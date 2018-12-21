@@ -59,7 +59,6 @@ module.exports = (page, manifest, mode = 'development', siteDir) => {
 				fse.writeFile(`${destPath}${fileName}`, html)
 					.then(() => resolve(`${destPath}${fileName}`))
 					.catch((err) => {
-
 						reject(err);
 					});
 			});

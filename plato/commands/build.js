@@ -56,6 +56,8 @@ module.exports = async function build() {
 		console.log('Generating JavaScript bundles failed', err);
 	});
 
+	console.log('manifestFile', manifestFile);
+
 	const finalRoutes = fse.readJsonSync(routeDestPath);
 	try {
 
@@ -68,6 +70,8 @@ module.exports = async function build() {
 		console.log('Error during page generation: '+err);
 		process.exit(1);
 	}
+
+	console.log('files', files);
 
 	for (const file of files) {
 		await buildCritical(file);
