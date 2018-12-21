@@ -27,7 +27,7 @@
     "dev": "concurrently -p \"[{name}]\" -n \"WEBPACK\" -c \"bgBlue.bold,bgRed.bold\" \"npm run watch:js\"",
     "dev:sass": "gulp sass",
     "start": "npm run server & npm run dev:sass && npm run browsersync && npm run watch:js",
-    "plato:develop": "node plato",
+    "plato:develop": "node plato develop",
     "plato:watch": "node plato/watch.js",
     "plato:deploy": "node plato build",
     "develop-OLD": "npm run plato:develop && npm run dev:sass && (npm run browsersync & npm run plato:watch & npm run watch:js)",
