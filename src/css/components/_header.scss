@@ -1,0 +1,17 @@
+#main-nav {
+
+	position: absolute;
+	z-index: 99;
+
+	padding-top: $nav-padding - 1px;
+	padding-left: $nav-padding;
+
+	.menu{
+		li{
+			&.active{
+				border-bottom: 1px solid black;
+			}
+		}
+	}
+
+}

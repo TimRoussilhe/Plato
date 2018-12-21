@@ -1,0 +1,41 @@
+@import "../font-faces";
+
+// font families
+$ff-title: "Untitled Sans", "Helvetica", "Arial", sans-serif;
+$ff-bold: "Untitled Sans", "Helvetica", "Arial", sans-serif;
+$ff-regular: "Untitled Sans", "Helvetica", "Arial", sans-serif;
+$ff-medium: "Untitled Sans", "Helvetica", "Arial", sans-serif;
+
+$fw-regular: normal;
+// font sizes
+$fs-base: 1.4rem;
+$lh-base: 1.8;
+
+// Font Definitions
+@mixin ffRegular() {
+  font-family: $ff-regular;
+  font-weight: normal;
+  font-style: normal;
+}
+
+@mixin ffMedium() {
+  font-family: $ff-medium;
+  font-weight: 500;
+  font-style: normal;
+}
+
+@mixin ffBold() {
+  font-family: $ff-bold;
+  font-weight: bold;
+  font-style: normal;
+}
+
+@mixin ffTitle() {
+  font-family: $ff-title;
+  font-weight: bold;
+  font-style: normal;
+}
+
+// Line Height Variables
+$ls-title: 0.5em;
+$ls-body: 0.01em;

@@ -1,0 +1,40 @@
+html {
+  box-sizing: border-box;
+  font-size: 62.5%;
+
+  /* Adjust font size */
+  font-size: 62.5%;
+  -webkit-text-size-adjust: 100%;
+
+  /* Font varient */
+  font-variant-ligatures: none;
+  -webkit-font-variant-ligatures: none;
+
+  /* Smoothing */
+  text-rendering: optimizeLegibility;
+  -moz-osx-font-smoothing: grayscale;
+  font-smoothing: antialiased;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  overflow: hidden;
+  background-color: $c-white;
+
+  .block-events {
+    pointer-events: none !important;
+  }
+}
+
+#content {
+  position: absolute;
+  z-index: 5;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+}
+
+.page-wrapper {
+  // opacity: 0;
+}

@@ -1,0 +1,30 @@
+{
+	"staticRoutes":[
+		{
+			"id": "index",
+			"url": "/",
+			"template": "index",
+			"data": "https://d1ijeakjvj2nvu.cloudfront.net/newland-directors.json",
+			"json": "index.json"
+		},
+		{
+			"id": "about",
+			"url": "/about",
+			"template": "about",
+			"json": "about.json"
+		},
+		{
+			"id": "directors",
+			"url": "/directors",
+			"template": "about",
+			"json": "about.json"
+		},
+		{
+			"id": "404",
+			"fileName": "404.html",
+			"url": "/error",
+			"template": "error",
+			"json": "404.json"
+		}
+	]
+}

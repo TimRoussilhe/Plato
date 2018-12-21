@@ -1,0 +1,41 @@
+// simple function to get back rem value;
+// in our case body is set to 62.5% so our base font-size is a 10 multiple
+@function get-rem($font-size) {
+	@return $font-size/10 * 1rem;
+}
+
+// helper function to make sure the unit type (px, rem)
+// is removed we want just the raw value no unit
+@function get-value($n) {
+	@return $n / ($n * 0 + 1);
+}
+
+// return ratio line-height / font-size
+@function unitless-lh($font-size, $line-height) {
+ @return get-value($line-height / $font-size);
+}
+// Usage:
+// .foo {
+//     font-size: 26px;
+//     line-height: get-line-height(26px, 32px); //1.23077
+// }
+
+// mixins for use to easily input Font Style Guide
+// px is optional too!
+// letter spacing is optional for some edge cases
+@mixin fontStyle($font-size, $line-height, $letter-spacing:"") {
+
+font-size: get-rem(get-value($font-size));
+line-height: unitless-lh($font-size, $line-height);
+
+//basic check for letter spacing
+@if $letter-spacing != "" {
+	@if unit($letter-spacing) == 'px' {
+		letter-spacing: $letter-spacing;
+	}@else if unit($letter-spacing) == 'em' {
+		letter-spacing: $letter-spacing;
+	}@else{
+		letter-spacing: $letter-spacing * 1px;
+	}
+}
+};

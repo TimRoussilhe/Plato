@@ -1,0 +1,41 @@
+{
+	"extends": "google",
+	"parser": "babel-eslint",
+	"rules": {
+		"global-require": 0,
+		"curly": [2, "multi-line"],
+		"no-mixed-spaces-and-tabs": [2, "smart-tabs"],
+		"key-spacing": 0,
+		"indent": [2, "tab"],
+		"strict": [2, "global"],
+		"quotes": [2, "single"],
+		"quote-props": [2, "as-needed"],
+		"max-len": [2, 200],
+		"no-use-before-define": [0],
+		"no-negated-condition": [0],
+		"no-lonely-if": [0],
+		"no-debugger": [0],
+		"padded-blocks": [0, "always"],
+		"spaced-comment": [1],
+		"space-before-blocks": [0],
+		"space-in-parens": [0],
+		"require-jsdoc": [0],
+		"no-undef": [0],
+		"no-tabs": [0],
+		"guard-for-in": [0],
+		"valid-jsdoc" : [1]
+	},
+  "env": {
+    "es6": true,
+    "node": true,
+    "browser": true
+  },
+	"parserOptions": {
+		"sourceType": "module",
+		"allowImportExportEverywhere": false,
+		"ecmaVersion": 2017,
+		"ecmaFeatures": {
+			"experimentalObjectRestSpread": true
+		}
+	}
+}

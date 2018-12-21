@@ -1,0 +1,10 @@
+.u-grab {
+	// scss-lint:disable all
+	cursor: move;
+	cursor: grab;
+	// scss-lint:enable all
+
+	&:active {
+		cursor: grabbing;
+	}
+}

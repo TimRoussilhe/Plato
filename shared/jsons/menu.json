@@ -1,0 +1,12 @@
+{
+	"index": {
+		"id": "index",
+		"url": "/",
+		"label": "Homepage"
+	},
+	"about": {
+		"id": "about",
+		"url": "/about",
+		"label": "About"
+	}
+}

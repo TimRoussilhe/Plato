@@ -1,0 +1,33 @@
+/*
+ * $size: size in pixel you want to have at $breakpoint
+ * $min-size: min size of the responsive font: doesn't go smaller
+ * $max-size: max size of the responsive font: doesn't go bigger
+ * $breakpoint: breakpoint to start using responsive fontSize
+ */
+ @mixin responsiveFontSize($size, $breakpoint, $min-size: false, $max-size: false, $fallback: true) {
+	// value for vw
+	$responsive: $size * 100 / $breakpoint;
+
+	//min value
+  @if $min-size {
+		$min-width: $size / ($breakpoint / $min-size);
+
+		@media screen and (max-width: #{$min-size} * 1px) {
+		  font-size: $min-width * 1px;
+		}
+	}
+
+  @if $max-size {
+		$max-width: $size / ($breakpoint / $max-size);
+
+		@media screen and (min-width: #{$max-size} * 1px) {
+		  font-size: $max-width * 1px;
+		}
+	}
+
+  @if $fallback {
+    font-size: $size * 1px;
+  }
+
+	font-size: $responsive * 1vw;
+}

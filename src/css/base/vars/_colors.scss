@@ -1,0 +1,17 @@
+// colors
+$c-white			: #FFF;
+$c-black			: #000;
+$c-dark-grey		: #2b2d30;
+
+// Font color
+.--c-white {
+	color: $c-white;
+}
+
+.--c-black {
+	color: $c-black;
+}
+
+.--c-dark-grey {
+	color: $c-dark-grey;
+}

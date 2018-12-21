@@ -1,0 +1,9 @@
+	<!-- Scripts -->
+
+	{% if manifest %}
+		<script src="{{manifest['main.js']}}"></script>
+	{% else %}
+		<script src="/assets/js/bundle.js"></script>
+	{% endif %}
+	</body>
+</html>

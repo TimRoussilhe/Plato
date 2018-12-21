@@ -1,0 +1,23 @@
+#   OS
+.DS_Store
+*.pyc
+*.swp
+*~
+*.zip
+
+# installation
+node_modules
+vendor
+
+
+npm-debug.log.*
+*.map
+*.log
+=======
+node_modules
+.DS_Store
+npm-debug.log.*
+
+build
+public/assets/js
+public/assets/css
