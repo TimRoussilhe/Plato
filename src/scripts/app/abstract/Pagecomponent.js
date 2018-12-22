@@ -4,7 +4,6 @@ import AbstractDOMComponent from 'abstract/component';
 // let TimelineLite = require('TimelineLite');
 // import CSSPlugin from 'CSSPlugin';
 import {TweenLite, TimelineLite, CSSPlugin} from 'gsap/TweenMax';
-
 const plugins = [CSSPlugin];
 
 /**

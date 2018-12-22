@@ -1,5 +1,5 @@
 // Abstract
-import Base from 'abstract/Base';
+import Base from 'abstract/base';
 
 // Containers
 import Layout from 'containers/layout/Layout';

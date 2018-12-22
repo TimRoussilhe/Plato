@@ -10,6 +10,7 @@ module.exports = async ()=> {
 
 		webpack(webpackConfig).run((err, stats) => {
 			if (err || stats.hasErrors()) {
+				console.log('stats.hasErrors()', stats.hasErrors());
 				console.log('stats', stats);
 				console.log('err', err);
 				reject(err);

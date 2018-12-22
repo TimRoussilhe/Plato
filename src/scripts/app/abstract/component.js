@@ -1,7 +1,7 @@
 import store from 'store';
 import {uniqueId, result, isFunction, bind, remove} from 'lodash-es';
 import SVGS from 'jsons/svgs.json';
-import Base from './Base';
+import Base from './base';
 
 const delegateEventSplitter = /^(\S+)\s*(.*)$/;
 

@@ -40,7 +40,6 @@ class Base {
 		return this._storeEvents;
 	}
 
-
 	constructor() {
 
 		/**

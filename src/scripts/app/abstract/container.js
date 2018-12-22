@@ -3,7 +3,7 @@
  * @constructor
  */
 
-import Base from './Base';
+import Base from './base';
 
 class AbstractContainer extends Base {
 
