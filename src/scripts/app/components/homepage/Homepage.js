@@ -1,5 +1,5 @@
 import AbstractPageComponent from 'abstract/Pagecomponent';
-import Tpl from 'templates/index.twig';
+import Tpl from 'templates/homepage.twig';
 
 // Constants
 
@@ -12,11 +12,9 @@ import Tpl from 'templates/index.twig';
 // Lib
 
 class Homepage extends AbstractPageComponent {
-	constructor(options) {
-		super(options);
-
+	constructor(props) {
+		super(props);
 		this.template = Tpl;
-
 	}
 
 	dispose() {

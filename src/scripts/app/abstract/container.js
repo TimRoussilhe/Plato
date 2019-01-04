@@ -7,10 +7,9 @@ import Base from './base';
 
 class AbstractContainer extends Base {
 
-	constructor(options = {}) {
+	constructor(props = {}) {
 
-		console.log('options', options);
-		super(options);
+		super(props);
 
 		/**
     * Component asociated to the container
@@ -25,20 +24,22 @@ class AbstractContainer extends Base {
 		this.ComponentClass = null;
 
 		/**
+		* Props Object
+		* @type {Object}
+		*/
+		this.props = props;
+
+		/**
 		* Data Object
 		* @type {Object}
 		*/
-		this.data = null;
+		this.data = props.data ? props.data : {};
 
 		/**
-		* Options Object
+		* Actions Object
 		* @type {Object}
 		*/
-		this.options = null;
-
-		this.options = options;
-		this.data = options.data ? options.data : null;
-		this.options.actions = options.actions ? options.actions : {};
+		this.props.actions = props.actions ? props.actions : {};
 
 		// /**
 		// * El
@@ -57,10 +58,7 @@ class AbstractContainer extends Base {
 		};
 
 		this.states = {
-			canUpdate: false,
 			isInit: false,
-			isAnimating: false,
-			isShown: false,
 		};
 
 	}
@@ -74,9 +72,7 @@ class AbstractContainer extends Base {
 			this.initActions();
 			this.initData();
 
-			this.options.data = this.data;
-
-			this.component = new this.ComponentClass(this.options);
+			this.component = new this.ComponentClass(this.props);
 			this.component.init().then(() => {
 				this.onInit();
 			});

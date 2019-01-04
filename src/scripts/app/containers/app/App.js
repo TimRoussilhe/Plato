@@ -6,16 +6,12 @@ import Layout from 'containers/layout/Layout';
 // import HomepageContainer from 'containers/homepage/Homepage';
 // import AboutContainer from 'containers/about/About';
 // import NotFoundContainer from 'containers/not-found/NotFound';
-import DefaultPage from 'abstract/Pagecomponent';
+// import DefaultPage from 'abstract/Pagecomponent';
 
 function getComponent(chunkName, path) {
-
-	return import(/* webpackChunkName: "`${chunkName}`" */ 'containers/homepage/Homepage').then(({default: HomepageContainer}) => {
-		// let element = document.createElement('div');
-
-		// element.innerHTML = _.join(['Hello', 'webpack'], ' ');
-		console.log('component loaded', HomepageContainer);
-		return HomepageContainer;
+	const ComponentName = path.charAt(0).toUpperCase() + path.slice(1);
+	return import(/* webpackChunkName: "[request]" */ `containers/${path}/${ComponentName}`).then(({default: Page}) => {
+		return Page;
 
 	}).catch((error) => 'An error occurred while loading the component');
 }
@@ -39,22 +35,20 @@ function getComponent(chunkName, path) {
 // } );
 
 // Constants
-import {HOMEPAGE, ABOUT, NOT_FOUND} from 'constants/locations';
+// import {HOMEPAGE, ABOUT, NOT_FOUND} from 'constants/locations';
 
 // Selector
 import {getRoute} from './selectors';
 
 // Actions
 import {setAnimating, setPage, setOldPage} from './actions';
-// import {showModal} from 'containers/modal/actions';
 import store from 'store';
-// import watch from 'redux-watch';
 
 class App extends Base {
 
-	constructor(options) {
+	constructor(props) {
 
-		super(options);
+		super(props);
 
 		this.prevLocation = null;
 		this.location = null;
@@ -87,23 +81,14 @@ class App extends Base {
 	}
 
 	async routing(location, fromSamePage = false) {
+
+		console.log('-------------- routing ---------------');
+
 		let Page = null;
+		const currentRoute = getRoute(location);
+		const PageAsync = await getComponent(currentRoute.template, currentRoute.template);
 
-		// switch (location) {
-		// case HOMEPAGE: Page = AboutContainer; break;
-		// case ABOUT: Page = AboutContainer; break;
-		// case NOT_FOUND: Page = NotFoundContainer; break;
-		// default: Page = DefaultPage;
-		// }
-
-		// const page = 'Homepage';
-
-		const PageAsync = await getComponent();
-		console.log('PageAsync', PageAsync);
 		Page = PageAsync;
-		// import( /* webpackChunkName: "[request]" */ `containers/homepage/${page}` ).then( ( data ) => {
-		// 	console.log( data );
-		// } );
 
 		if (Page === null) {
 			console.error('Error: page is null');
@@ -117,7 +102,17 @@ class App extends Base {
 			el = document.getElementsByClassName('page-wrapper')[0];
 		}
 
-		const currentRoute = getRoute(location);
+		// SAFETY HERE
+		// IF THERE IS STILL AN OLDPAGE HERE IT MEANS SOMETHING BEEN WRONG
+		// SO WE JUST KILL IT
+		// USUALLY HAPPENS IF USER PLAY WITH BROWSER BACK ARROWS WHILE ANIMATING
+		if (this.oldPage){
+			this.oldPage.dispose();
+			this.oldPage = null;
+			this.page.dispose();
+			this.page = null;
+			console.log('KILL PAGE !!!!!!');
+		}
 
 		if (this.page) {
 			this.oldPage = this.page;

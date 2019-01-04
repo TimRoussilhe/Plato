@@ -1,6 +1,5 @@
 import store from 'store';
 import {uniqueId, result, isFunction, bind, remove} from 'lodash-es';
-import SVGS from 'jsons/svgs.json';
 import Base from './base';
 
 const delegateEventSplitter = /^(\S+)\s*(.*)$/;
@@ -14,9 +13,11 @@ class Component extends Base {
 
 	set events(events) {
 		for (const event in events) {
-			const uid = uniqueId('e');
-			events[event].uid = uid;
-			this._events[event] = events[event];
+			if ({}.hasOwnProperty.call(events, event)) {
+				const uid = uniqueId('e');
+				events[event].uid = uid;
+				this._events[event] = events[event];
+			}
 		}
 
 		// for now we disable it here to avoid too many call
@@ -26,26 +27,6 @@ class Component extends Base {
 
 	get events() {
 		return this._events;
-	}
-
-	set promises(newPromises) {
-		if (!this._promises) this._promises = {};
-		for (const promise in newPromises) {
-			this._promises[promise] = newPromises[promise];
-		}
-	}
-	get promises() {
-		return this._promises;
-	}
-
-	set states(states) {
-		for (const state in states) {
-			this._states[state] = states[state];
-		}
-	}
-
-	get states() {
-		return this._states;
 	}
 
 	constructor(props) {
@@ -65,11 +46,11 @@ class Component extends Base {
 		this._events = {};
 		this.delegatedEvents = [];
 
-			 /**
+		/**
      * Object as associative array of all the <promises> objects
      * @type {Object}
      */
-		this._promises = {
+		this.promises = {
 			init: {
 				resolve: null,
 				reject: null,
@@ -83,12 +64,6 @@ class Component extends Base {
 				reject: null,
 			},
 		};
-
-		/**
-			 * Object as associative array of all the states
-			 * @type {Object}
-			 */
-		this._states = {};
 
 		/**
 		 * Object as associative array of all the timelines
@@ -177,7 +152,6 @@ class Component extends Base {
 
 		const html = this.template({
 			data:this.data,
-			svgs: SVGS,
 		});
 
 		// String to DOM Element
@@ -245,13 +219,15 @@ class Component extends Base {
 		if (!events) return this;
 		this.undelegateEvents();
 		for (let key in events) {
-			let method = events[key];
-			if (!isFunction(method)) method = this[method];
-			if (!method) continue;
-			let match = key.match(delegateEventSplitter);
-			console.log('method.uid', method.uid);
+			if ({}.hasOwnProperty.call(events, key)) {
+				let method = events[key];
+				if (!isFunction(method)) method = this[method];
+				if (!method) continue;
+				let match = key.match(delegateEventSplitter);
+				console.log('method.uid', method.uid);
 
-			this.delegate(match[1], match[2], bind(method, this), method.uid);
+				this.delegate(match[1], match[2], bind(method, this), method.uid);
+			}
 		}
 		return this;
 	}
@@ -441,7 +417,6 @@ class Component extends Base {
 		this.el.parentNode.removeChild(this.el);
 		this.el = null;
 		this._events = {};
-		// this.events = {};
 		super.dispose();
 		// TODO Check this to make sure event are properly removed
 	}

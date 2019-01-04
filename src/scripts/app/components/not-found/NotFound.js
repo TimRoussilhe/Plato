@@ -3,8 +3,8 @@ import Tpl from 'templates/error.twig';
 
 class NotFound extends AbstractPageComponent {
 
-	constructor(options) {
-		super(options);
+	constructor(props) {
+		super(props);
 
 		this.template = Tpl;
 	}

@@ -4,10 +4,9 @@ import App from 'containers/app/App';
 import Router from 'router';
 import {setDeviceType} from 'containers/app/actions';
 import store from 'store';
-// import 'whatwg-fetch';
-
+import 'whatwg-fetch';
+import {cleanURL} from 'helpers/cleanURL';
 import './../../css/app.scss';
-console.log('HELLO WORLD');
 
 class Entry {
 
@@ -53,6 +52,10 @@ console.log('location', location);
 	if (hostname !== 'localhost' && port!==8080 && 'serviceWorker' in navigator) {
 		navigator.serviceWorker.register('/assets/service-worker.js');
 	}
+})();
+
+(function() {
+	cleanURL(window.location.href.split('?')[0]);
 })();
 
 // initialize the APP do not make a global reference to it.

@@ -7,12 +7,19 @@ const srcPath = './src';
 const distPath = './build';
 const distDataPath = './build/data';
 
+// report
+const report = require('../utils/reporter');
+
+function reportFailure(msg, err) {
+	report.log('');
+	report.panic(msg, err);
+}
+
 const routes = require('../../shared/routes/routes.json');
 const routeDestPath = path.resolve(__dirname + '/../../shared/routes/real_routes.json');
 
-const buildPageFromRoutes = require('../buildPage.js');
-const {saveRemoteDataFromSource, updateRoutes} = require('../saveData.js');
-const createPages = require('../createPages.js');
+const buildHTML = require('../core/buildHTML');
+const {saveRemoteDataFromSource, updateRoutes} = require('../core/saveData');
 const buildProductionBundle = require('./build-javascript.js');
 const buildCritical = require('./build-critical.js');
 
@@ -20,6 +27,18 @@ const files = [];
 const siteDir = './build/';
 
 module.exports = async function build() {
+
+	let globalActivity;
+	globalActivity = report.activityTimer(
+		'Plato Build',
+	);
+	globalActivity.start();
+
+	let activity;
+	activity = report.activityTimer(
+		'Cleaning Repo',
+	);
+	activity.start();
 
 	// clear destination folder
 	fse.emptyDirSync(distPath);
@@ -35,7 +54,12 @@ module.exports = async function build() {
 
 	// add static routes to final_routes
 	await updateRoutes(routes.staticRoutes);
+	activity.end();
 
+	activity = report.activityTimer(
+		'Save remote Data',
+	);
+	activity.start();
 	// save remote endpoint for static routes
 	try {
 
@@ -44,37 +68,68 @@ module.exports = async function build() {
 		}
 
 	} catch (err){
-		console.log('Error during saving static file: '+err);
-		process.exit(1);
+		reportFailure('Error during saving static file: '+err);
 	}
+	activity.end();
 
-	await createPages.createPages(siteDir + 'data/');
 
+	activity = report.activityTimer(
+		'Create Pages from Plato API',
+	);
+	activity.start();
+	// check if node API is used and if so check if createPages is used
+	try {
+
+		let nodeAPI = require('../../plato-node');
+		if (nodeAPI && nodeAPI.createPages){
+			await nodeAPI.createPages(siteDir + 'data/');
+		}
+
+	} catch (err) {
+		console.log('No API found: '+err);
+	}
+	activity.end();
+
+
+	activity = report.activityTimer(
+		'Build Javascript',
+	);
+	activity.start();
 	// Build Javascript and CSS Production Bundle
 	// Return the manifest with files and ther hashed path.
 	const manifestFile = await buildProductionBundle().catch((err) => {
-		console.log('Generating JavaScript bundles failed', err);
+		reportFailure('Generating JavaScript bundles failed', err);
 	});
+	activity.end();
 
-	console.log('manifestFile', manifestFile);
 
+	activity = report.activityTimer(
+		'Build HTML:',
+	);
+	activity.start();
 	const finalRoutes = fse.readJsonSync(routeDestPath);
 	try {
 
 		for (let page of finalRoutes.routes) {
-			const filename = await buildPageFromRoutes(page, manifestFile, 'production', siteDir);
+			const filename = await buildHTML(page, manifestFile, 'production', siteDir);
 			files.push(filename);
 		}
 
 	} catch (err){
-		console.log('Error during page generation: '+err);
-		process.exit(1);
+		reportFailure('Error during page generation: '+err);
 	}
+	activity.end();
 
-	console.log('files', files);
+
+	activity = report.activityTimer(
+		'Build Critical CSS and minify HTML',
+	);
+	activity.start();
 
 	for (const file of files) {
 		await buildCritical(file);
 	}
+	activity.end();
+	globalActivity.end();
 
 };

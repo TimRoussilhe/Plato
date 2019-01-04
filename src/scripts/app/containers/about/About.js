@@ -3,8 +3,8 @@ import About from 'components/about/About';
 
 class AboutContainer extends AbstractPageContainer {
 
-	constructor(options) {
-		super(options);
+	constructor(props) {
+		super(props);
 
 		this.ComponentClass = About;
 

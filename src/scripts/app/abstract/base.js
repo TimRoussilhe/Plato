@@ -10,7 +10,9 @@ class Base {
 	set promises(newPromises) {
 		if (!this._promises) this._promises = {};
 		for (const promise in newPromises) {
-			this._promises[promise] = newPromises[promise];
+			if ({}.hasOwnProperty.call(newPromises, promise)) {
+				this._promises[promise] = newPromises[promise];
+			}
 		}
 	}
 
@@ -19,8 +21,11 @@ class Base {
 	}
 
 	set states(states) {
-		for (const state in states) { // eslint-disable-line guard-for-in
-			this._states[state] = states[state];
+		if (!this._states) this._states = {};
+		for (const state in states) {
+			if ({}.hasOwnProperty.call(states, state)) {
+				this._states[state] = states[state];
+			}
 		}
 	}
 
@@ -54,12 +59,11 @@ class Base {
 		 */
 		this._states = {};
 
-		// /**
-		//  * Object as associative array of all <watcher> objects
-		//  * @type {Object}
-		//  */
+		/**
+		 * Object as associative array of all <watcher> objects
+		 * @type {Object}
+		 */
 		this._storeEvents = {};
-
 
 		/**
      * Object as associative array of all <subscriptions> objects
@@ -112,8 +116,10 @@ class Base {
 			return;
 		}
 
-		for (const key in partialState) { // eslint-disable-line guard-for-in
-			this.states[key] = partialState[key];
+		for (const key in partialState) {
+			if ({}.hasOwnProperty.call(partialState, key)) {
+				this.states[key] = partialState[key];
+			}
 		}
 
 		if (callback) callback();
@@ -121,7 +127,6 @@ class Base {
 	}
 
 	subscribe(o) {
-		console.log('o', o);
 
 		// When an object is givin for a specific subscription
 		if (o) {
@@ -142,21 +147,21 @@ class Base {
 			return;
 		}
 
-		console.log('this.storeEvents', this.storeEvents);
-
 		for (const path in this.storeEvents) {
-			console.log('path', path);
 
-			if (!this.storeEvents[path]) continue;
-			if (this.subscriptions[path]) this.subscriptions[path]();
+			if ({}.hasOwnProperty.call(this.storeEvents, path)) {
 
-			let method = this.storeEvents[path];
+				if (!this.storeEvents[path]) continue;
+				if (this.subscriptions[path]) this.subscriptions[path]();
 
-			if (typeof method !== 'function') method = this[method];
-			if (!method) continue;
+				let method = this.storeEvents[path];
 
-			const watcher = watch(store.getState, path);
-			this.subscriptions[path] = store.subscribe(watcher(method));
+				if (typeof method !== 'function') method = this[method];
+				if (!method) continue;
+
+				const watcher = watch(store.getState, path);
+				this.subscriptions[path] = store.subscribe(watcher(method));
+			}
 		}
 	}
 

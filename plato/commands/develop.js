@@ -5,16 +5,15 @@ const chokidar = require('chokidar');
 const webpack = require('webpack');
 const WebpackDevServer = require('webpack-dev-server');
 const webpackConfig = require('../../config/webpack.dev.config');
-const port = 8080;
+const port = 9090;
 const opn = require('opn');
 
 const srcPath = './src';
 const distPath = './public';
 const distDataPath = './public/data';
 
-const buildPage = require('../buildPage.js');
-const {saveRemoteDataFromSource, updateRoutes} = require('../saveData.js');
-const createPages = require('../createPages.js');
+const buildHTML = require('../core/buildHTML');
+const {saveRemoteDataFromSource, updateRoutes} = require('../core/saveData');
 
 const routes = require('../../shared/routes/routes.js');
 const routeDestPath = path.resolve(__dirname + '/../../shared/routes/real_routes.json');
@@ -23,7 +22,27 @@ const routeDestPath = path.resolve(__dirname + '/../../shared/routes/real_routes
 let log = console.log.bind(console);
 const siteDir = './public/';
 
+// report
+const report = require('../utils/reporter');
+
+function reportFailure(msg, err) {
+	report.log('');
+	report.panic(msg, err);
+}
+
 module.exports = async function develop() {
+
+	let globalActivity;
+	globalActivity = report.activityTimer(
+		'Plato Develop',
+	);
+	globalActivity.start();
+
+	let activity;
+	activity = report.activityTimer(
+		'Cleaning Repo',
+	);
+	activity.start();
 
 	// clear destination folder
 	fse.emptyDirSync(distPath);
@@ -36,50 +55,64 @@ module.exports = async function develop() {
 	fse.copySync(`${srcPath}/.htaccess`, `${distPath}/.htaccess`);
 	fse.copySync(`${srcPath}/assets`, `${distPath}/assets`);
 	fse.copySync(`${srcPath}/data`, `${distPath}/data`);
+	activity.end();
+
+	activity = report.activityTimer(
+		'Build Routes and saving remote Data from Static routes',
+	);
+	activity.start();
 
 	// add static routes to final_routes
 	// save remote endpoint for static routes
 	try {
-
 		await updateRoutes(routes.routes);
 
 	} catch (err){
-		console.log('Error during updating routes: '+err);
-		process.exit(1);
+		reportFailure('Error during updating routes: '+err);
 	}
 
 	// save remote endpoint for static routes
 	try {
-
 		for (const route of routes.routes) {
-			if (route.data) saveRemoteDataFromSource(route.data, route.json, siteDir + 'data/');
+			if (route.data) await saveRemoteDataFromSource(route.data, route.json, siteDir + 'data/');
 		}
 
 	} catch (err){
-		console.log('Error during saving static file: '+err);
-		process.exit(1);
+		reportFailure('Error during saving static file: '+err);
 	}
+	activity.end();
 
+	activity = report.activityTimer(
+		'Create Pages from Plato API',
+	);
+	activity.start();
+	// check if node API is used and if so check if createPages is used
 	try {
+		let nodeAPI = require('../../plato-node');
+		if (nodeAPI && nodeAPI.createPages){
+			await nodeAPI.createPages(siteDir + 'data/');
+		}
 
-		await createPages.createPages(siteDir + 'data/');
-
-	} catch (err){
-		console.log('Error during creating pages: '+err);
-		process.exit(1);
+	} catch (err) {
+		console.log('No API found: '+err);
 	}
+	activity.end();
 
+	activity = report.activityTimer(
+		'Build Static site',
+	);
+	activity.start();
 	const finalRoutes = fse.readJsonSync(routeDestPath);
 	try {
 
 		for (let page of finalRoutes.routes) {
-			await buildPage(page, null, 'development', siteDir);
+			await buildHTML(page, null, 'development', siteDir);
 		}
 
 	} catch (err){
-		console.log('Error during page generation: '+err);
-		process.exit(1);
+		reportFailure('Error during page generation: '+err);
 	}
+	activity.end();
 
 	// Initialize watcher.
 	let watcher = chokidar.watch('./shared/templates/', {
@@ -96,16 +129,15 @@ module.exports = async function develop() {
 			if (activeRoutes !== null){
 
 				for (let page of activeRoutes) {
-					buildPage(page, null, 'development', siteDir).catch(console.error);
+					buildHTML(page, null, 'development', siteDir).catch(console.error);
 				}
 
 			} else {
 			// change from a partial => rebuild everything
 			// TODO : check if change is not happening in an unlink template
 				for (let page of finalRoutes.routes) {
-					buildPage(page, null, 'development', siteDir).catch((err) => {
+					buildHTML(page, null, 'development', siteDir).catch((err) => {
 						log(`Error: ${err}`);
-						process.exit(1);
 					});
 				}
 
@@ -120,6 +152,8 @@ module.exports = async function develop() {
 		hot: true,
 		inline: true,
 		host: 'localhost',
+		disableHostCheck: true,
+		noInfo: true,
 		watchContentBase: true,
 		watchOptions: {
 			poll: true,
@@ -134,6 +168,7 @@ module.exports = async function develop() {
 		if (err){
 			console.log(err);
 		} else {
+			globalActivity.end();
 			opn('http://localhost:' + port);
 		}
 	});

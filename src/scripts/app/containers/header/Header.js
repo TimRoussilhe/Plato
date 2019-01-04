@@ -5,8 +5,8 @@ import Header from 'components/header/Header';
 
 class HeaderContainer extends AbstractContainer {
 
-	constructor(options) {
-		super(options);
+	constructor(props) {
+		super(props);
 		this.ComponentClass = Header;
 
 	}

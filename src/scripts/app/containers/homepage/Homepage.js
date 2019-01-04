@@ -6,8 +6,8 @@ import Homepage from 'components/homepage/Homepage';
 
 class HomepageContainer extends AbstractPageContainer {
 
-	constructor(options) {
-		super(options);
+	constructor(props) {
+		super(props);
 
 		this.ComponentClass = Homepage;
 

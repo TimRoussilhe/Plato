@@ -3,7 +3,7 @@
 		{
 			"id": "index",
 			"url": "/",
-			"template": "index",
+			"template": "homepage",
 			"data": "https://d1ijeakjvj2nvu.cloudfront.net/newland-directors.json",
 			"json": "index.json"
 		},

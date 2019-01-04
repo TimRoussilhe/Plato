@@ -19,8 +19,8 @@ class LayoutContainer extends AbstractContainer {
 	}
 
 	initActions() {
-		this.options.actions.resize = () => this.resizeAction();
-		this.options.actions.setOrientation = () => this.setOrientation();
+		this.props.actions.resize = () => this.resizeAction();
+		this.props.actions.setOrientation = () => this.setOrientation();
 
 	}
 
@@ -37,8 +37,6 @@ class LayoutContainer extends AbstractContainer {
 	}
 
 	setOrientation(window){
-		console.log('setOrientation');
-
 		store.dispatch(setOrientation(window));
 	}
 }

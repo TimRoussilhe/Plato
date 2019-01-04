@@ -1,14 +1,11 @@
 
 import AbstractDOMComponent from 'abstract/component';
-// let TweenLite = require('TweenLite');
-// let TimelineLite = require('TimelineLite');
-// import CSSPlugin from 'CSSPlugin';
 import {TweenLite, TimelineLite, CSSPlugin} from 'gsap/TweenMax';
 const plugins = [CSSPlugin];
 
 /**
  * PageComponent: Defines a page
- * @extends Component
+ * @extends AbstractDOMComponent
  * @constructor
  */
 class PageComponent extends AbstractDOMComponent {

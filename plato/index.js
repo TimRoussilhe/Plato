@@ -33,7 +33,8 @@
 // 1) Fix JS
 // 2) Templating etc...
 // 3) test mobX
-// 4) Simplify JS
+// 4) Simplify JS : pages structure
+// 5) See for templates
 
 // BUILD MODE
 
@@ -41,20 +42,20 @@
 // TEST DEPLOY AND NETLIFY
 
 // BACKLOG
-// - Clean destination folder thing
-// - add DATA back
+
 // - add preload and prefetch
 // - add Meta support back
-// - clean structure of plato folders
-// - add logg etc... from command scripts\
-// - proper error hanlder everywhere
+// - add context from CreatePage ( example blog )
+// - Images!
+// - add middleware supports
 
-// - test middleware
-
-// - test netlify
 // - test circleci
 
-// - clean up and refactor javascript and CSS
+// final to-do before Sylvain:
+// - Clean destination folder thing
+// - clean structure of plato folders
+// - proper error hanlder everywhere
+// - cleanup dependencies
 
 const program = require('commander');
 const build = require('./commands/build');

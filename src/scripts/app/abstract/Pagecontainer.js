@@ -22,41 +22,31 @@ import {JSON_ENDPOINTS} from 'constants/config';
  */
 class PageContainer extends AbstractContainer {
 
-	constructor(options) {
-		super(options);
+	constructor(props) {
+		super(props);
 
 	}
 
 	// to override if needed
 	fetchData() {
 
-		const endPoint = this.options.endPoint;
+		const endPoint = this.props.endPoint;
 
 		if (!endPoint) {
 			this.promises.data.resolve();
 			return;
 		}
 
-		const url = JSON_ENDPOINTS + this.options.endPoint;
-		// axios.get(url)
-		// 	.then((response) => {
-		// 		console.log('response', response);
-		// 		this.data = response.data;
-		// 		this.promises.data.resolve();
-		// 	})
-		// 	.catch((error) => {
-		// 		this.promises.data.reject();
-		// 	});
+		const url = JSON_ENDPOINTS + this.props.endPoint;
 
-		fetch(url)
-			.then((response) => {
-				console.log('response', response);
-				this.data = response.data;
-				this.promises.data.resolve();
-			})
-			.catch((error) => {
-				this.promises.data.reject();
-			});
+		fetch(url).then((response) => {
+			return response.json();
+		}).then((json) => {
+			this.data = json;
+			this.promises.data.resolve();
+		}).catch((ex) => {
+			this.promises.data.reject();
+		});
 
 	}
 

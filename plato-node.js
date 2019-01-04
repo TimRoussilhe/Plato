@@ -1,41 +1,7 @@
 const Promise = require('bluebird');
 const fetch = require('node-fetch');
-const {saveRemoteData, updateRoutes} = require('./saveData.js');
-// const buildPage = require('./buildPage.js');
-// const fse = require('fs-extra');
-
 fetch.Promise = Promise;
-
-
-// Things we need for a page
-// slug/url
-// template
-// json filename
-// data to create the JSON
-
-const createPage = ({id, url, template, data}, siteDir) => {
-
-	return new Promise((resolve, reject) => {
-
-		// create JSON File
-		saveRemoteData(JSON.stringify(data), id+'.json', siteDir).then(()=>{
-			console.log('DATA SAVED');
-		});
-
-		const route = {
-			id,
-			url,
-			template,
-			json: id + '.json',
-		};
-
-		updateRoutes([route]).then(() => {
-			resolve();
-		});
-
-	});
-
-};
+const {createPage} = require('./plato/core/createPage');
 
 exports.createPages = (siteDir) => {
 

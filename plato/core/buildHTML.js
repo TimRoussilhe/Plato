@@ -5,7 +5,11 @@ const fse = require('fs-extra');
 const path = require('path');
 const Promise = require('bluebird');
 
-const config = require('../site-config.js');
+const chalk = require('chalk');
+const log = console.log;
+const print = chalk.grey;
+
+const config = require('../../site-config.js');
 
 module.exports = (page, manifest, mode = 'development', siteDir) => {
 
@@ -57,7 +61,10 @@ module.exports = (page, manifest, mode = 'development', siteDir) => {
 				}
 
 				fse.writeFile(`${destPath}${fileName}`, html)
-					.then(() => resolve(`${destPath}${fileName}`))
+					.then(() => {
+						log(print(` HTML Built : ${destPath}${fileName}`));
+						resolve(`${destPath}${fileName}`);
+					})
 					.catch((err) => {
 						reject(err);
 					});

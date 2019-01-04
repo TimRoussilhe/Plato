@@ -3,8 +3,8 @@ import Tpl from 'templates/about.twig';
 
 
 class Homepage extends AbstractPageComponent {
-	constructor(options) {
-		super(options);
+	constructor(props) {
+		super(props);
 
 		this.template = Tpl;
 

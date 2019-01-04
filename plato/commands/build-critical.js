@@ -5,9 +5,8 @@ const fse = require('fs-extra');
 module.exports = (filename) => {
 
 	return new Promise((resolve, reject) => {
-		console.log('filename', filename);
+
 		const source = filename.replace('build/', '');
-		console.log('filename', filename);
 
 		critical.generate({
 			base: 'build/',

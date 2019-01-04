@@ -1,7 +1,15 @@
-RewriteEngine on
+RewriteEngine On
+
+# remove trailing slash
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule . indexdsd.php [L]
+RewriteRule ^([^/]+)/$ http://example.com/folder/$1 [R=301,L]
+
+# Redirect external .html requests to extensionless url
+RewriteCond %{THE_REQUEST} ^(.+)\.html([#?][^\ ]*)?\ HTTP/
+RewriteRule ^(.+)\.html$ http://example.com/folder/$1 [R=301,L]
+
+# Resolve .html file for extensionless html urls
+RewriteRule ^([^/.]+)$ $1.html[L]
 
  # 1 Month for all your static assets
  <FilesMatch ".(json|)$">

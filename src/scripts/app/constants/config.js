@@ -1,1 +1,1 @@
-export const JSON_ENDPOINTS = './data/';
+export const JSON_ENDPOINTS = '/data/';

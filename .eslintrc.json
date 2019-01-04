@@ -22,7 +22,6 @@
 		"require-jsdoc": [0],
 		"no-undef": [0],
 		"no-tabs": [0],
-		"guard-for-in": [0],
 		"valid-jsdoc" : [1]
 	},
   "env": {
