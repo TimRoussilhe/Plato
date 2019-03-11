@@ -19,5 +19,6 @@ node_modules
 npm-debug.log.*
 
 build
+public
 public/assets/js
 public/assets/css

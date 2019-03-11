@@ -41,12 +41,9 @@ module.exports = (page, manifest, mode = 'development', siteDir) => {
 			reject(new Error(err));
 		}
 
-		let templatePath;
-		try {
-			templatePath = path.resolve(`./shared/templates/${page.template}.twig`);
-		} catch (err) {
-			reject(new Error(err));
-		}
+		const templatePath= path.resolve(`./shared/templates/${page.template}.twig`);
+		const exists = fse.existsSync(templatePath);
+		if (!exists) reject(new Error('Template file does not exists'));
 
 		Twig.renderFile(templatePath, {data, mode}, (err, html) => {
 			if (err){

@@ -30,18 +30,23 @@ function reportFailure(msg, err) {
 	report.panic(msg, err);
 }
 
-module.exports = async function develop() {
+function copyAssetToPublicFolder(path) {
+	const publicPath = path.replace('src/', 'public/');
+	fse
+		.copy(path, publicPath)
+		.then(() => report.log('📗 File Copied: ' + path))
+		.catch((err) => {
+			reportFailure('Error during asset copy : ' + err);
+		});
+}
 
+module.exports = async function develop() {
 	let globalActivity;
-	globalActivity = report.activityTimer(
-		'Plato Develop',
-	);
+	globalActivity = report.activityTimer('Plato Develop');
 	globalActivity.start();
 
 	let activity;
-	activity = report.activityTimer(
-		'Cleaning Repo',
-	);
+	activity = report.activityTimer('Cleaning Repo');
 	activity.start();
 
 	// clear destination folder
@@ -57,18 +62,15 @@ module.exports = async function develop() {
 	fse.copySync(`${srcPath}/data`, `${distPath}/data`);
 	activity.end();
 
-	activity = report.activityTimer(
-		'Build Routes and saving remote Data from Static routes',
-	);
+	activity = report.activityTimer('Build Routes and saving remote Data from Static routes');
 	activity.start();
 
 	// add static routes to final_routes
 	// save remote endpoint for static routes
 	try {
 		await updateRoutes(routes.routes);
-
-	} catch (err){
-		reportFailure('Error during updating routes: '+err);
+	} catch (err) {
+		reportFailure('Error during updating routes: ' + err);
 	}
 
 	// save remote endpoint for static routes
@@ -76,45 +78,37 @@ module.exports = async function develop() {
 		for (const route of routes.routes) {
 			if (route.data) await saveRemoteDataFromSource(route.data, route.json, siteDir + 'data/');
 		}
-
-	} catch (err){
-		reportFailure('Error during saving static file: '+err);
+	} catch (err) {
+		reportFailure('Error during saving static file: ' + err);
 	}
 	activity.end();
 
-	activity = report.activityTimer(
-		'Create Pages from Plato API',
-	);
+	activity = report.activityTimer('Create Pages from Plato API');
 	activity.start();
 	// check if node API is used and if so check if createPages is used
 	try {
 		let nodeAPI = require('../../plato-node');
-		if (nodeAPI && nodeAPI.createPages){
+		if (nodeAPI && nodeAPI.createPages) {
 			await nodeAPI.createPages(siteDir + 'data/');
 		}
-
 	} catch (err) {
-		console.log('No API found: '+err);
+		console.log('No API found: ' + err);
 	}
 	activity.end();
 
-	activity = report.activityTimer(
-		'Build Static site',
-	);
+	activity = report.activityTimer('Build Static site');
 	activity.start();
 	const finalRoutes = fse.readJsonSync(routeDestPath);
 	try {
-
 		for (let page of finalRoutes.routes) {
 			await buildHTML(page, null, 'development', siteDir);
 		}
-
-	} catch (err){
-		reportFailure('Error during page generation: '+err);
+	} catch (err) {
+		reportFailure('Error during page generation: ' + err);
 	}
 	activity.end();
 
-	// Initialize watcher.
+	// Initialize watcher for template files
 	let watcher = chokidar.watch('./shared/templates/', {
 		ignored: /(^|[\/\\])\../,
 		persistent: true,
@@ -126,24 +120,31 @@ module.exports = async function develop() {
 		.on('add', (path) => log(`File ${path} has been added`))
 		.on('change', (path, stats) => {
 			const activeRoutes = routes.getRoutesByTemplatePath(path);
-			if (activeRoutes !== null){
-
+			if (activeRoutes !== null) {
 				for (let page of activeRoutes) {
 					buildHTML(page, null, 'development', siteDir).catch(console.error);
 				}
-
 			} else {
-			// change from a partial => rebuild everything
-			// TODO : check if change is not happening in an unlink template
+				// change from a partial => rebuild everything
+				// TODO : check if change is not happening in an unlink template
 				for (let page of finalRoutes.routes) {
 					buildHTML(page, null, 'development', siteDir).catch((err) => {
 						log(`Error: ${err}`);
 					});
 				}
-
 			}
 			log(`File ${path} has been changed`);
 		});
+
+	// Initialize watcher for assets files
+	let watcherAsset = chokidar.watch('./src/assets/', {
+		ignored: /(^|[\/\\])\../,
+		persistent: true,
+		ignoreInitial: true,
+	});
+
+	watcherAsset.on('add', (path) => copyAssetToPublicFolder(path));
+	watcherAsset.on('change', (path) => copyAssetToPublicFolder(path));
 
 	const options = {
 		contentBase: './public',
@@ -165,12 +166,11 @@ module.exports = async function develop() {
 	const server = new WebpackDevServer(compiler, options);
 
 	server.listen(port, 'localhost', function(err) {
-		if (err){
+		if (err) {
 			console.log(err);
 		} else {
 			globalActivity.end();
 			opn('http://localhost:' + port);
 		}
 	});
-
 };

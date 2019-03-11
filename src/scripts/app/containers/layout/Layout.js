@@ -9,22 +9,20 @@ import Layout from 'components/layout/Layout';
 import {setOrientation} from './actions';
 
 class LayoutContainer extends AbstractContainer {
-
 	constructor() {
 		super();
 		this.ComponentClass = Layout;
 		// console.log('this.ComponentClass', this.ComponentClass);
 		console.log('set componenet layout');
-
 	}
 
 	initActions() {
-		this.props.actions.resize = () => this.resizeAction();
+		this.props.actions.resize = (wdw) => this.resizeAction(wdw);
 		this.props.actions.setOrientation = () => this.setOrientation();
-
 	}
 
 	resizeAction(wdw) {
+		console.log('wdw', wdw);
 		store.dispatch(calculateResponsiveState(wdw));
 	}
 
@@ -36,7 +34,7 @@ class LayoutContainer extends AbstractContainer {
 		this.component.setMeta();
 	}
 
-	setOrientation(window){
+	setOrientation(window) {
 		store.dispatch(setOrientation(window));
 	}
 }

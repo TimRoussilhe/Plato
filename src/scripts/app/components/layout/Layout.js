@@ -7,7 +7,6 @@ import Header from 'containers/header/Header';
 import {debounce} from 'utils/misc';
 
 class Layout extends DOMComponent {
-
 	constructor(props) {
 		super(props);
 
@@ -21,11 +20,9 @@ class Layout extends DOMComponent {
 			'app.location': (location, prevLocation) => this.setLocationClass(location, prevLocation),
 			'app.meta': (newVal, oldVal) => this.setMeta(newVal, oldVal),
 		};
-
 	}
 
 	initDOM() {
-
 		this.$content = this.el.querySelector('#content');
 		this.$title = this.el.querySelector('head > title');
 		this.$metaDescription = this.el.querySelector('head > meta[name=description]');
@@ -37,7 +34,6 @@ class Layout extends DOMComponent {
 		//     return needsClick.apply(this, arguments);
 		// };
 		// FastClick.attach(this.el);
-
 	}
 
 	onDOMInit() {
@@ -60,15 +56,24 @@ class Layout extends DOMComponent {
 	}
 
 	bindEvents() {
+		window.addEventListener(
+			'orientationchange',
+			debounce(() => {
+				this.actions.resize(window);
+			}, 300),
+			false
+		);
 
-		window.addEventListener('orientationchange', debounce(() => {
-			this.actions.resize(window);
-		}, 300), false);
+		window.addEventListener(
+			'resize',
+			debounce(() => {
+				this.actions.setOrientation(window);
+				this.actions.resize(window);
+			}, 300),
+			false
+		);
 
-		window.addEventListener('resize', debounce(() => {
-			this.actions.setOrientation(window);
-			this.actions.resize(window);
-		}, 300), false);
+		this.actions.resize(window);
 
 		// enable a flag to grab scroll position during update
 		// window.addEventListener('scroll', () => {
@@ -100,26 +105,22 @@ class Layout extends DOMComponent {
 	}
 
 	triggerResize() {
-
 		window.dispatchEvent(new Event('resize'));
 	}
 
 	setMeta(meta, oldMeta) {
-
 		this.$title.textContent = meta.title;
 		this.$metaDescription.textContent = meta.description;
 
 		// Analytics
-		if (window.ga){
+		if (window.ga) {
 			const location = store.getState().app.location;
 			ga('set', 'page', location);
 			ga('send', 'pageview');
 		}
-
 	}
 
 	setLocationClass(location) {
-
 		this.el.setAttribute('location', location);
 	}
 

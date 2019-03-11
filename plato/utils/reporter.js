@@ -13,29 +13,29 @@ const base = Object.getPrototypeOf(reporter);
 
 module.exports = Object.assign(reporter, {
 	/**
-   * Strip initial indentation template function.
-   */
+	 * Strip initial indentation template function.
+	 */
 	stripIndent,
 	/**
-   * Toggle verbosity.
-   * @param {boolean} [isVerbose=true]
-   */
+	 * Toggle verbosity.
+	 * @param {boolean} [isVerbose=true]
+	 */
 	setVerbose(isVerbose = true) {
 		this.isVerbose = !!isVerbose;
 	},
 	/**
-   * Turn off colors in error output.
-   * @param {boolean} [isNoColor=false]
-   */
+	 * Turn off colors in error output.
+	 * @param {boolean} [isNoColor=false]
+	 */
 	setNoColor(isNoColor = false) {
 		if (isNoColor) {
 			errorFormatter.withoutColors();
 		}
 	},
 	/**
-   * Log arguments and exit process with status 1.
-   * @param {*} [arguments]
-   */
+	 * Log arguments and exit process with status 1.
+	 * @param {*} [arguments]
+	 */
 	panic(...args) {
 		this.error(...args);
 		process.exit(1);
@@ -57,18 +57,18 @@ module.exports = Object.assign(reporter, {
 		if (error) console.log(errorFormatter.render(error));
 	},
 	/**
-   * Set prefix on uptime.
-   * @param {string} prefix - A string to prefix uptime with.
-   */
+	 * Set prefix on uptime.
+	 * @param {string} prefix - A string to prefix uptime with.
+	 */
 	uptime(prefix) {
 		this.verbose(`${prefix}: ${(process.uptime() * 1000).toFixed(3)}ms`);
 	},
 	/**
-   * Time an activity.
-   * @param {string} name - Name of activity.
-   * @param {activityArgs} activityArgs - optional object with tracer parentSpan
-   * @return {string} The elapsed time of activity.
-   */
+	 * Time an activity.
+	 * @param {string} name - Name of activity.
+	 * @param {activityArgs} activityArgs - optional object with tracer parentSpan
+	 * @return {string} The elapsed time of activity.
+	 */
 	activityTimer(name, activityArgs = {}) {
 		const spinner = reporter.activity();
 		const start = process.hrtime();
@@ -93,9 +93,7 @@ module.exports = Object.assign(reporter, {
 			},
 			end: () => {
 				// span.finish();
-				const str = status
-					? `${name} — ${elapsedTime()} — ${status}`
-					: `${name} — ${elapsedTime()}`;
+				const str = status ? `${name} — ${elapsedTime()} — ${status}` : `${name} — ${elapsedTime()}`;
 				reporter.success(str);
 				spinner.end();
 			},
