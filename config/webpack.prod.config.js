@@ -8,7 +8,6 @@ const WebpackBundleSizeAnalyzerPlugin = require('webpack-bundle-size-analyzer').
 const WebpackChunkHash = require('webpack-chunk-hash');
 const ManifestPlugin = require('webpack-manifest-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-// const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin');
 const WorkboxPlugin = require('workbox-webpack-plugin');
 
 const appEntryPoint = path.join(__dirname, '../src/scripts/app/index.js');

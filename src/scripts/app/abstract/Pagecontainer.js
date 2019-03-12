@@ -1,6 +1,5 @@
 import AbstractContainer from './container';
-import store from 'store';
-// import axios from 'axios';
+// import store from 'store';
 
 // Constants
 // import {END_POINT} from 'constants/api';
@@ -10,7 +9,7 @@ import store from 'store';
 // import {loadJSON} from 'utils/load';
 
 // Actions
-import {setMeta} from 'containers/app/actions';
+// import {setMeta} from 'containers/app/actions';
 
 // Config
 import {JSON_ENDPOINTS} from 'constants/config';
