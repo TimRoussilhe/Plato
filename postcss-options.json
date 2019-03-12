@@ -1,8 +1,0 @@
-{
-	"autoprefixer": {
-		"browsers": "last 3 versions, iOS 8"
-	},
-	"cssnano": {
-		"safe": true
-	}
-}

@@ -1,9 +1,10 @@
 const path = require('path');
 const webpack = require('webpack');
 const devTool = 'source-map';
-const FriendlyErrorsWebpackPlugin = require( 'friendly-errors-webpack-plugin' );
+const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
-const notifier = require( 'node-notifier' );
+const notifier = require('node-notifier');
+const postcssConfig = require('./postcss.config');
 
 const appEntryPoint = path.join(__dirname, '../src/scripts/app/index.js');
 const outputPath = path.join(__dirname, '../public/assets/js/');
@@ -11,7 +12,6 @@ const filename = 'bundle.js';
 
 // console.log('appEntryPoint', appEntryPoint);
 // console.log('outputPath', outputPath);
-
 
 // console.log('\n ---- WEBPACK ---- \n \n running in development \n');
 // console.log(path.join(' running webpack in ', __dirname));
@@ -22,7 +22,6 @@ const filename = 'bundle.js';
 const entryPoints = appEntryPoint;
 
 module.exports = {
-
 	/*
 	ENTRY
 	If you pass a string: The string is resolved to a module which is loaded upon startup.
@@ -44,7 +43,7 @@ module.exports = {
 		chunkFilename: '[name].bundle.js',
 	},
 
-	optimization:{
+	optimization: {
 		noEmitOnErrors: true, // NoEmitOnErrorsPlugin
 	},
 
@@ -52,13 +51,13 @@ module.exports = {
 		new webpack.DefinePlugin({
 			'process.env': {
 				NODE_ENV: JSON.stringify('development'),
-				DEV: (process.env.NODE_ENV !== 'production'),
+				DEV: process.env.NODE_ENV !== 'production',
 				IS_BROWSER: true,
 			},
 		}),
 		new FriendlyErrorsWebpackPlugin({
-			onErrors: ( severity, errors ) => {
-				if ( severity !== 'error' ) return;
+			onErrors: (severity, errors) => {
+				if (severity !== 'error') return;
 
 				const error = errors[0];
 				notifier.notify({
@@ -76,13 +75,7 @@ module.exports = {
 	// will be included in the bundle, no need to add and load vendor
 	resolve: {
 		extensions: ['.js', '.json', '.twig', '.html'],
-		modules: [
-			'src/scripts/app/',
-			'src/scripts/vendors/',
-			'shared/',
-			'public/assets/',
-			'node_modules',
-		],
+		modules: ['src/scripts/app/', 'src/scripts/vendors/', 'shared/', 'public/assets/', 'node_modules'],
 	},
 
 	module: {
@@ -97,28 +90,32 @@ module.exports = {
 			{test: /\.twig$/, use: 'twig-loader'},
 			{
 				test: /\.scss$/,
-				use: [{
-					loader: 'style-loader',
-					// singleton is important here. On dev it will wait for CSS to be appended to start JS
-					options: {singleton: true},
-				},
-				{
-					loader: 'css-loader', options: {
-						sourceMap: true,
+				use: [
+					{
+						loader: 'style-loader',
+						// singleton is important here. On dev it will wait for CSS to be appended to start JS
+						options: {singleton: true},
 					},
-				},
-				{
-					loader: 'postcss-loader',
-					options: {
-						ident: 'postcss',
-						plugins: () => [require('autoprefixer')({browsers: ['> 3%', 'last 3 versions']})],
+					{
+						loader: 'css-loader',
+						options: {
+							sourceMap: true,
+						},
 					},
-				},
-				{
-					loader: 'sass-loader', options: {
-						sourceMap: true,
+					{
+						loader: 'postcss-loader',
+						options: {
+							ident: 'postcss',
+							plugins: () => [require('autoprefixer')(postcssConfig.options)],
+						},
 					},
-				}],
+					{
+						loader: 'sass-loader',
+						options: {
+							sourceMap: true,
+						},
+					},
+				],
 			},
 		],
 	},
@@ -137,5 +134,4 @@ module.exports = {
 	// 	hot: true,
 	// 	inline: true,
 	// },
-
 };

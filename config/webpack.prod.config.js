@@ -1,5 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
+const postcssConfig = require('./postcss.config');
 
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
@@ -45,37 +46,11 @@ module.exports = {
 	},
 
 	optimization: {
-		// splitChunks:{
-		// 	cacheGroups: {
-		// 		default: false,
-		// 		vendors: false,
-		// 		// vendor chunk
-		// 		vendor: {
-		// 		// name of the chunk
-		// 			name: 'vendor',
-		// 			// async + async chunks
-		// 			chunks: 'all',
-		// 			// import file path containing node_modules
-		// 			test: /node_modules/,
-		// 			// priority
-		// 			priority: 20,
-		// 		},
-		// 		// common chunk
-		// 		common: {
-		// 			name: 'common',
-		// 			minChunks: 2,
-		// 			chunks: 'async',
-		// 			priority: 10,
-		// 			reuseExistingChunk: true,
-		// 			enforce: true,
-		// 		},
-		// 	},
-		// },
 		noEmitOnErrors: true,
 		concatenateModules: true,
 		minimizer: [
 			new UglifyJsPlugin({
-				uglifyOptions:{
+				uglifyOptions: {
 					compress: {
 						drop_console: true,
 						warnings: false,
@@ -117,17 +92,6 @@ module.exports = {
 		new ManifestPlugin({
 			publicPath: '/assets/',
 		}),
-		// new SWPrecacheWebpackPlugin(
-		// 	{
-		// 		cacheId: 'plato',
-		// 		dontCacheBustUrlsMatching: /\.\w{8}\./,
-		// 		// filename: 'service-worker.js',
-		// 		filepath: './build/service-worker.js',
-		// 		minify: true,
-		// 		navigateFallback: publicPath + 'index.html',
-		// 		staticFileGlobsIgnorePatterns: [/\.map$/, /asset-manifest\.json$/],
-		// 	}
-		// ),
 		new WorkboxPlugin.GenerateSW(),
 	],
 
@@ -136,13 +100,7 @@ module.exports = {
 	// will be included in the bundle, no need to add and load vendor
 	resolve: {
 		extensions: ['.js', '.json', '.twig', '.html'],
-		modules: [
-			'src/scripts/app/',
-			'src/scripts/vendors/',
-			'shared/',
-			'public/assets/',
-			'node_modules',
-		],
+		modules: ['src/scripts/app/', 'src/scripts/vendors/', 'shared/', 'public/assets/', 'node_modules'],
 	},
 
 	module: {
@@ -162,7 +120,7 @@ module.exports = {
 						loader: 'postcss-loader',
 						options: {
 							ident: 'postcss',
-							plugins: () => [require('autoprefixer')({browsers: ['> 3%', 'last 3 versions']})],
+							plugins: () => [require('autoprefixer')(postcssConfig.options)],
 						},
 					},
 					'sass-loader',
@@ -178,5 +136,4 @@ module.exports = {
 
 	// Create Sourcemaps for the bundle
 	devtool: devTool,
-
 };

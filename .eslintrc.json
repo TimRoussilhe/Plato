@@ -22,13 +22,13 @@
 		"require-jsdoc": [0],
 		"no-undef": [0],
 		"no-tabs": [0],
-		"valid-jsdoc" : [1]
+		"valid-jsdoc": [1]
 	},
-  "env": {
-    "es6": true,
-    "node": true,
-    "browser": true
-  },
+	"env": {
+		"es6": true,
+		"node": true,
+		"browser": true
+	},
 	"parserOptions": {
 		"sourceType": "module",
 		"allowImportExportEverywhere": false,
