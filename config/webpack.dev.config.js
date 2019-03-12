@@ -1,7 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const devTool = 'source-map';
-// const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
+const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 const notifier = require('node-notifier');
 
@@ -56,18 +56,18 @@ module.exports = {
 				IS_BROWSER: true,
 			},
 		}),
-		// new FriendlyErrorsWebpackPlugin({
-		// 	onErrors: (severity, errors) => {
-		// 		if (severity !== 'error') return;
+		new FriendlyErrorsWebpackPlugin({
+			onErrors: (severity, errors) => {
+				if (severity !== 'error') return;
 
-		// 		const error = errors[0];
-		// 		notifier.notify({
-		// 			title: 'Compilation Failed',
-		// 			message: severity + ': ' + error.name,
-		// 			subtitle: error.file || '',
-		// 		});
-		// 	},
-		// }),
+				const error = errors[0];
+				notifier.notify({
+					title: 'Compilation Failed',
+					message: severity + ': ' + error.name,
+					subtitle: error.file || '',
+				});
+			},
+		}),
 		new webpack.HotModuleReplacementPlugin(),
 		new HardSourceWebpackPlugin(),
 	],
