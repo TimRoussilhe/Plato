@@ -51,12 +51,6 @@
 
 // - test circleci
 
-// final to-do before Sylvain:
-// - Clean destination folder thing
-// - clean structure of plato folders
-// - proper error hanlder everywhere
-// - cleanup dependencies
-
 const program = require('commander');
 const build = require('./commands/build');
 const develop = require('./commands/develop');
@@ -64,10 +58,7 @@ const develop = require('./commands/develop');
 program
 	.command('build')
 	.description('Build website')
-	.option(
-		'-sic, --skip-image-compression <skipImageCompression>',
-		'Skip compression of image assets (default: false)',
-	)
+	.option('-sic, --skip-image-compression <skipImageCompression>', 'Skip compression of image assets (default: false)')
 	.action(() => {
 		console.log('BUILD');
 		build();
@@ -76,18 +67,10 @@ program
 program
 	.command('develop')
 	.description('Develop website')
-	.option(
-		'-sic, --skip-image-compression <skipImageCompression>',
-		'Skip compression of image assets (default: false)',
-	)
+	.option('-sic, --skip-image-compression <skipImageCompression>', 'Skip compression of image assets (default: false)')
 	.action(() => {
 		console.log('develop');
 		develop();
 	});
 
 program.parse(process.argv);
-
-
-// module.exports = {
-// 	build,
-// };

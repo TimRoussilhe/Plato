@@ -62,7 +62,7 @@ module.exports = async function develop() {
 	fse.copySync(`${srcPath}/data`, `${distPath}/data`);
 	activity.end();
 
-	activity = report.activityTimer('Build Routes and saving remote Data from Static routes');
+	activity = report.activityTimer('Build Routes and save remote Data from Static routes');
 	activity.start();
 
 	// add static routes to final_routes
@@ -85,7 +85,8 @@ module.exports = async function develop() {
 
 	activity = report.activityTimer('Create Pages from Plato API');
 	activity.start();
-	// check if node API is used and if so check if createPages is used
+
+	// check if node API is used and if so, check if createPages is used
 	try {
 		let nodeAPI = require('../../plato-node');
 		if (nodeAPI && nodeAPI.createPages) {

@@ -11,7 +11,6 @@ const print = chalk.grey;
 const routeDestPath = path.resolve(__dirname + '/../../shared/routes/real_routes.json');
 
 const saveFile = (destination, data) => {
-
 	return new Promise((resolve, reject) => {
 		fse.writeFile(destination, data, 'utf8', () => {
 			resolve();
@@ -19,9 +18,15 @@ const saveFile = (destination, data) => {
 	});
 };
 
-exports.saveRemoteData = (data, fileName, siteDir) => {
+exports.saveRemoteData = (data, fileName, siteDir, dataMiddleware) => {
 	const destination = path.join(siteDir, fileName);
-	return saveFile(destination, data);
+
+	let jsonData = data;
+	if (dataMiddleware !== null) {
+		jsonData = dataMiddleware(data);
+	}
+
+	return saveFile(destination, jsonData);
 };
 
 exports.saveRemoteDataFromSource = (source, fileName, siteDir) => {
@@ -34,7 +39,7 @@ exports.saveRemoteDataFromSource = (source, fileName, siteDir) => {
 				const destination = path.join(siteDir, fileName);
 				saveFile(destination, JSON.stringify(body)).then(() => {
 					const end = process.hrtime(start);
-					log(print(` Saved ${fileName} in ${end[1] / 1000000 }ms`));
+					log(print(` Saved ${fileName} in ${end[1] / 1000000}ms`));
 					resolve();
 				});
 			});
@@ -42,24 +47,17 @@ exports.saveRemoteDataFromSource = (source, fileName, siteDir) => {
 };
 
 exports.updateRoutes = (routes) => {
-
 	return new Promise((resolve, reject) => {
-
 		const exists = fse.existsSync(routeDestPath);
 
-		if (exists){
-
-			fse.readFile(routeDestPath).then((data)=>{
-
+		if (exists) {
+			fse.readFile(routeDestPath).then((data) => {
 				obj = JSON.parse(data); // now it an object
-				obj.routes = [...obj.routes, ...routes];// add some data
+				obj.routes = [...obj.routes, ...routes]; // add some data
 				json = JSON.stringify(obj); // convert it back to json
 				fse.writeFile(routeDestPath, json, 'utf8').then(() => resolve()); // write it back
-
 			});
-
 		} else {
-
 			const routesObject = {
 				routes,
 			};
@@ -72,5 +70,3 @@ exports.updateRoutes = (routes) => {
 		}
 	});
 };
-
-

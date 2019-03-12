@@ -1,19 +1,9 @@
-@import "~normalize.css/normalize";
-@import "base/base";
+@import '~normalize.css/normalize';
+@import 'base/base';
 
 // components
-@import "components/header";
-@import "components/footer";
+@import 'components/header';
+@import 'components/footer';
 
 // page
-@import "components/page";
-
-body {
-  // transition: all 3s cubic-bezier(0.075, 0.82, 0.165, 1);
-  user-select: none;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  filter: grayscale(100%);
-  background: lightgrey;
-}
+@import 'components/page';
