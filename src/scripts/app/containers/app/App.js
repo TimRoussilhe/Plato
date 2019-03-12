@@ -5,14 +5,41 @@ import Base from 'abstract/base';
 import Layout from 'containers/layout/Layout';
 
 // dynamic import
-function getComponent(chunkName, path) {
+// function getComponent(chunkName, path) {
+// 	return new Promise((resolve, reject) => {
+// 		const ComponentName = path.charAt(0).toUpperCase() + path.slice(1);
+// 		import(/* webpackChunkName: "[request]" */ `containers/${path}/${ComponentName}`)
+// 			.then(({default: Page}) => {
+// 				resolve(Page);
+// 			})
+// 			.catch((error) => reject('An error occurred while loading the component'));
+// 	});
+// }
+
+// not so dynamic import
+function pageLoader(chunkName, path) {
 	return new Promise((resolve, reject) => {
 		const ComponentName = path.charAt(0).toUpperCase() + path.slice(1);
-		import(/* webpackChunkName: "[request]" */ `containers/${path}/${ComponentName}`)
-			.then(({default: Page}) => {
-				resolve(Page);
-			})
-			.catch((error) => reject('An error occurred while loading the component'));
+		switch (ComponentName) {
+		case 'Homepage':
+			return import(/* webpackChunkName: "Homepage" */ 'containers/homepage/Homepage')
+				.then(({default: Page}) => {
+					resolve(Page);
+				})
+				.catch((error) => reject('An error occurred while loading the component'));
+		case 'About':
+			return import(/* webpackChunkName: "About" */ 'containers/about/About')
+				.then(({default: Page}) => {
+					resolve(Page);
+				})
+				.catch((error) => reject('An error occurred while loading the component'));
+		case 'Notfound':
+			return import(/* webpackChunkName: "Notfound" */ 'containers/notfound/Notfound')
+				.then(({default: Page}) => {
+					resolve(Page);
+				})
+				.catch((error) => reject('An error occurred while loading the component'));
+		}
 	});
 }
 
@@ -63,7 +90,8 @@ class App extends Base {
 		const currentRoute = getRoute(location);
 
 		try {
-			const PageAsync = await getComponent(currentRoute.template, currentRoute.template);
+			// const PageAsync = await getComponent(currentRoute.template, currentRoute.template);
+			const PageAsync = await pageLoader(currentRoute.template, currentRoute.template);
 			Page = PageAsync;
 		} catch (error) {
 			console.error(error);
