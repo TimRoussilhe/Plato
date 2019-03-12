@@ -1,32 +1,30 @@
 @mixin aspect-ratio($width, $height) {
-
 	position: relative;
-  display:block;
+	display: block;
 
-	&:before{
+	&:before {
 		display: block;
-		content: "";
+		content: '';
 		width: 100%;
-		$percent : ($height / $width) * 100%;
-    padding-top: round($percent * 1000) / 1000;
+		$percent: ($height / $width) * 100%;
+		padding-top: round($percent * 1000) / 1000;
 	}
-	> img{
+	> img {
 		position: absolute;
 		top: 0;
 		left: 0;
 		right: 0;
 		bottom: 0;
-		width : 100%;
-		height : auto;
+		width: 100%;
+		height: auto;
 	}
-	> video{
+	> video {
 		position: absolute;
 		top: 0;
 		left: 0;
 		right: 0;
 		bottom: 0;
-		width : 100%;
-		height : auto;
+		width: 100%;
+		height: auto;
 	}
-
 }

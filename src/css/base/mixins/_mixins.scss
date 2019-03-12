@@ -1,26 +1,25 @@
-
 @mixin responsive-font($responsive, $min, $max: false, $fallback: false) {
-  $responsive-unitless: $responsive / ($responsive - $responsive + 1);
-  $dimension: if(unit($responsive) == 'vh', 'height', 'width');
-  $min-breakpoint: $min / $responsive-unitless * 100;
+	$responsive-unitless: $responsive / ($responsive - $responsive + 1);
+	$dimension: if(unit($responsive) == 'vh', 'height', 'width');
+	$min-breakpoint: $min / $responsive-unitless * 100;
 
-  @media (max-#{$dimension}: #{$min-breakpoint}) {
-    font-size: $min;
-  }
+	@media (max-#{$dimension}: #{$min-breakpoint}) {
+		font-size: $min;
+	}
 
-  @if $max {
-    $max-breakpoint: $max / $responsive-unitless * 100;
+	@if $max {
+		$max-breakpoint: $max / $responsive-unitless * 100;
 
-    @media (min-#{$dimension}: #{$max-breakpoint}) {
-      font-size: $max;
-    }
-  }
+		@media (min-#{$dimension}: #{$max-breakpoint}) {
+			font-size: $max;
+		}
+	}
 
-  @if $fallback {
-    font-size: $fallback;
-  }
+	@if $fallback {
+		font-size: $fallback;
+	}
 
-  font-size: $responsive;
+	font-size: $responsive;
 }
 
 /*
@@ -30,56 +29,56 @@
  * $rule-color: desired color of horizontal rules
  */
 @mixin multiline-input($line-height, $rule-height, $rule-color) {
-    background-image: linear-gradient(from top, transparent, transparent $line-height, $rule-color 0);
-    background-image: -ms-linear-gradient(top, transparent, transparent $line-height, $rule-color 0);
-    background-image: -o-linear-gradient(top, transparent, transparent $line-height, $rule-color 0);
-    background-image: -moz-linear-gradient(top, transparent, transparent $line-height, $rule-color 0);
-    background-image: -webkit-linear-gradient(top, transparent, transparent $line-height, $rule-color 0);
-    background-size: 100% $line-height + $rule-height;
-    line-height: $line-height;
+	background-image: linear-gradient(from top, transparent, transparent $line-height, $rule-color 0);
+	background-image: -ms-linear-gradient(top, transparent, transparent $line-height, $rule-color 0);
+	background-image: -o-linear-gradient(top, transparent, transparent $line-height, $rule-color 0);
+	background-image: -moz-linear-gradient(top, transparent, transparent $line-height, $rule-color 0);
+	background-image: -webkit-linear-gradient(top, transparent, transparent $line-height, $rule-color 0);
+	background-size: 100% $line-height + $rule-height;
+	line-height: $line-height;
 
-    resize: none;
-    -moz-appearance: none;
-    -webkit-appearance: none;
-    appearance: none;
+	resize: none;
+	-moz-appearance: none;
+	-webkit-appearance: none;
+	appearance: none;
 }
 
 @mixin replaceText() {
-    display: block;
-    text-indent: -99999px;
+	display: block;
+	text-indent: -99999px;
 }
 
 @mixin tracking($val, $font-size) {
-  letter-spacing: ( $val * $font-size / 1000 ) * 1px;
+	letter-spacing: ($val * $font-size / 1000) * 1px;
 }
 
 @mixin photoshop-letterspacing-to-ems($val) {
-  letter-spacing: ( $val / 1000 ) * 1em;
+	letter-spacing: ($val / 1000) * 1em;
 }
 
 // custom scrollbar
 @mixin scrollbar($size, $foreground-color, $background-color: rgba($foreground-color, 0.25)) {
-  // For Google Chrome
-  &::-webkit-scrollbar {
-      width:  $size;
-      height: $size;
-  }
+	// For Google Chrome
+	&::-webkit-scrollbar {
+		width: $size;
+		height: $size;
+	}
 
-  &::-webkit-scrollbar-thumb {
-      background: $foreground-color;
-  }
+	&::-webkit-scrollbar-thumb {
+		background: $foreground-color;
+	}
 
-  &::-webkit-scrollbar-track {
-      background: $background-color;
-  }
+	&::-webkit-scrollbar-track {
+		background: $background-color;
+	}
 
-  // For Internet Explorer
-  &{
-    scrollbar-face-color: $foreground-color;
-    scrollbar-track-color: $background-color;
-  }
+	// For Internet Explorer
+	& {
+		scrollbar-face-color: $foreground-color;
+		scrollbar-track-color: $background-color;
+	}
 }
 
 @function responsive-font($breakpoint, $px) {
-  @return #{$px*100/$breakpoint}vw;
+	@return #{$px * 100 / $breakpoint}vw;
 }

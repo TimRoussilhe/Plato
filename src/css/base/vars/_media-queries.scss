@@ -7,9 +7,9 @@ $bp-desktop-s: 1250;
 $bp-desktop-l: 1600;
 
 // media queries
-$mq-mobile: "(max-width: #{$bp-mobile}px)";
-$mq-mobile-landscape: "(max-width: #{$bp-mobile-landscape}px) and (orientation : landscape)";
-$mq-tablet: "(max-width: #{$bp-tablet}px)";
-$mq-tablet-landscape: "(max-width: #{$bp-tablet-landscape}px) and (orientation : landscape)";
-$mq-desktop-s: "(max-width: #{$bp-desktop-s}px)";
-$mq-desktop-l: "(max-width: #{$bp-desktop-l}px)";
+$mq-mobile: '(max-width: #{$bp-mobile}px)';
+$mq-mobile-landscape: '(max-width: #{$bp-mobile-landscape}px) and (orientation : landscape)';
+$mq-tablet: '(max-width: #{$bp-tablet}px)';
+$mq-tablet-landscape: '(max-width: #{$bp-tablet-landscape}px) and (orientation : landscape)';
+$mq-desktop-s: '(max-width: #{$bp-desktop-s}px)';
+$mq-desktop-l: '(max-width: #{$bp-desktop-l}px)';

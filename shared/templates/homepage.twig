@@ -1,20 +1,17 @@
 <section class="page-wrapper" id="homepage">
-
 	<div class="introduction">
+		<h1 class="f-title">Dynamic content: {{ data.content.title }}</h1>
+		<h2 class="f-body">INDEX RELOAD Static content</h2>
 
-			<h1 class="f-title">Dynamic content: {{ data.content.title }}</h1>
-			<h2 class="f-body">INDEX RELOAD Static content</h2>
+		<span class="icon instagram">{% include './svgs/instagram.twig' %}</span>
 
-			<span class="icon instagram">{% include './svgs/instagram.twig' %}</span>
-
-			<div class="grid">
-				<div class="col-12 col-md-6">
-					<p>Look at me! </p>
-				</div>
-				<div class="col-12 col-md-6">
-					<p>I am a Reflex grid!</p>
-				</div>
+		<div class="grid">
+			<div class="col-12 col-md-6">
+				<p>Look at me!</p>
 			</div>
+			<div class="col-12 col-md-6">
+				<p>I am a Reflex grid!</p>
+			</div>
+		</div>
 	</div>
-
 </section>
