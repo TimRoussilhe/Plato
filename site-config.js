@@ -10,13 +10,13 @@ module.exports = {
 	pathPrefix: null,
 	logo: path.resolve(__dirname, 'src/images/icon.png'),
 	social: {
-		twitter: 'Dipsea',
-		fbAppId: '966242223397117',
+		twitter: 'Plato',
+		fbAppId: '550534890534809345890',
 	},
-	preload:[
+	preload: [
 		{
-			type:'font',
-			href:'/assets/fonts/UntitledSans-Regular.woff2',
+			type: 'font',
+			href: '/assets/fonts/UntitledSans-Regular.woff2',
 			format: 'woff2',
 		},
 	],
