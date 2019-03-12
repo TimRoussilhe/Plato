@@ -3,40 +3,22 @@ import Base from 'abstract/base';
 
 // Containers
 import Layout from 'containers/layout/Layout';
-// import HomepageContainer from 'containers/homepage/Homepage';
-// import AboutContainer from 'containers/about/About';
-// import NotFoundContainer from 'containers/not-found/NotFound';
-// import DefaultPage from 'abstract/Pagecomponent';
 
+// dynamic import
 function getComponent(chunkName, path) {
-	const ComponentName = path.charAt(0).toUpperCase() + path.slice(1);
-	return import(/* webpackChunkName: "[request]" */ `containers/${path}/${ComponentName}`).then(({default: Page}) => {
-		return Page;
+	return new Promise((resolve, reject) => {
+		const ComponentName = path.charAt(0).toUpperCase() + path.slice(1);
+		console.log('ComponentName', ComponentName);
 
-	}).catch((error) => 'An error occurred while loading the component');
+		import(/* webpackChunkName: "[request]" */ `containers/${path}/${ComponentName}`)
+			.then(({default: Page}) => {
+				resolve(Page);
+			})
+			.catch((error) => reject('An error occurred while loading the component'));
+	});
 }
 
-// getComponent().then((Component) => {
-// 	const home = new Component();
-// 	console.log('home', home);
-
-// 	// document.body.appendChild(component);
-// });
-// const page = 'Homepage';
-
-// import( /* webpackChunkName: "[request]" */ `containers/homepage/${page}` ).then( ( data ) => {
-// 	console.log( data );
-// } );
-// import( 'containers/about/About' ).then( ( data ) => {
-// 	console.log( data );
-// } );
-// import( 'containers/not-found/NotFound' ).then( ( data ) => {
-// 	console.log( data );
-// } );
-
 // Constants
-// import {HOMEPAGE, ABOUT, NOT_FOUND} from 'constants/locations';
-
 // Selector
 import {getRoute} from './selectors';
 
@@ -45,9 +27,7 @@ import {setAnimating, setPage, setOldPage} from './actions';
 import store from 'store';
 
 class App extends Base {
-
 	constructor(props) {
-
 		super(props);
 
 		this.prevLocation = null;
@@ -60,7 +40,6 @@ class App extends Base {
 		this.storeEvents = {
 			'app.location': (location, prevLocation) => this.onLocationChanged(location, prevLocation),
 		};
-
 	}
 
 	init() {
@@ -81,19 +60,18 @@ class App extends Base {
 	}
 
 	async routing(location, fromSamePage = false) {
-
 		console.log('-------------- routing ---------------');
 
 		let Page = null;
 		const currentRoute = getRoute(location);
-		const PageAsync = await getComponent(currentRoute.template, currentRoute.template);
 
-		Page = PageAsync;
-
-		if (Page === null) {
-			console.error('Error: page is null');
-			return;
+		try {
+			const PageAsync = await getComponent(currentRoute.template, currentRoute.template);
+			Page = PageAsync;
+		} catch (error) {
+			console.error(error);
 		}
+
 		store.dispatch(setAnimating(true));
 
 		// First Render from the server
@@ -106,7 +84,7 @@ class App extends Base {
 		// IF THERE IS STILL AN OLDPAGE HERE IT MEANS SOMETHING BEEN WRONG
 		// SO WE JUST KILL IT
 		// USUALLY HAPPENS IF USER PLAY WITH BROWSER BACK ARROWS WHILE ANIMATING
-		if (this.oldPage){
+		if (this.oldPage) {
 			this.oldPage.dispose();
 			this.oldPage = null;
 			this.page.dispose();
@@ -129,7 +107,6 @@ class App extends Base {
 
 		// Init the next page now
 		this.page.init().then(() => {
-
 			console.log('ON PAGE INIT');
 
 			// Resize the current page for position
@@ -137,20 +114,19 @@ class App extends Base {
 
 			if (this.oldPage) {
 				console.log('HIDE OLD PAGE', this.oldPage);
-				this.oldPage.hide()
-					.then(() => {
-						console.log('OLD PAGE HIDDEN');
-						this.oldPage.dispose();
-						this.oldPage = null;
-						this.showPage();
-					});
+				this.oldPage.hide().then(() => {
+					console.log('OLD PAGE HIDDEN');
+					this.oldPage.dispose();
+					this.oldPage = null;
+					this.showPage();
+				});
 			} else {
 				this.showPage();
 			}
 		});
 	}
 
-	showPage(){
+	showPage() {
 		// Show next
 		this.page.show().then(() => {
 			// if (!this.getState().get('app').get('appLoaded')) this.dispatch(setAppLoaded(true));
@@ -166,7 +142,6 @@ class App extends Base {
 			}
 		});
 	}
-
 }
 
 export default App;

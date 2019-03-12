@@ -17,7 +17,7 @@ class Layout extends DOMComponent {
 		this.el = document.documentElement;
 
 		this.storeEvents = {
-			'app.location': (location, prevLocation) => this.setLocationClass(location, prevLocation),
+			'app.location': (location, prevLocation) => this.onLocationupdate(location, prevLocation),
 			'app.meta': (newVal, oldVal) => this.setMeta(newVal, oldVal),
 		};
 	}
@@ -111,17 +111,16 @@ class Layout extends DOMComponent {
 	setMeta(meta, oldMeta) {
 		this.$title.textContent = meta.title;
 		this.$metaDescription.textContent = meta.description;
+	}
 
-		// Analytics
+	onLocationupdate(location) {
+		this.el.setAttribute('location', location);
+
+		// Analytics single app page view
 		if (window.ga) {
-			const location = store.getState().app.location;
 			ga('set', 'page', location);
 			ga('send', 'pageview');
 		}
-	}
-
-	setLocationClass(location) {
-		this.el.setAttribute('location', location);
 	}
 
 	resize() {

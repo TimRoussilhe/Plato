@@ -23,7 +23,7 @@
 			"id": "404",
 			"fileName": "404.html",
 			"url": "/error",
-			"template": "error",
+			"template": "notfound",
 			"json": "404.json"
 		}
 	]

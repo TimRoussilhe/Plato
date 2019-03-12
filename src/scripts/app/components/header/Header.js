@@ -1,7 +1,6 @@
 import AbstractDOMComponent from 'abstract/component';
 
 class Header extends AbstractDOMComponent {
-
 	constructor(props) {
 		super(props);
 
@@ -12,7 +11,6 @@ class Header extends AbstractDOMComponent {
 		this.storeEvents = {
 			'app.location': (location, prevLocation) => this.setActiveLink(location, prevLocation),
 		};
-
 	}
 
 	initDOM() {
@@ -39,7 +37,6 @@ class Header extends AbstractDOMComponent {
 			navItem.parentNode.classList.remove('active');
 		});
 	}
-
 }
 
 export default Header;

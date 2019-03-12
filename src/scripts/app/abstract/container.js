@@ -6,39 +6,37 @@
 import Base from './base';
 
 class AbstractContainer extends Base {
-
 	constructor(props = {}) {
-
 		super(props);
 
 		/**
-    * Component asociated to the container
-    * @type {Object}
-    */
+		 * Component asociated to the container
+		 * @type {Object}
+		 */
 		this.component = null;
 
 		/**
-		* Component Class
-		* @type {Object}
-		*/
+		 * Component Class
+		 * @type {Object}
+		 */
 		this.ComponentClass = null;
 
 		/**
-		* Props Object
-		* @type {Object}
-		*/
+		 * Props Object
+		 * @type {Object}
+		 */
 		this.props = props;
 
 		/**
-		* Data Object
-		* @type {Object}
-		*/
+		 * Data Object
+		 * @type {Object}
+		 */
 		this.data = props.data ? props.data : {};
 
 		/**
-		* Actions Object
-		* @type {Object}
-		*/
+		 * Actions Object
+		 * @type {Object}
+		 */
 		this.props.actions = props.actions ? props.actions : {};
 
 		// /**
@@ -47,20 +45,11 @@ class AbstractContainer extends Base {
 		// */
 
 		this.promises = {
-			init: {
-				resolve: null,
-				reject: null,
-			},
 			data: {
 				resolve: null,
 				reject: null,
 			},
 		};
-
-		this.states = {
-			isInit: false,
-		};
-
 	}
 
 	getComponent() {

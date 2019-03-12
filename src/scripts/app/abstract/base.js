@@ -6,7 +6,6 @@ import watch from 'redux-watch';
  * @constructor
  */
 class Base {
-
 	set promises(newPromises) {
 		if (!this._promises) this._promises = {};
 		for (const promise in newPromises) {
@@ -46,11 +45,10 @@ class Base {
 	}
 
 	constructor() {
-
 		/**
-     * Object as associative array of all the <promises> objects
-     * @type {Object}
-     */
+		 * Object as associative array of all the <promises> objects
+		 * @type {Object}
+		 */
 		this._promises = {};
 
 		/**
@@ -66,11 +64,21 @@ class Base {
 		this._storeEvents = {};
 
 		/**
-     * Object as associative array of all <subscriptions> objects
-     * @type {Object}
-     */
+		 * Object as associative array of all <subscriptions> objects
+		 * @type {Object}
+		 */
 		this.subscriptions = {};
 
+		this.promises = {
+			init: {
+				resolve: null,
+				reject: null,
+			},
+		};
+
+		this.states = {
+			isInit: false,
+		};
 	}
 
 	/**
@@ -101,18 +109,13 @@ class Base {
 	 * Once the component is init
 	 */
 	onInit() {
-		console.log('ONInit');
-		this.setState({isInit: true, canUpdate: true});
+		this.setState({isInit: true});
 		this.promises.init.resolve();
 	}
 
 	setState(partialState = {}, callback, needRender = false) {
-		if (typeof partialState !== 'object' &&
-            typeof partialState !== 'function' &&
-            partialState !== null
-		) {
-			console.error('setState(...): takes an object of state variables to update or a ' +
-            'function which returns an object of state variables.');
+		if (typeof partialState !== 'object' && typeof partialState !== 'function' && partialState !== null) {
+			console.error('setState(...): takes an object of state variables to update or a ' + 'function which returns an object of state variables.');
 			return;
 		}
 
@@ -127,7 +130,6 @@ class Base {
 	}
 
 	subscribe(o) {
-
 		// When an object is givin for a specific subscription
 		if (o) {
 			if (this.subscriptions[o.path]) {
@@ -148,9 +150,7 @@ class Base {
 		}
 
 		for (const path in this.storeEvents) {
-
 			if ({}.hasOwnProperty.call(this.storeEvents, path)) {
-
 				if (!this.storeEvents[path]) continue;
 				if (this.subscriptions[path]) this.subscriptions[path]();
 
@@ -189,12 +189,11 @@ class Base {
 		store.dispatch(action);
 	}
 
-	dispose(){
+	dispose() {
 		this.unsubscribe();
 	}
 
 	resize() {}
-
 }
 
 export default Base;

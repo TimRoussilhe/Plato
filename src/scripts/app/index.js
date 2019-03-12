@@ -1,4 +1,3 @@
-
 import {isMobile, isTablet} from 'utils/is';
 import App from 'containers/app/App';
 import Router from 'router';
@@ -9,22 +8,16 @@ import {cleanURL} from 'helpers/cleanURL';
 import './../../css/app.scss';
 
 class Entry {
-
 	constructor() {
-		console.log('--- APP TEST TEST ---');
+		console.log('--- APP STARTED ---');
 		console.log('\n\n\n');
 		this.app = null;
 	}
 
 	init() {
-		console.log('init');
 		const router = Router.configureRoute();
 		this.app = new App();
-		// custom Detectizr setup
 		const root = document.documentElement;
-
-		console.log('isMobile', isMobile());
-		console.log('isMobile', isTablet());
 
 		isMobile() && root.classList.add('isMobile');
 		isTablet() && root.classList.add('isTablet');
@@ -36,20 +29,16 @@ class Entry {
 		store.dispatch(setDeviceType(deviceType));
 
 		Router.initRouter().then(() => {
-			this.app.init()
-				.then(() => {
-					console.log('init then');
-					router.start();
-				});
+			this.app.init().then(() => {
+				router.start();
+			});
 		});
-
 	}
 }
-console.log('location', location);
 
 (function() {
 	const {hostname, port} = location;
-	if (hostname !== 'localhost' && port!==8080 && 'serviceWorker' in navigator) {
+	if (hostname !== 'localhost' && port !== 8080 && 'serviceWorker' in navigator) {
 		navigator.serviceWorker.register('/assets/service-worker.js');
 	}
 })();
@@ -62,4 +51,3 @@ console.log('location', location);
 const entry = new Entry();
 export default entry;
 document.addEventListener('DOMContentLoaded', () => entry.init());
-

@@ -1,14 +1,12 @@
 import AbstractPageContainer from 'abstract/container.js';
-import NotFound from 'components/not-found/NotFound';
+import NotFound from 'components/notfound/Notfound';
 
 class NotFoundContainer extends AbstractPageContainer {
-
-	constructor(props){
+	constructor(props) {
 		super(props);
 
 		this.ComponentClass = NotFound;
 	}
-
 }
 
 export default NotFoundContainer;

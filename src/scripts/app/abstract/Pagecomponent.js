@@ -1,4 +1,3 @@
-
 import AbstractDOMComponent from 'abstract/component';
 import {TweenLite, TimelineLite, CSSPlugin} from 'gsap/TweenMax';
 const plugins = [CSSPlugin];
@@ -9,7 +8,6 @@ const plugins = [CSSPlugin];
  * @constructor
  */
 class PageComponent extends AbstractDOMComponent {
-
 	setupDOM() {
 		TweenLite.set(this.el, {autoAlpha: 0});
 	}

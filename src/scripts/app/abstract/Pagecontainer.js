@@ -21,15 +21,12 @@ import {JSON_ENDPOINTS} from 'constants/config';
  * @constructor
  */
 class PageContainer extends AbstractContainer {
-
 	constructor(props) {
 		super(props);
-
 	}
 
 	// to override if needed
 	fetchData() {
-
 		const endPoint = this.props.endPoint;
 
 		if (!endPoint) {
@@ -39,15 +36,17 @@ class PageContainer extends AbstractContainer {
 
 		const url = JSON_ENDPOINTS + this.props.endPoint;
 
-		fetch(url).then((response) => {
-			return response.json();
-		}).then((json) => {
-			this.data = json;
-			this.promises.data.resolve();
-		}).catch((ex) => {
-			this.promises.data.reject();
-		});
-
+		fetch(url)
+			.then((response) => {
+				return response.json();
+			})
+			.then((json) => {
+				this.data = json;
+				this.promises.data.resolve();
+			})
+			.catch((ex) => {
+				this.promises.data.reject();
+			});
 	}
 
 	loadAssets() {
@@ -61,7 +60,6 @@ class PageContainer extends AbstractContainer {
 	onInit() {
 		super.onInit();
 	}
-
 }
 
 export default PageContainer;

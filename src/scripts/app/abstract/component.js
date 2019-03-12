@@ -10,7 +10,6 @@ const delegateEventSplitter = /^(\S+)\s*(.*)$/;
  */
 
 class Component extends Base {
-
 	set events(events) {
 		for (const event in events) {
 			if ({}.hasOwnProperty.call(events, event)) {
@@ -21,7 +20,7 @@ class Component extends Base {
 		}
 
 		// for now we disable it here to avoid too many call
-		// and let the render naturally call the evetns delegation
+		// and let the render naturally call the events delegation
 		// this.delegateEvents();
 	}
 
@@ -30,31 +29,26 @@ class Component extends Base {
 	}
 
 	constructor(props) {
-
 		super(props);
 
 		/**
-			 * Object as associative array of all the <handlers> objects
-			 * @type {Object}
-			 */
+		 * Object as associative array of all the <handlers> objects
+		 * @type {Object}
+		 */
 		this.handlers = {};
 
 		/**
-			 * Object as associative array of all the <DOM.events> objects
-			 * @type {Object}
-			 */
+		 * Object as associative array of all the <DOM.events> objects
+		 * @type {Object}
+		 */
 		this._events = {};
 		this.delegatedEvents = [];
 
 		/**
-     * Object as associative array of all the <promises> objects
-     * @type {Object}
-     */
+		 * Object as associative array of all the <promises> objects
+		 * @type {Object}
+		 */
 		this.promises = {
-			init: {
-				resolve: null,
-				reject: null,
-			},
 			show: {
 				resolve: null,
 				reject: null,
@@ -72,15 +66,14 @@ class Component extends Base {
 		this.TL = {};
 
 		/**
-     * uniqueId
-     * @type {String}
-     */
+		 * uniqueId
+		 * @type {String}
+		 */
 		this.cid = uniqueId('component');
 
 		this.props = props;
 		this.states = {
 			canUpdate: false,
-			isInit: false,
 			isAnimating: false,
 			isShown: false,
 		};
@@ -101,7 +94,6 @@ class Component extends Base {
 		this.events = {
 			'click a': (e) => this.hyperlink(e),
 		};
-
 	}
 
 	/**
@@ -127,8 +119,6 @@ class Component extends Base {
 	 * This is where we scope the main elements
 	 */
 	setElement() {
-		console.log('this.el', this.el);
-
 		if (this.el === null && this.template === null) {
 			console.error('You must provide a template or an el to scope a component. Creating an empty div instead');
 			this.el = document.createElement('div');
@@ -148,22 +138,17 @@ class Component extends Base {
 	 * Render your template
 	 */
 	renderTemplate() {
-		console.log('renderTemplate');
-
 		const html = this.template({
-			data:this.data,
+			data: this.data,
 		});
 
 		// String to DOM Element
-		let wrapper= document.createElement('div');
-		wrapper.innerHTML= html;
+		let wrapper = document.createElement('div');
+		wrapper.innerHTML = html;
 		this.el = wrapper.firstChild;
-
 	}
 
 	onRender() {
-		console.log('onRender');
-
 		this.initDOM();
 		this.setupDOM();
 		this.initTL();
@@ -172,13 +157,13 @@ class Component extends Base {
 	}
 
 	/**
-     * Init all your DOM elements here
-     */
+	 * Init all your DOM elements here
+	 */
 	initDOM() {}
 
 	/**
-     * Setup your DOM elements here ( for example defaut style before animation )
-     */
+	 * Setup your DOM elements here ( for example defaut style before animation )
+	 */
 	setupDOM() {}
 
 	/**
@@ -189,6 +174,7 @@ class Component extends Base {
 	onDOMInit() {
 		this.bindEvents();
 		this.onInit();
+		this.setState({canUpdate: true});
 	}
 
 	/**
@@ -214,7 +200,6 @@ class Component extends Base {
 	 * @param {Object} Events Objcets
 	 */
 	delegateEvents(events) {
-
 		events || (events = result(this, 'events'));
 		if (!events) return this;
 		this.undelegateEvents();
@@ -224,7 +209,6 @@ class Component extends Base {
 				if (!isFunction(method)) method = this[method];
 				if (!method) continue;
 				let match = key.match(delegateEventSplitter);
-				console.log('method.uid', method.uid);
 
 				this.delegate(match[1], match[2], bind(method, this), method.uid);
 			}
@@ -233,17 +217,15 @@ class Component extends Base {
 	}
 
 	/**
-     * Add a single event listener to the view's element (or a child element
-     * using `selector`). This only works for delegate-able events: not `focus`,
-     * `blur`, and not `change`, `submit`, and `reset` in Internet Explorer.
-     */
+	 * Add a single event listener to the view's element (or a child element
+	 * using `selector`). This only works for delegate-able events: not `focus`,
+	 * `blur`, and not `change`, `submit`, and `reset` in Internet Explorer.
+	 */
 	delegate(eventName, selector, listener, uid) {
-
-		if (this.el){
-
-			if (selector){
+		if (this.el) {
+			if (selector) {
 				const items = [...this.el.querySelectorAll(selector)];
-				if (items.length > 0 ) items.forEach((item) => item.addEventListener(eventName, listener) );
+				if (items.length > 0) items.forEach((item) => item.addEventListener(eventName, listener));
 			} else {
 				this.el.addEventListener(eventName, listener);
 			}
@@ -262,8 +244,7 @@ class Component extends Base {
 	// You usually don't need to use this, but may wish to if you have multiple
 	// views attached to the same DOM element.
 	undelegateEvents() {
-
-		if (this.el){
+		if (this.el) {
 			this.delegatedEvents.forEach((element) => {
 				this.undelegate(element.eventName, element.selector, element.listener, element.uid);
 			});
@@ -275,11 +256,10 @@ class Component extends Base {
 	// A finer-grained `undelegateEvents` for removing a single delegated event.
 	// `selector` and `listener` are both optional.
 	undelegate(eventName, selector, listener, uid) {
-
-		if (this.el){
-			if (selector){
+		if (this.el) {
+			if (selector) {
 				const items = [...this.el.querySelectorAll(selector)];
-				if (items.length > 0 ) items.forEach((item) => item.removeEventListener(eventName, listener) );
+				if (items.length > 0) items.forEach((item) => item.removeEventListener(eventName, listener));
 			} else {
 				this.el.removeEventListener(eventName, listener);
 			}
@@ -295,7 +275,7 @@ class Component extends Base {
 
 	/**
 	 * Update
-     *
+	 *
 	 */
 	update() {
 		if (this.states.canUpdate) this.onUpdate();
@@ -313,7 +293,7 @@ class Component extends Base {
 
 	/**
 	 * Called on resize
-     * In our scenario this will listen to the GlobalStore Events
+	 * In our scenario this will listen to the GlobalStore Events
 	 */
 	onResize() {}
 
@@ -334,8 +314,8 @@ class Component extends Base {
 	}
 
 	/**
-		 * The component is shown
-		 */
+	 * The component is shown
+	 */
 	onShown() {
 		this.setState({isShown: true, isAnimating: false});
 		this.promises.show.resolve();
@@ -366,13 +346,10 @@ class Component extends Base {
 	}
 
 	hyperlink(e) {
-		console.log('hyperlink');
-
 		const isAnimating = store.getState().app.isAnimating;
-		if (isAnimating){
+		if (isAnimating) {
 			e.preventDefault();
 		}
-
 	}
 
 	/**
