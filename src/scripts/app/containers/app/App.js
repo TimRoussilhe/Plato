@@ -31,7 +31,8 @@ class App extends Base {
 		this.prevLocation = null;
 		this.location = null;
 		this.layout = null;
-		this.loader = null;
+		// this.loader = null;
+
 		this.page = null;
 		this.oldPage = null;
 

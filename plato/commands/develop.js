@@ -155,7 +155,7 @@ module.exports = async function develop() {
 		inline: true,
 		host: 'localhost',
 		disableHostCheck: true,
-		noInfo: true,
+		noInfo: false,
 		watchContentBase: true,
 		watchOptions: {
 			poll: true,
