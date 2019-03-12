@@ -13,7 +13,7 @@ class LayoutContainer extends AbstractContainer {
 		super();
 		this.ComponentClass = Layout;
 		// console.log('this.ComponentClass', this.ComponentClass);
-		console.log('set componenet layout');
+		console.log('constructor component layout');
 	}
 
 	initActions() {
@@ -22,7 +22,6 @@ class LayoutContainer extends AbstractContainer {
 	}
 
 	resizeAction(wdw) {
-		console.log('wdw', wdw);
 		store.dispatch(calculateResponsiveState(wdw));
 	}
 

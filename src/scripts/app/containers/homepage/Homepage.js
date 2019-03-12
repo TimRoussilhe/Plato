@@ -5,16 +5,13 @@ import Homepage from 'components/homepage/Homepage';
 // import {setIntroListHomepage} from './actions';
 
 class HomepageContainer extends AbstractPageContainer {
-
 	constructor(props) {
 		super(props);
 
 		this.ComponentClass = Homepage;
-
 	}
 
 	initData() {
-		console.log('HomepageContainer:initData');
 		// const list = {
 		// 	default_landing: false,
 		// };
@@ -27,7 +24,6 @@ class HomepageContainer extends AbstractPageContainer {
 
 		super.initData();
 	}
-
 }
 
 export default HomepageContainer;

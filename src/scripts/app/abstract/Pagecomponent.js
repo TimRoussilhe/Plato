@@ -13,8 +13,6 @@ class PageComponent extends AbstractDOMComponent {
 	}
 
 	initTL() {
-		console.log('==================== initTL');
-
 		this.TL.show = new TimelineLite({paused: true, onComplete: () => this.onShown()});
 		this.TL.show.to(this.el, 0.3, {autoAlpha: 1, ease: Cubic.easeOut});
 

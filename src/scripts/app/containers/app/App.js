@@ -8,8 +8,6 @@ import Layout from 'containers/layout/Layout';
 function getComponent(chunkName, path) {
 	return new Promise((resolve, reject) => {
 		const ComponentName = path.charAt(0).toUpperCase() + path.slice(1);
-		console.log('ComponentName', ComponentName);
-
 		import(/* webpackChunkName: "[request]" */ `containers/${path}/${ComponentName}`)
 			.then(({default: Page}) => {
 				resolve(Page);
@@ -50,8 +48,6 @@ class App extends Base {
 	}
 
 	onLocationChanged(location, prevLocation) {
-		console.log('onLocationChanged', location);
-
 		this.prevLocation = prevLocation;
 		if (location !== prevLocation) {
 			this.location = location;
@@ -60,7 +56,7 @@ class App extends Base {
 	}
 
 	async routing(location, fromSamePage = false) {
-		console.log('-------------- routing ---------------');
+		console.log('-------------- routing ---------------', location);
 
 		let Page = null;
 		const currentRoute = getRoute(location);
@@ -107,15 +103,11 @@ class App extends Base {
 
 		// Init the next page now
 		this.page.init().then(() => {
-			console.log('ON PAGE INIT');
-
 			// Resize the current page for position
 			this.layout.triggerResize();
 
 			if (this.oldPage) {
-				console.log('HIDE OLD PAGE', this.oldPage);
 				this.oldPage.hide().then(() => {
-					console.log('OLD PAGE HIDDEN');
 					this.oldPage.dispose();
 					this.oldPage = null;
 					this.showPage();
@@ -130,13 +122,11 @@ class App extends Base {
 		// Show next
 		this.page.show().then(() => {
 			// if (!this.getState().get('app').get('appLoaded')) this.dispatch(setAppLoaded(true));
-			console.log('CURRENT PAGE SHOW');
 
 			store.dispatch(setAnimating(false));
 
 			// at this point, dispose
 			if (this.oldPage) {
-				console.log('dispose again?');
 				this.oldPage.dispose();
 				this.oldPage = null;
 			}

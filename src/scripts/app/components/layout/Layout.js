@@ -39,8 +39,6 @@ class Layout extends DOMComponent {
 	onDOMInit() {
 		const aInitPromises = [];
 
-		console.log('document.getElementById()', document.getElementById('main-nav'));
-
 		this.header = new Header({
 			el: document.getElementById('main-nav'),
 		});
@@ -95,8 +93,6 @@ class Layout extends DOMComponent {
 	}
 
 	showComponent() {
-		console.log('this.states.isShown', this.states.isShown);
-
 		if (this.states.isShown) return;
 
 		setTimeout(() => {
