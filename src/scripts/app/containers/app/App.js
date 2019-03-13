@@ -22,19 +22,19 @@ function pageLoader(chunkName, path) {
 		const ComponentName = path.charAt(0).toUpperCase() + path.slice(1);
 		switch (ComponentName) {
 		case 'Homepage':
-			return import(/* webpackChunkName: "Homepage" */ 'containers/homepage/Homepage')
+			return import(/* webpackPrefetch: true */ /* webpackChunkName: "Homepage" */ 'containers/homepage/Homepage')
 				.then(({default: Page}) => {
 					resolve(Page);
 				})
 				.catch((error) => reject('An error occurred while loading the component'));
 		case 'About':
-			return import(/* webpackChunkName: "About" */ 'containers/about/About')
+			return import(/* webpackPrefetch: true */ /* webpackChunkName: "About" */ 'containers/about/About')
 				.then(({default: Page}) => {
 					resolve(Page);
 				})
 				.catch((error) => reject('An error occurred while loading the component'));
 		case 'Notfound':
-			return import(/* webpackChunkName: "Notfound" */ 'containers/notfound/Notfound')
+			return import(/* webpackPrefetch: true */ /* webpackChunkName: "Notfound" */ 'containers/notfound/Notfound')
 				.then(({default: Page}) => {
 					resolve(Page);
 				})
