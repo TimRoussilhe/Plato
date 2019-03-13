@@ -1,7 +1,7 @@
 import AbstractPageComponent from 'abstract/Pagecomponent';
 import Tpl from 'templates/about.twig';
 
-class Homepage extends AbstractPageComponent {
+class About extends AbstractPageComponent {
 	constructor(props) {
 		super(props);
 
@@ -13,4 +13,4 @@ class Homepage extends AbstractPageComponent {
 	}
 }
 
-export default Homepage;
+export default About;
