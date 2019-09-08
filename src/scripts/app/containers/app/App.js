@@ -21,34 +21,47 @@ function pageLoader(chunkName, path) {
 	return new Promise((resolve, reject) => {
 		const ComponentName = path.charAt(0).toUpperCase() + path.slice(1);
 		switch (ComponentName) {
-		case 'Homepage':
-			return import(/* webpackPrefetch: true */ /* webpackChunkName: "Homepage" */ 'containers/homepage/Homepage')
-				.then(({default: Page}) => {
-					resolve(Page);
-				})
-				.catch((error) => reject('An error occurred while loading the component'));
-		case 'About':
-			return import(/* webpackPrefetch: true */ /* webpackChunkName: "About" */ 'containers/about/About')
-				.then(({default: Page}) => {
-					resolve(Page);
-				})
-				.catch((error) => reject('An error occurred while loading the component'));
-		case 'Notfound':
-			return import(/* webpackPrefetch: true */ /* webpackChunkName: "Notfound" */ 'containers/notfound/Notfound')
-				.then(({default: Page}) => {
-					resolve(Page);
-				})
-				.catch((error) => reject('An error occurred while loading the component'));
+			case 'Homepage':
+				return import( /* webpackPrefetch: true */ /* webpackChunkName: "Homepage" */ 'containers/homepage/Homepage')
+					.then(({
+						default: Page
+					}) => {
+						resolve(Page);
+					})
+					.catch((error) => reject('An error occurred while loading the component'));
+			case 'About':
+				return import( /* webpackPrefetch: true */ /* webpackChunkName: "About" */ 'containers/about/About')
+					.then(({
+						default: Page
+					}) => {
+						resolve(Page);
+					})
+					.catch((error) => reject('An error occurred while loading the component'));
+			case 'Notfound':
+				return import( /* webpackPrefetch: true */ /* webpackChunkName: "Notfound" */ 'containers/notfound/Notfound')
+					.then(({
+						default: Page
+					}) => {
+						resolve(Page);
+					})
+					.catch((error) => reject('An error occurred while loading the component'));
 		}
 	});
 }
 
 // Constants
 // Selector
-import {getRoute} from './selectors';
+import {
+	getRoute
+} from './selectors';
 
 // Actions
-import {setAnimating, setPage, setOldPage} from './actions';
+import {
+	setAnimating,
+	setPage,
+	setOldPage,
+	setGlobalData
+} from './actions';
 import store from 'store';
 
 class App extends Base {
@@ -69,6 +82,13 @@ class App extends Base {
 	}
 
 	init() {
+
+		// grab server data
+		const data = window.globalData && JSON.parse(window.globalData);
+		console.log('data', data);
+		if (data) {
+			store.dispatch(setGlobalData(data));
+		}
 		this.layout = new Layout();
 
 		// return layout promise
@@ -91,6 +111,7 @@ class App extends Base {
 
 		try {
 			// const PageAsync = await getComponent(currentRoute.template, currentRoute.template);
+			// we use template to defnie page Type
 			const PageAsync = await pageLoader(currentRoute.template, currentRoute.template);
 			Page = PageAsync;
 		} catch (error) {

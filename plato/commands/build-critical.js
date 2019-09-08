@@ -16,10 +16,10 @@ module.exports = (filename) => {
 			// Minify critical-path CSS when inlining
 			minify: true,
 			width: 1600,
-			height: 1000,
+			height: 1200,
 		}, (err, output) => {
 
-			if (err){
+			if (err) {
 				reject(err);
 			}
 
@@ -32,7 +32,10 @@ module.exports = (filename) => {
 				conservativeCollapse: true,
 				removeComments: true,
 			});
-			fse.writeFileSync(filename, result, {encoding:'utf8', flag:'w'});
+			fse.writeFileSync(filename, result, {
+				encoding: 'utf8',
+				flag: 'w'
+			});
 			resolve();
 		});
 	});

@@ -13,11 +13,9 @@ module.exports = {
 		twitter: 'Plato',
 		fbAppId: '550534890534809345890',
 	},
-	preload: [
-		{
-			type: 'font',
-			href: '/assets/fonts/UntitledSans-Regular.woff2',
-			format: 'woff2',
-		},
-	],
+	preload: [{
+		type: 'font',
+		href: '/assets/fonts/UntitledSans-Regular.woff2',
+		format: 'woff2',
+	}, ],
 };

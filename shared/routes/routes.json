@@ -1,6 +1,5 @@
 {
-	"staticRoutes": [
-		{
+	"staticRoutes": [{
 			"id": "index",
 			"url": "/",
 			"template": "homepage",

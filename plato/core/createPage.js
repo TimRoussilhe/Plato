@@ -1,4 +1,7 @@
-const {saveRemoteData, updateRoutes} = require('./saveData.js');
+const {
+	saveRemoteData,
+	updateRoutes
+} = require('./saveData.js');
 const chalk = require('chalk');
 const log = console.log;
 const print = chalk.grey;
@@ -26,7 +29,12 @@ const print = chalk.grey;
  * @return {Promise} createPage Promise
  */
 
-exports.createPage = ({id, url, template, data}, siteDir, dataMiddleware = null) => {
+exports.createPage = ({
+	id,
+	url,
+	template,
+	data
+}, siteDir, dataMiddleware = null) => {
 	return new Promise((resolve, reject) => {
 		// create JSON File
 		saveRemoteData(JSON.stringify(data), id + '.json', siteDir, dataMiddleware);

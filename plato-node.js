@@ -1,7 +1,9 @@
 const Promise = require('bluebird');
 const fetch = require('node-fetch');
 fetch.Promise = Promise;
-const {createPage} = require('./plato/core/createPage');
+const {
+	createPage
+} = require('./plato/core/createPage');
 
 exports.createPages = (siteDir) => {
 	return new Promise((resolve, reject) => {
@@ -12,8 +14,7 @@ exports.createPages = (siteDir) => {
 					for (let i = 0; i < body.directors.length; i++) {
 						let element = body.directors[i];
 
-						await createPage(
-							{
+						await createPage({
 								id: 'director' + element.id,
 								url: element.slug,
 								template: 'about',
@@ -28,5 +29,15 @@ exports.createPages = (siteDir) => {
 					}
 				})();
 			});
+	});
+};
+
+exports.createGlobalData = () => {
+	return new Promise((resolve, reject) => {
+		resolve({
+			globals: {
+				array: [1, 2, 3, 4, 5]
+			}
+		})
 	});
 };

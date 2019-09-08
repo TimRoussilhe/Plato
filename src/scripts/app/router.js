@@ -5,13 +5,18 @@ import realRoutes from 'routes/real_routes.json';
 const routes = realRoutes.routes;
 
 // Actions
-import {navigate, setRoutes} from 'containers/app/actions';
+import {
+	navigate,
+	setRoutes
+} from 'containers/app/actions';
 // Selectors
 // Constants
 
 // Utils
 // import {MAIN_ENDPOINT} from 'constants/config';
-import {isString} from 'utils/is';
+import {
+	isString
+} from 'utils/is';
 
 class Router {
 	preRouting(ctx, next) {

@@ -2,7 +2,7 @@ const fse = require('fs-extra');
 const webpack = require('webpack');
 const webpackConfig = require('../../config/webpack.prod.config');
 
-module.exports = async ()=> {
+module.exports = async () => {
 
 	return new Promise((resolve, reject) => {
 

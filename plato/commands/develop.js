@@ -13,7 +13,10 @@ const distPath = './public';
 const distDataPath = './public/data';
 
 const buildHTML = require('../core/buildHTML');
-const {saveRemoteDataFromSource, updateRoutes} = require('../core/saveData');
+const {
+	saveRemoteDataFromSource,
+	updateRoutes
+} = require('../core/saveData');
 
 const routes = require('../../shared/routes/routes.js');
 const routeDestPath = path.resolve(__dirname + '/../../shared/routes/real_routes.json');
@@ -87,14 +90,25 @@ module.exports = async function develop() {
 	activity.start();
 
 	// check if node API is used and if so, check if createPages is used
+	let nodeAPI = require('../../plato-node');
 	try {
-		let nodeAPI = require('../../plato-node');
 		if (nodeAPI && nodeAPI.createPages) {
 			await nodeAPI.createPages(siteDir + 'data/');
 		}
 	} catch (err) {
 		console.log('No API found: ' + err);
 	}
+
+	// check if node API is used and if so, check if createGlobalData is used
+	let globalData;
+	try {
+		if (nodeAPI && nodeAPI.createGlobalData) {
+			globalData = await nodeAPI.createGlobalData();
+		}
+	} catch (err) {
+		console.log('No API found: ' + err);
+	}
+
 	activity.end();
 
 	activity = report.activityTimer('Build Static site');
@@ -102,7 +116,7 @@ module.exports = async function develop() {
 	const finalRoutes = fse.readJsonSync(routeDestPath);
 	try {
 		for (let page of finalRoutes.routes) {
-			await buildHTML(page, null, 'development', siteDir);
+			await buildHTML(page, null, 'development', siteDir, globalData);
 		}
 	} catch (err) {
 		reportFailure('Error during page generation: ' + err);
@@ -123,13 +137,13 @@ module.exports = async function develop() {
 			const activeRoutes = routes.getRoutesByTemplatePath(path);
 			if (activeRoutes !== null) {
 				for (let page of activeRoutes) {
-					buildHTML(page, null, 'development', siteDir).catch(console.error);
+					buildHTML(page, null, 'development', siteDir, globalData).catch(console.error);
 				}
 			} else {
 				// change from a partial => rebuild everything
 				// TODO : check if change is not happening in an unlink template
 				for (let page of finalRoutes.routes) {
-					buildHTML(page, null, 'development', siteDir).catch((err) => {
+					buildHTML(page, null, 'development', siteDir, globalData).catch((err) => {
 						log(`Error: ${err}`);
 					});
 				}
@@ -166,7 +180,7 @@ module.exports = async function develop() {
 	const compiler = webpack(webpackConfig);
 	const server = new WebpackDevServer(compiler, options);
 
-	server.listen(port, 'localhost', function(err) {
+	server.listen(port, 'localhost', function (err) {
 		if (err) {
 			console.log(err);
 		} else {

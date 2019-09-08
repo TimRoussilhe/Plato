@@ -52,10 +52,20 @@ exports.updateRoutes = (routes) => {
 
 		if (exists) {
 			fse.readFile(routeDestPath).then((data) => {
-				obj = JSON.parse(data); // now it an object
+
+				let obj;
+				try {
+					obj = JSON.parse(data); // now it an object
+				} catch (e) {
+					reject(e);
+				}
+
 				obj.routes = [...obj.routes, ...routes]; // add some data
 				json = JSON.stringify(obj); // convert it back to json
-				fse.writeFile(routeDestPath, json, 'utf8').then(() => resolve()); // write it back
+				fse
+					.writeFile(routeDestPath, json, 'utf8') // write it back
+					.then(() => resolve())
+					.catch((err) => reject(err));
 			});
 		} else {
 			const routesObject = {

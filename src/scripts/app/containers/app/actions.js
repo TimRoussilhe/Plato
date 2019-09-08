@@ -6,6 +6,7 @@ import {
 	SET_PAGE,
 	SET_OLDPAGE,
 	SET_DEVICE_TYPE,
+	SET_GLOBAL_DATA
 } from './constants';
 
 export function navigate(location, params = {}) {
@@ -19,15 +20,15 @@ export function navigate(location, params = {}) {
 export function setMeta(meta = null, isDefault = false) {
 	return {
 		type: SET_META,
-		meta: meta,
-		isDefault: isDefault,
+		meta,
+		isDefault
 	};
 }
 
 export function setRoutes(routes) {
 	return {
 		type: SET_ROUTES,
-		routes: routes,
+		routes,
 	};
 }
 
@@ -41,20 +42,27 @@ export function setAnimating(animatingState) {
 export function setPage(page) {
 	return {
 		type: SET_PAGE,
-		page: page,
+		page
 	};
 }
 
 export function setOldPage(page) {
 	return {
 		type: SET_OLDPAGE,
-		page: page,
+		page
 	};
 }
 
 export function setDeviceType(deviceType) {
 	return {
 		type: SET_DEVICE_TYPE,
-		deviceType: deviceType,
+		deviceType,
+	};
+}
+
+export function setGlobalData(data) {
+	return {
+		type: SET_GLOBAL_DATA,
+		data
 	};
 }
