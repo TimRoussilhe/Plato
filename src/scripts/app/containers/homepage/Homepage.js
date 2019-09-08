@@ -7,7 +7,9 @@ import Homepage from 'components/homepage/Homepage';
 class HomepageContainer extends AbstractPageContainer {
 	constructor(props) {
 		super(props);
-
+		this.storeEvents = {
+			'browser': (window) => this.onResize(window),
+		};
 		this.ComponentClass = Homepage;
 	}
 
@@ -23,6 +25,10 @@ class HomepageContainer extends AbstractPageContainer {
 		// this.dispatch(setIntroListHomepage(list));
 
 		super.initData();
+	}
+
+	onResize() {
+		console.log('HOMEPAGE RESIZE');
 	}
 }
 
