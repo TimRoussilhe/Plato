@@ -12,7 +12,9 @@ import AbstractContainer from './container';
 // import {setMeta} from 'containers/app/actions';
 
 // Config
-import {JSON_ENDPOINTS} from 'constants/config';
+import {
+	JSON_ENDPOINTS
+} from 'constants/config';
 
 /**
  * PageContainer: Defines a page container

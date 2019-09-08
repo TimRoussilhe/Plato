@@ -5,15 +5,25 @@ class Header extends AbstractDOMComponent {
 		super(props);
 
 		this.events = {
-			// 'click .home': () => this._clickHome(),
+			'click .logo': () => this.clickHome(),
 		};
 
 		this.storeEvents = {
 			'app.location': (location, prevLocation) => this.setActiveLink(location, prevLocation),
 		};
+
+		// setTimeout(() => {
+		// 	this.undelegateEvents();
+		// }, 1000);
+	}
+
+	clickHome() {
+		console.log('_clickHome');
 	}
 
 	initDOM() {
+		console.log('HEADER');
+
 		this.$logo = this.el.querySelector('.logo');
 		this.$navItems = this.el.querySelectorAll('.menu li a');
 	}

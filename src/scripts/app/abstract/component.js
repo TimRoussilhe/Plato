@@ -1,12 +1,7 @@
 import store from 'store';
-import {
-	uniqueId,
-	result,
-	isFunction,
-	bind,
-	remove
-} from 'lodash-es';
 import Base from './base';
+import uniqueId from 'utils/lodash/uniqueId';
+import isFunction from 'utils/lodash/isFunction';
 
 const delegateEventSplitter = /^(\S+)\s*(.*)$/;
 
@@ -17,6 +12,8 @@ const delegateEventSplitter = /^(\S+)\s*(.*)$/;
 
 class Component extends Base {
 	set events(events) {
+		console.log('events', events);
+
 		for (const event in events) {
 			if ({}.hasOwnProperty.call(events, event)) {
 				const uid = uniqueId('e');
@@ -48,7 +45,7 @@ class Component extends Base {
 		 * @type {Object}
 		 */
 		this._events = {};
-		this.delegatedEvents = [];
+		this.bindedEvents = [];
 
 		/**
 		 * Object as associative array of all the <promises> objects
@@ -158,7 +155,7 @@ class Component extends Base {
 		this.initDOM();
 		this.setupDOM();
 		this.initTL();
-		this.delegateEvents();
+		this.bindEvents();
 		setTimeout(() => this.onDOMInit(), 0);
 	}
 
@@ -178,22 +175,22 @@ class Component extends Base {
 	initTL() {}
 
 	onDOMInit() {
-		this.bindEvents();
+		// this.bindEvents();
 		this.onInit();
 		this.setState({
 			canUpdate: true
 		});
 	}
 
-	/**
-	 * Bind your events here
-	 */
-	bindEvents() {}
+	// /**
+	//  * Bind your events here
+	//  */
+	// bindEvents() {}
 
-	/**
-	 * Unbind yout events here
-	 */
-	unbindEvents() {}
+	// /**
+	//  * Unbind yout events here
+	//  */
+	// unbindEvents() {}
 
 	/**
 	 * Set callbacks, where `this.events` is a hash of
@@ -207,18 +204,19 @@ class Component extends Base {
 	 *   }
 	 * @param {Object} Events Objcets
 	 */
-	delegateEvents(events) {
-		events || (events = result(this, 'events'));
+	bindEvents(events) {
+		console.log('bindEvents', events);
+
+		events || (events = this.events);
 		if (!events) return this;
-		this.undelegateEvents();
+		this.unbindEvents();
 		for (let key in events) {
 			if ({}.hasOwnProperty.call(events, key)) {
 				let method = events[key];
 				if (!isFunction(method)) method = this[method];
 				if (!method) continue;
 				let match = key.match(delegateEventSplitter);
-
-				this.delegate(match[1], match[2], bind(method, this), method.uid);
+				this.bindEvent(match[1], match[2], method, method.uid);
 			}
 		}
 		return this;
@@ -229,7 +227,8 @@ class Component extends Base {
 	 * using `selector`). This only works for delegate-able events: not `focus`,
 	 * `blur`, and not `change`, `submit`, and `reset` in Internet Explorer.
 	 */
-	delegate(eventName, selector, listener, uid) {
+	bindEvent(eventName, selector, listener, uid) {
+
 		if (this.el) {
 			if (selector) {
 				const items = [...this.el.querySelectorAll(selector)];
@@ -238,7 +237,7 @@ class Component extends Base {
 				this.el.addEventListener(eventName, listener);
 			}
 
-			this.delegatedEvents.push({
+			this.bindedEvents.push({
 				uid: uid,
 				eventName: eventName,
 				selector: selector,
@@ -251,19 +250,19 @@ class Component extends Base {
 	// Clears all callbacks previously bound to the view by `delegateEvents`.
 	// You usually don't need to use this, but may wish to if you have multiple
 	// views attached to the same DOM element.
-	undelegateEvents() {
+	unbindEvents() {
 		if (this.el) {
-			this.delegatedEvents.forEach((element) => {
-				this.undelegate(element.eventName, element.selector, element.listener, element.uid);
+			this.bindedEvents.forEach((element) => {
+				this.unbindEvent(element.eventName, element.selector, element.listener, element.uid);
 			});
 		}
 
 		return this;
 	}
 
-	// A finer-grained `undelegateEvents` for removing a single delegated event.
+	// A finer-grained `unbindEvents` for removing a single delegated event.
 	// `selector` and `listener` are both optional.
-	undelegate(eventName, selector, listener, uid) {
+	unbindEvent(eventName, selector, listener, uid) {
 		if (this.el) {
 			if (selector) {
 				const items = [...this.el.querySelectorAll(selector)];
@@ -274,7 +273,7 @@ class Component extends Base {
 		}
 
 		// remove event from array based on uid
-		remove(this.delegatedEvents, (event) => {
+		this.bindedEvents = this.bindedEvents.filter((event) => {
 			return event.uid === uid;
 		});
 
@@ -412,7 +411,7 @@ class Component extends Base {
 		this.handlers = {};
 		this.promises = {};
 
-		this.undelegateEvents();
+		// this.undelegateEvents();
 		this.destroyTL();
 
 		this.el.parentNode.removeChild(this.el);
