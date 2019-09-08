@@ -1,5 +1,11 @@
 import store from 'store';
-import {uniqueId, result, isFunction, bind, remove} from 'lodash-es';
+import {
+	uniqueId,
+	result,
+	isFunction,
+	bind,
+	remove
+} from 'lodash-es';
 import Base from './base';
 
 const delegateEventSplitter = /^(\S+)\s*(.*)$/;
@@ -174,7 +180,9 @@ class Component extends Base {
 	onDOMInit() {
 		this.bindEvents();
 		this.onInit();
-		this.setState({canUpdate: true});
+		this.setState({
+			canUpdate: true
+		});
 	}
 
 	/**
@@ -304,7 +312,10 @@ class Component extends Base {
 		return new Promise((resolve, reject) => {
 			this.promises.show.resolve = resolve;
 			this.promises.show.reject = reject;
-			this.setState({isAnimating: true, canUpdate: true});
+			this.setState({
+				isAnimating: true,
+				canUpdate: true
+			});
 			this.showComponent();
 		});
 	}
@@ -317,7 +328,10 @@ class Component extends Base {
 	 * The component is shown
 	 */
 	onShown() {
-		this.setState({isShown: true, isAnimating: false});
+		this.setState({
+			isShown: true,
+			isAnimating: false
+		});
 		this.promises.show.resolve();
 	}
 
@@ -328,7 +342,9 @@ class Component extends Base {
 		return new Promise((resolve, reject) => {
 			this.promises.hidden.resolve = resolve;
 			this.promises.hidden.reject = reject;
-			this.setState({isAnimating: true});
+			this.setState({
+				isAnimating: true
+			});
 			this.hideComponent();
 		});
 	}
@@ -341,7 +357,11 @@ class Component extends Base {
 	 * The component is shown
 	 */
 	onHidden() {
-		this.setState({isAnimating: false, isShown: false, canUpdate: false});
+		this.setState({
+			isAnimating: false,
+			isShown: false,
+			canUpdate: false
+		});
 		this.promises.hidden.resolve();
 	}
 
@@ -383,7 +403,11 @@ class Component extends Base {
 	 * Dispose the component
 	 */
 	dispose() {
-		this.setState({isInit: false, isShown: false, canUpdate: false});
+		this.setState({
+			isInit: false,
+			isShown: false,
+			canUpdate: false
+		});
 		this.unbindEvents();
 		this.handlers = {};
 		this.promises = {};

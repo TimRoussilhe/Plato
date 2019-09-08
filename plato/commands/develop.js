@@ -100,7 +100,7 @@ module.exports = async function develop() {
 	}
 
 	// check if node API is used and if so, check if createGlobalData is used
-	let globalData;
+	let globalData = null;
 	try {
 		if (nodeAPI && nodeAPI.createGlobalData) {
 			globalData = await nodeAPI.createGlobalData();

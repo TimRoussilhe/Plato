@@ -4,6 +4,7 @@ const devTool = 'source-map';
 const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 const notifier = require('node-notifier');
+const SizePlugin = require('size-plugin');
 
 const postcssConfig = require('./postcss.config');
 
@@ -49,6 +50,7 @@ module.exports = {
 	},
 
 	plugins: [
+		new SizePlugin(),
 		new webpack.DefinePlugin({
 			'process.env': {
 				NODE_ENV: JSON.stringify('development'),
@@ -80,22 +82,25 @@ module.exports = {
 	},
 
 	module: {
-		rules: [
-			{
+		rules: [{
 				test: /\.js$/,
 				exclude: /(node_modules|bower_components)/,
 				use: {
 					loader: 'babel-loader',
 				},
 			},
-			{test: /\.twig$/, use: 'twig-loader'},
+			{
+				test: /\.twig$/,
+				use: 'twig-loader'
+			},
 			{
 				test: /\.scss$/,
-				use: [
-					{
+				use: [{
 						loader: 'style-loader',
 						// singleton is important here. On dev it will wait for CSS to be appended to start JS
-						options: {singleton: true},
+						options: {
+							singleton: true
+						},
 					},
 					{
 						loader: 'css-loader',

@@ -54,7 +54,6 @@ module.exports = (page, manifest, mode = 'development', siteDir, globalData) => 
 				reject(new Error(err));
 			}
 			html; // compiled string
-
 			Twig.renderFile(path.resolve('./shared/templates/layout.twig'), {
 				html,
 				config,
