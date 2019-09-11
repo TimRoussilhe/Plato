@@ -12,9 +12,7 @@ const print = chalk.grey;
 const config = require('../../site-config.js');
 
 module.exports = (page, manifest, mode = 'development', siteDir, globalData) => {
-
 	return new Promise((resolve, reject) => {
-
 		const distPath = siteDir;
 
 		let destPath;
@@ -29,10 +27,9 @@ module.exports = (page, manifest, mode = 'development', siteDir, globalData) => 
 			}
 		}
 
-		fse.mkdirs(destPath)
-			.catch((err) => {
-				reject(err);
-			});
+		fse.mkdirs(destPath).catch((err) => {
+			reject(err);
+		});
 
 		let data;
 		try {
@@ -45,37 +42,45 @@ module.exports = (page, manifest, mode = 'development', siteDir, globalData) => 
 		const exists = fse.existsSync(templatePath);
 		if (!exists) reject(new Error('Template file does not exists'));
 
-		Twig.renderFile(templatePath, {
-			data,
-			mode,
-			globalData
-		}, (err, html) => {
-			if (err) {
-				reject(new Error(err));
-			}
-			html; // compiled string
-			Twig.renderFile(path.resolve('./shared/templates/layout.twig'), {
-				html,
-				config,
+		Twig.renderFile(
+			templatePath,
+			{
 				data,
 				mode,
-				manifest,
-				globalData: JSON.stringify(globalData)
-			}, (err, html) => {
-
+				globalData,
+			},
+			(err, html) => {
 				if (err) {
 					reject(new Error(err));
 				}
+				html; // compiled string
+				Twig.renderFile(
+					path.resolve('./shared/templates/layout.twig'),
+					{
+						html,
+						config,
+						data,
+						mode,
+						manifest,
+						globalData: JSON.stringify(globalData),
+					},
+					(err, html) => {
+						if (err) {
+							reject(new Error(err));
+						}
 
-				fse.writeFile(`${destPath}${fileName}`, html)
-					.then(() => {
-						log(print(` HTML Built : ${destPath}${fileName}`));
-						resolve(`${destPath}${fileName}`);
-					})
-					.catch((err) => {
-						reject(err);
-					});
-			});
-		});
+						fse
+							.writeFile(`${destPath}${fileName}`, html)
+							.then(() => {
+								log(print(` HTML Built : ${destPath}${fileName}`));
+								resolve(`${destPath}${fileName}`);
+							})
+							.catch((err) => {
+								reject(err);
+							});
+					}
+				);
+			}
+		);
 	});
 };

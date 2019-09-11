@@ -1,20 +1,11 @@
 import AbstractContainer from './container';
-// import store from 'store';
-
-// Constants
-// import {END_POINT} from 'constants/api';
-// import {BAR_LOADER} from 'containers/loader/constants';
-
-// Utils
-// import {loadJSON} from 'utils/load';
+import store from 'store';
 
 // Actions
-// import {setMeta} from 'containers/app/actions';
+import {setMeta} from 'containers/app/actions';
 
 // Config
-import {
-	JSON_ENDPOINTS
-} from 'constants/config';
+import {JSON_ENDPOINTS} from 'constants/config';
 
 /**
  * PageContainer: Defines a page container
@@ -55,7 +46,10 @@ class PageContainer extends AbstractContainer {
 	}
 
 	initData() {
-		// store.dispatch(setMeta(this.data.meta));
+		console.log('this.data.meta', this.data.meta);
+		if (this.data.meta) {
+			store.dispatch(setMeta(this.data.meta));
+		}
 	}
 
 	onInit() {

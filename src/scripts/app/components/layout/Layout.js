@@ -4,9 +4,7 @@ import store from 'store';
 // Containers
 import Header from 'containers/header/Header';
 
-import {
-	debounce
-} from 'utils/misc';
+import {debounce} from 'utils/misc';
 
 class Layout extends DOMComponent {
 	constructor(props) {
