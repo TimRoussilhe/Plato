@@ -76,7 +76,7 @@
 		"convert-hrtime": "^2.0.0",
 		"hoek": "^6.1.2",
 		"html-minifier": "^3.5.21",
-		"lodash": "^4.17.11",
+		"lodash": "^4.17.13",
 		"node-fetch": "^2.3.0",
 		"opentracing": "^0.14.3",
 		"opn": "^5.4.0",
