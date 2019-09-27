@@ -44,16 +44,7 @@ module.exports = {
 	},
 
 	optimization: {
-		noEmitOnErrors: true, // NoEmitOnErrorsPlugin
-		splitChunks: {
-			cacheGroups: {
-				vendor: {
-					chunks: 'initial',
-					name: 'vendor',
-					enforce: true
-				}
-			}
-		}
+		noEmitOnErrors: true // NoEmitOnErrorsPlugin
 	},
 
 	plugins: [
