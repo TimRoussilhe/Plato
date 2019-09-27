@@ -1,5 +1,5 @@
 {
-	"extends": "google",
+	"extends": ["google", "prettier"],
 	"parser": "babel-eslint",
 	"rules": {
 		"global-require": 0,
