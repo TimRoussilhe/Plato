@@ -1,7 +1,7 @@
 import AbstractDOMComponent from 'abstract/component';
 // import {TweenLite, TimelineLite, CSSPlugin} from 'gsap/TweenMax';
 // const plugins = [CSSPlugin];
-import { gsap } from 'gsap';
+import { gsap } from 'gsap/dist/gsap';
 // const plugins = [CSSPlugin];
 
 /**

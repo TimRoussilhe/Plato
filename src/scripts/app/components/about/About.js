@@ -1,5 +1,5 @@
 import AbstractPageComponent from 'abstract/Pagecomponent';
-import Tpl from 'templates/about.twig';
+import Tpl from 'templates/about.art';
 
 class About extends AbstractPageComponent {
 	constructor(props) {

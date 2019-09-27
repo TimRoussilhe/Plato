@@ -4,6 +4,7 @@
 		"description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmodproident, sunt in culpa qui officia deserunt mollit anim id est laborum."
 	},
 	"content": {
-		"title": "Hello World Index"
+		"title": "Hello World Index",
+		"number": 2
 	}
 }

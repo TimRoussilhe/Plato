@@ -90,7 +90,6 @@ class Component extends Base {
 
 		this.el = props.el ? props.el : null;
 		this.template = props.template ? props.template : null;
-
 		this.data = props.data ? props.data : this.data;
 		this.actions = props.actions ? props.actions : {};
 
@@ -141,9 +140,7 @@ class Component extends Base {
 	 * Render your template
 	 */
 	renderTemplate() {
-		const html = this.template({
-			data: this.data
-		});
+		const html = this.template({ data: this.data });
 
 		// String to DOM Element
 		let wrapper = document.createElement('div');

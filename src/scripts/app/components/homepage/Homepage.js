@@ -1,5 +1,5 @@
 import AbstractPageComponent from 'abstract/Pagecomponent';
-import Tpl from 'templates/homepage.twig';
+import Tpl from 'templates/homepage.art';
 
 // Constants
 
@@ -20,7 +20,6 @@ class Homepage extends AbstractPageComponent {
 	dispose() {
 		super.dispose();
 	}
-
 }
 
 export default Homepage;

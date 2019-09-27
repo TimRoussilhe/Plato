@@ -1,0 +1,10 @@
+<section class="page-wrapper" id="homepage">
+
+	<div class="introduction">
+		{{if data.content}}
+			<h1 class="f-title">Dynamic content: {{ data.content.title}}</h1>
+		{{/if}}
+		<h2 class="f-body">ABOUT PAGE Static content</h2>
+	</div>
+
+</section>

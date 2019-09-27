@@ -88,10 +88,8 @@ module.exports = {
 					loader: 'babel-loader'
 				}
 			},
-			{
-				test: /\.twig$/,
-				use: 'twig-loader'
-			},
+			{ test: /\.twig$/, use: 'twig-loader' },
+			{ test: /\.art$/, use: 'art-template-loader' },
 			{
 				test: /\.scss$/,
 				use: [

@@ -72,12 +72,12 @@ class Base {
 		this.promises = {
 			init: {
 				resolve: null,
-				reject: null,
-			},
+				reject: null
+			}
 		};
 
 		this.states = {
-			isInit: false,
+			isInit: false
 		};
 	}
 
@@ -90,7 +90,7 @@ class Base {
 			this.promises.init.resolve = resolve;
 			this.promises.init.reject = reject;
 
-			const {isInit} = this.states;
+			const { isInit } = this.states;
 
 			if (isInit) {
 				this.promises.init.reject();
@@ -109,7 +109,7 @@ class Base {
 	 * Once the component is init
 	 */
 	onInit() {
-		this.setState({isInit: true});
+		this.setState({ isInit: true });
 		this.promises.init.resolve();
 	}
 

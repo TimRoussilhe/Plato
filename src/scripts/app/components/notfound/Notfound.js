@@ -1,5 +1,5 @@
 import AbstractPageComponent from 'abstract/Pagecomponent';
-import Tpl from 'templates/notfound.twig';
+import Tpl from 'templates/notfound.art';
 
 class NotFound extends AbstractPageComponent {
 	constructor(props) {
