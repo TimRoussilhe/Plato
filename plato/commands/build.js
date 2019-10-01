@@ -1,15 +1,12 @@
 const fse = require('fs-extra');
 const path = require('path');
 
-// const config = require('../../site-config.js');
-
 const srcPath = './src';
 const distPath = './build';
 const distDataPath = './build/data';
 
 // report
-const report = require('../utils/reporter');
-
+const reporter = require('../utils/reporter');
 function reportFailure(msg, err) {
 	report.log('');
 	report.panic(msg, err);
@@ -28,11 +25,14 @@ const siteDir = './build/';
 
 module.exports = async function build() {
 	let globalActivity;
-	globalActivity = report.activityTimer('Plato Build');
+	globalActivity = reporter.activity('Plato Build', '🤔');
 	globalActivity.start();
 
-	let activity;
-	activity = report.activityTimer('Cleaning Repo');
+	/**
+	 * Clean repo
+	 * Empty directories and move source files
+	 */
+	let activity = reporter.activity('Cleaning Repo', '🧽');
 	activity.start();
 
 	// clear destination folder
@@ -51,7 +51,10 @@ module.exports = async function build() {
 	await updateRoutes(routes.staticRoutes);
 	activity.end();
 
-	activity = report.activityTimer('Save remote Data');
+	/**
+	 * Save remote date from the static route file
+	 */
+	activity = reporter.activity('Save remote Data', '🛣️');
 	activity.start();
 	// save remote endpoint for static routes
 	try {
@@ -63,7 +66,10 @@ module.exports = async function build() {
 	}
 	activity.end();
 
-	activity = report.activityTimer('Create Pages from Plato API');
+	/**
+	 * Create Pages from Plato Node API createPages method
+	 */
+	activity = reporter.activity('Run Plato Node API', '🤖');
 	activity.start();
 	// check if node API is used and if so check if createPages is used
 	let nodeAPI = require('../../plato-node');
@@ -88,7 +94,10 @@ module.exports = async function build() {
 
 	activity.end();
 
-	activity = report.activityTimer('Build Javascript');
+	/**
+	 * Build production javascript using webpack
+	 */
+	activity = reporter.activity('Build Javascript', '📁');
 	activity.start();
 	// Build Javascript and CSS Production Bundle Return the manifest with files and
 	// ther hashed path.
@@ -97,7 +106,7 @@ module.exports = async function build() {
 	});
 	activity.end();
 
-	activity = report.activityTimer('Build HTML:');
+	activity = reporter.activity('Build HTML', '💻');
 	activity.start();
 	const finalRoutes = fse.readJsonSync(routeDestPath);
 	try {
@@ -110,7 +119,7 @@ module.exports = async function build() {
 	}
 	activity.end();
 
-	activity = report.activityTimer('Build Critical CSS and minify HTML');
+	activity = reporter.activity('Build Critical CSS and minify HTML', '🎨');
 	activity.start();
 
 	for (const file of files) {

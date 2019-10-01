@@ -24,6 +24,7 @@
 		"plato:deploy": "node plato build",
 		"develop": "node plato develop -d -o",
 		"serve": "webpack-dev-server --config ./config/webpack.dev.config.js",
+		"build": "npm run plato:deploy",
 		"deploy": "npm run plato:deploy",
 		"bundleSizeAnalyser": "webpack --config ./config/webpack.prod.config.js --env bundleSize"
 	},
