@@ -9,16 +9,6 @@ const SizePlugin = require('size-plugin');
 const appEntryPoint = path.join(__dirname, '../src/scripts/app/index.js');
 const outputPath = path.join(__dirname, '../public/assets/js/');
 const filename = 'bundle.js';
-
-// console.log('appEntryPoint', appEntryPoint);
-// console.log('outputPath', outputPath);
-
-// console.log('\n ---- WEBPACK ---- \n \n running in development \n');
-// console.log(path.join(' running webpack in ', __dirname));
-// // console.log(' filename: ' + filename);
-// console.log(' devTool: ' + devTool);
-// console.log(' outputPath path ' + outputPath + '\n');
-
 const entryPoints = appEntryPoint;
 
 module.exports = {
@@ -69,7 +59,12 @@ module.exports = {
 			}
 		}),
 		new webpack.HotModuleReplacementPlugin(),
-		new HardSourceWebpackPlugin()
+		new HardSourceWebpackPlugin({
+			info: {
+				mode: 'none',
+				level: 'warn'
+			}
+		})
 	],
 
 	// i. e. through the resolve.alias option
@@ -130,11 +125,4 @@ module.exports = {
 
 	// Create Sourcemaps for the bundle
 	devtool: devTool
-
-	// devServer: {
-	// 	contentBase: './public',
-	// 	port: 8080,
-	// 	hot: true,
-	// 	inline: true,
-	// },
 };

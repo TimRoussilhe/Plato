@@ -21,25 +21,24 @@
 // - test circleci
 
 const program = require('commander');
-const build = require('./commands/build');
-const develop = require('./commands/develop');
 
 program
-		.command('build')
-		.description('Build website')
-		.option('-sic, --skip-image-compression <skipImageCompression>', 'Skip compression of image assets (default: false)')
-		.action(() => {
-				console.log('BUILD');
-				build();
-		});
+	.command('develop')
+	.option('-v, --verbose', 'output extra debugging')
+	.option('-o, --open', 'open dev')
+	.description('Develop website')
+	.action(cmdObj => {
+		const script = require('./commands/develop');
+		script(cmdObj.verbose, cmdObj.open);
+	});
 
 program
-		.command('develop')
-		.description('Develop website')
-		.option('-sic, --skip-image-compression <skipImageCompression>', 'Skip compression of image assets (default: false)')
-		.action(() => {
-				console.log('develop');
-				develop();
-		});
+	.command('build')
+	.description('Build website')
+	.option('-sic, --skip-image-compression <skipImageCompression>', 'Skip compression of image assets (default: false)')
+	.action(() => {
+		const script = require('./commands/build');
+		script();
+	});
 
 program.parse(process.argv);

@@ -1,103 +1,84 @@
-const { createReporter } = require('yurnalist');
-const { stripIndent } = require('common-tags');
 const convertHrtime = require('convert-hrtime');
-// const tracer = require('opentracing').globalTracer();
+const chalk = require('chalk');
+const terminalLink = require('terminal-link');
+const boxen = require('boxen');
+const log = console.log;
 
-const reporter = createReporter({ emoji: true, verbose: true });
+const defaultColors = {
+	activityStart: chalk.magentaBright,
+	log: chalk.white,
+	info: chalk.grey,
+	warn: chalk.orange,
+	error: chalk.red,
+	success: chalk.green,
+	bigError: chalk.bold.red,
+	bigSucces: chalk.bold.blue
+};
 
-const base = Object.getPrototypeOf(reporter);
+function Reporter() {
+	this.verbose = false;
+	this.colors = defaultColors;
 
-/* Reporter module.
- * @module reporter
- */
+	this.updateColors = function(colors) {
+		this.colors = Object.assign(colors, defaultColors);
+	};
 
-module.exports = Object.assign(reporter, {
-	/**
-	 * Strip initial indentation template function.
-	 */
-	stripIndent,
-	/**
-	 * Toggle verbosity.
-	 * @param {boolean} [isVerbose=true]
-	 */
-	setVerbose(isVerbose = true) {
-		this.isVerbose = !!isVerbose;
-	},
-	/**
-	 * Turn off colors in error output.
-	 * @param {boolean} [isNoColor=false]
-	 */
-	setNoColor(isNoColor = false) {
-		if (isNoColor) {
-			errorFormatter.withoutColors();
-		}
-	},
-	/**
-	 * Log arguments and exit process with status 1.
-	 * @param {*} [arguments]
-	 */
-	panic(...args) {
-		this.error(...args);
+	this.log = function(message) {
+		log(this.colors.log(message));
+	};
+
+	this.info = function(message) {
+		// info is only printed if verbose is precised
+		this.verbose && log(this.colors.info(message));
+	};
+	this.warn = function(message) {
+		log(this.colors.warn(message));
+	};
+	this.error = function(message, exit = false) {
+		log(this.colors.error(message));
+		if (exit) process.exit(1);
+	};
+	this.failure = function(message) {
+		log(this.colors.bigError(message));
 		process.exit(1);
-	},
+	};
+	this.success = function(message) {
+		log(this.colors.success(message));
+	};
 
-	panicOnBuild(...args) {
-		this.error(...args);
-		if (process.env.gatsby_executing_command === 'build') {
-			process.exit(1);
+	this.displayUrl = function(message, url) {
+		log(boxen(`${message} \n ${terminalLink(url, url)}`, { padding: 1, margin: 0, round: 1 }));
+	};
+
+	// this.reportFailure();
+}
+
+Reporter.prototype.activity = function(activityName, activityEmoji) {
+	return new Activity(activityName, activityEmoji, this);
+};
+
+function Activity(activityName, activityEmoji = '', reporter) {
+	return {
+		start: (verbose = false) => {
+			this.startTime = process.hrtime();
+			verbose && log(reporter.colors.activityStart(`starting ${activityEmoji} ${activityName}`));
+		},
+		update: (verbose = false) => {
+			const elapsedTime = () => {
+				let elapsed = process.hrtime(this.startTime);
+				return `${convertHrtime(elapsed)['seconds'].toFixed(3)} s`;
+			};
+			verbose && log(reporter.colors.info(`update ${activityEmoji}`), reporter.colors.log(`${activityName} - ${elapsedTime()}`));
+		},
+		end: () => {
+			const elapsedTime = () => {
+				let elapsed = process.hrtime(this.startTime);
+				return `${convertHrtime(elapsed)['seconds'].toFixed(3)} s`;
+			};
+			log(reporter.colors.success(`success ${activityEmoji}`), reporter.colors.log(`${activityName} - ${elapsedTime()}`));
 		}
-	},
+	};
+}
 
-	error(message, error) {
-		if (arguments.length === 1 && typeof message !== 'string') {
-			error = message;
-			message = error.message;
-		}
-		base.error.call(this, message);
-		if (error) console.log(error);
-	},
-	/**
-	 * Set prefix on uptime.
-	 * @param {string} prefix - A string to prefix uptime with.
-	 */
-	uptime(prefix) {
-		this.verbose(`${prefix}: ${(process.uptime() * 1000).toFixed(3)}ms`);
-	},
-	/**
-	 * Time an activity.
-	 * @param {string} name - Name of activity.
-	 * @param {activityArgs} activityArgs - optional object with tracer parentSpan
-	 * @return {string} The elapsed time of activity.
-	 */
-	activityTimer(name, activityArgs = {}) {
-		const spinner = reporter.activity();
-		const start = process.hrtime();
-		let status;
-
-		const elapsedTime = () => {
-			let elapsed = process.hrtime(start);
-			return `${convertHrtime(elapsed)['seconds'].toFixed(3)} s`;
-		};
-
-		// const {parentSpan} = activityArgs;
-		// const spanArgs = parentSpan ? {childOf: parentSpan} : {};
-		// const span = tracer.startSpan(name, spanArgs);
-
-		return {
-			start: () => {
-				spinner.tick(name);
-			},
-			setStatus: s => {
-				status = s;
-				spinner.tick(`${name} — ${status}`);
-			},
-			end: () => {
-				// span.finish();
-				const str = status ? `${name} — ${elapsedTime()} — ${status}` : `${name} — ${elapsedTime()}`;
-				reporter.success(str);
-				spinner.end();
-			}
-			// span: span,
-		};
-	}
-});
+const reporter = new Reporter();
+module.exports = reporter;

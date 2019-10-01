@@ -1,7 +1,5 @@
-const {saveRemoteData, updateRoutes} = require('./saveData.js');
-const chalk = require('chalk');
-const log = console.log;
-const print = chalk.grey;
+const { saveRemoteData, updateRoutes } = require('./saveData.js');
+const reporter = require('../utils/reporter');
 
 // Things we need for a page
 // id
@@ -26,7 +24,7 @@ const print = chalk.grey;
  * @return {Promise} createPage Promise
  */
 
-exports.createPage = ({id, url, template, data}, siteDir, dataMiddleware = null) => {
+exports.createPage = ({ id, url, template, data }, siteDir, dataMiddleware = null) => {
 	return new Promise((resolve, reject) => {
 		// create JSON File
 		saveRemoteData(JSON.stringify(data), id + '.json', siteDir, dataMiddleware);
@@ -35,11 +33,11 @@ exports.createPage = ({id, url, template, data}, siteDir, dataMiddleware = null)
 			id,
 			url,
 			template,
-			json: id + '.json',
+			json: id + '.json'
 		};
 
 		updateRoutes([route]).then(() => {
-			log(print(` Created Page : ${id}`));
+			reporter.info(`Created Page : ${id}`);
 			resolve();
 		});
 	});

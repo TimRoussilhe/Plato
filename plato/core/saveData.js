@@ -4,9 +4,7 @@ const Promise = require('bluebird');
 const fetch = require('node-fetch');
 fetch.Promise = Promise;
 
-const chalk = require('chalk');
-const log = console.log;
-const print = chalk.grey;
+const reporter = require('../utils/reporter');
 
 const routeDestPath = path.resolve(__dirname + '/../../shared/routes/real_routes.json');
 
@@ -34,25 +32,24 @@ exports.saveRemoteDataFromSource = (source, fileName, siteDir) => {
 		const start = process.hrtime();
 
 		fetch(source)
-			.then((res) => res.json())
-			.then((body) => {
+			.then(res => res.json())
+			.then(body => {
 				const destination = path.join(siteDir, fileName);
 				saveFile(destination, JSON.stringify(body)).then(() => {
 					const end = process.hrtime(start);
-					log(print(` Saved ${fileName} in ${end[1] / 1000000}ms`));
+					reporter.info(`Saved remote data ${fileName} in ${end[1] / 1000000}ms`);
 					resolve();
 				});
 			});
 	});
 };
 
-exports.updateRoutes = (routes) => {
+exports.updateRoutes = routes => {
 	return new Promise((resolve, reject) => {
 		const exists = fse.existsSync(routeDestPath);
 
 		if (exists) {
-			fse.readFile(routeDestPath).then((data) => {
-
+			fse.readFile(routeDestPath).then(data => {
 				let obj;
 				try {
 					obj = JSON.parse(data); // now it an object
@@ -65,11 +62,11 @@ exports.updateRoutes = (routes) => {
 				fse
 					.writeFile(routeDestPath, json, 'utf8') // write it back
 					.then(() => resolve())
-					.catch((err) => reject(err));
+					.catch(err => reject(err));
 			});
 		} else {
 			const routesObject = {
-				routes,
+				routes
 			};
 
 			fse.writeFile(routeDestPath, JSON.stringify(routesObject), 'utf8').then(() => {
