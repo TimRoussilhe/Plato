@@ -1,8 +1,11 @@
 const fse = require('fs-extra');
 const path = require('path');
 
+const connect = require('connect');
+const serveStatic = require('serve-static');
+
 const srcPath = './src';
-const distPath = './build';
+// const distPath = './build';
 const distDataPath = './build/data';
 
 // report
@@ -23,7 +26,9 @@ const buildCritical = require('./build-critical.js');
 const files = [];
 const siteDir = './build/';
 
-module.exports = async function build() {
+module.exports = async function build(verbose, open) {
+	reporter.verbose = verbose;
+
 	let globalActivity;
 	globalActivity = reporter.activity('Plato Build', '🤔');
 	globalActivity.start();
@@ -36,16 +41,16 @@ module.exports = async function build() {
 	activity.start();
 
 	// clear destination folder
-	fse.emptyDirSync(distPath);
+	fse.emptyDirSync(siteDir);
 	fse.emptyDirSync(distDataPath);
 
 	// remove real_routes files
 	fse.removeSync('./shared/routes/real_routes.json');
 
 	// copy assets folder
-	fse.copySync(`${srcPath}/.htaccess`, `${distPath}/.htaccess`);
-	fse.copySync(`${srcPath}/assets`, `${distPath}/assets`);
-	fse.copySync(`${srcPath}/data`, `${distPath}/data`);
+	fse.copySync(`${srcPath}/.htaccess`, `${siteDir}/.htaccess`);
+	fse.copySync(`${srcPath}/assets`, `${siteDir}/assets`);
+	fse.copySync(`${srcPath}/data`, `${siteDir}/data`);
 
 	// add static routes to final_routes
 	await updateRoutes(routes.staticRoutes);
@@ -127,4 +132,15 @@ module.exports = async function build() {
 	}
 	activity.end();
 	globalActivity.end();
+
+	// open HTTP server serving our local files
+	if (open) {
+		const port = 8080;
+		connect()
+			.use(serveStatic(siteDir))
+			.listen(port, function() {
+				reporter.displayUrl(`Server running on ${port}`, 'http://localhost:' + port);
+				opn('http://localhost:' + port);
+			});
+	}
 };

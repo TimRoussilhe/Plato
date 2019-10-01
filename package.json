@@ -20,12 +20,13 @@
 	},
 	"scripts": {
 		"start": "node plato develop -v -o",
-		"plato:develop": "node ./plato/index develop",
+		"plato:develop": "node plato develop",
 		"plato:deploy": "node plato build",
 		"develop": "node plato develop -d -o",
 		"serve": "webpack-dev-server --config ./config/webpack.dev.config.js",
-		"build": "npm run plato:deploy",
-		"deploy": "npm run plato:deploy",
+		"build": "node plato build -v",
+		"build-and-test": "node plato build -v -o",
+		"deploy": "node plato build",
 		"bundleSizeAnalyser": "webpack --config ./config/webpack.prod.config.js --env bundleSize"
 	},
 	"devDependencies": {
@@ -83,6 +84,7 @@
 		"chunk-manifest-webpack-plugin": "^1.1.2",
 		"commander": "^2.19.0",
 		"common-tags": "^1.8.0",
+		"connect": "^3.7.0",
 		"convert-hrtime": "^2.0.0",
 		"core-js": "^3.2.1",
 		"eslint-config-prettier": "^6.3.0",
@@ -92,6 +94,7 @@
 		"node-fetch": "^2.3.0",
 		"opentracing": "^0.14.3",
 		"opn": "^5.4.0",
+		"serve-static": "^1.14.1",
 		"terminal-link": "^2.0.0",
 		"valid-url": "^1.0.9",
 		"yurnalist": "^1.0.4"

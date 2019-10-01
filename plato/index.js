@@ -34,11 +34,11 @@ program
 
 program
 	.command('build')
-	.description('Build website')
-	.option('-sic, --skip-image-compression <skipImageCompression>', 'Skip compression of image assets (default: false)')
-	.action(() => {
+	.option('-v, --verbose', 'output extra debugging')
+	.option('-o, --open', 'open local http server to QA build')
+	.action(cmdObj => {
 		const script = require('./commands/build');
-		script();
+		script(cmdObj.verbose, cmdObj.open);
 	});
 
 program.parse(process.argv);
