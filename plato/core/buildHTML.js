@@ -1,6 +1,3 @@
-const Twig = require('twig'); // Twig module
-Twig.cache(false);
-
 const template = require('art-template');
 const fse = require('fs-extra');
 const path = require('path');

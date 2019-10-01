@@ -75,7 +75,7 @@ module.exports = {
 	// i. e. through the resolve.alias option
 	// will be included in the bundle, no need to add and load vendor
 	resolve: {
-		extensions: ['.js', '.json', '.twig', '.html'],
+		extensions: ['.js', '.json', '.art', '.html'],
 		modules: ['src/scripts/app/', 'src/scripts/vendors/', 'shared/', 'public/assets/', 'node_modules']
 	},
 
@@ -88,7 +88,6 @@ module.exports = {
 					loader: 'babel-loader'
 				}
 			},
-			{ test: /\.twig$/, use: 'twig-loader' },
 			{ test: /\.art$/, use: 'art-template-loader' },
 			{
 				test: /\.scss$/,

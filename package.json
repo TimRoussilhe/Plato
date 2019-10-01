@@ -63,7 +63,6 @@
 		"sass-loader": "^7.1.0",
 		"size-plugin": "^2.0.0",
 		"style-loader": "^0.23.1",
-		"twig-loader": "^0.4.1",
 		"uglifyjs-webpack-plugin": "^2.2.0",
 		"webpack": "^4.41.0",
 		"webpack-bundle-analyzer": "^3.5.2",
@@ -91,7 +90,6 @@
 		"node-fetch": "^2.3.0",
 		"opentracing": "^0.14.3",
 		"opn": "^5.4.0",
-		"twig": "^1.12.0",
 		"valid-url": "^1.0.9",
 		"yurnalist": "^1.0.4"
 	}
