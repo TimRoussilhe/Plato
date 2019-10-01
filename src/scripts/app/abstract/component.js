@@ -54,12 +54,12 @@ class Component extends Base {
 		this.promises = {
 			show: {
 				resolve: null,
-				reject: null,
+				reject: null
 			},
 			hidden: {
 				resolve: null,
-				reject: null,
-			},
+				reject: null
+			}
 		};
 
 		/**
@@ -78,7 +78,7 @@ class Component extends Base {
 		this.states = {
 			canUpdate: false,
 			isAnimating: false,
-			isShown: false,
+			isShown: false
 		};
 
 		/**
@@ -90,12 +90,11 @@ class Component extends Base {
 
 		this.el = props.el ? props.el : null;
 		this.template = props.template ? props.template : null;
-
 		this.data = props.data ? props.data : this.data;
 		this.actions = props.actions ? props.actions : {};
 
 		this.events = {
-			'click a': (e) => this.hyperlink(e),
+			'click a': e => this.hyperlink(e)
 		};
 	}
 
@@ -141,9 +140,7 @@ class Component extends Base {
 	 * Render your template
 	 */
 	renderTemplate() {
-		const html = this.template({
-			data: this.data,
-		});
+		const html = this.template({ data: this.data });
 
 		// String to DOM Element
 		let wrapper = document.createElement('div');
@@ -228,11 +225,10 @@ class Component extends Base {
 	 * `blur`, and not `change`, `submit`, and `reset` in Internet Explorer.
 	 */
 	bindEvent(eventName, selector, listener, uid) {
-
 		if (this.el) {
 			if (selector) {
 				const items = [...this.el.querySelectorAll(selector)];
-				if (items.length > 0) items.forEach((item) => item.addEventListener(eventName, listener));
+				if (items.length > 0) items.forEach(item => item.addEventListener(eventName, listener));
 			} else {
 				this.el.addEventListener(eventName, listener);
 			}
@@ -241,7 +237,7 @@ class Component extends Base {
 				uid: uid,
 				eventName: eventName,
 				selector: selector,
-				listener: listener,
+				listener: listener
 			});
 		}
 		return this;
@@ -252,7 +248,7 @@ class Component extends Base {
 	// views attached to the same DOM element.
 	unbindEvents() {
 		if (this.el) {
-			this.bindedEvents.forEach((element) => {
+			this.bindedEvents.forEach(element => {
 				this.unbindEvent(element.eventName, element.selector, element.listener, element.uid);
 			});
 		}
@@ -266,14 +262,14 @@ class Component extends Base {
 		if (this.el) {
 			if (selector) {
 				const items = [...this.el.querySelectorAll(selector)];
-				if (items.length > 0) items.forEach((item) => item.removeEventListener(eventName, listener));
+				if (items.length > 0) items.forEach(item => item.removeEventListener(eventName, listener));
 			} else {
 				this.el.removeEventListener(eventName, listener);
 			}
 		}
 
 		// remove event from array based on uid
-		this.bindedEvents = this.bindedEvents.filter((event) => {
+		this.bindedEvents = this.bindedEvents.filter(event => {
 			return event.uid === uid;
 		});
 
@@ -380,7 +376,7 @@ class Component extends Base {
 
 		let tl = this.TL[name];
 
-		tl.stop();
+		tl.pause();
 		tl.kill();
 		tl.clear();
 		tl = null;

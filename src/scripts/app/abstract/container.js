@@ -47,8 +47,8 @@ class AbstractContainer extends Base {
 		this.promises = {
 			data: {
 				resolve: null,
-				reject: null,
-			},
+				reject: null
+			}
 		};
 	}
 

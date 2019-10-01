@@ -2,10 +2,10 @@ import AbstractContainer from './container';
 import store from 'store';
 
 // Actions
-import {setMeta} from 'containers/app/actions';
+import { setMeta } from 'containers/app/actions';
 
 // Config
-import {JSON_ENDPOINTS} from 'constants/config';
+import { JSON_ENDPOINTS } from 'constants/config';
 
 /**
  * PageContainer: Defines a page container
@@ -29,14 +29,14 @@ class PageContainer extends AbstractContainer {
 		const url = JSON_ENDPOINTS + this.props.endPoint;
 
 		fetch(url)
-			.then((response) => {
+			.then(response => {
 				return response.json();
 			})
-			.then((json) => {
+			.then(json => {
 				this.data = json;
 				this.promises.data.resolve();
 			})
-			.catch((ex) => {
+			.catch(ex => {
 				this.promises.data.reject();
 			});
 	}
@@ -46,10 +46,10 @@ class PageContainer extends AbstractContainer {
 	}
 
 	initData() {
-		console.log('this.data.meta', this.data.meta);
 		if (this.data.meta) {
 			store.dispatch(setMeta(this.data.meta));
 		}
+		this.props.data = this.data;
 	}
 
 	onInit() {

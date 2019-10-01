@@ -6,8 +6,6 @@ const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 const notifier = require('node-notifier');
 const SizePlugin = require('size-plugin');
 
-const postcssConfig = require('./postcss.config');
-
 const appEntryPoint = path.join(__dirname, '../src/scripts/app/index.js');
 const outputPath = path.join(__dirname, '../public/assets/js/');
 const filename = 'bundle.js';
@@ -31,7 +29,7 @@ module.exports = {
 	If you pass an object: Multiple entry bundles are created. The key is the chunk name. The value can be a string or an array.
 	*/
 	node: {
-		fs: 'empty',
+		fs: 'empty'
 	},
 
 	mode: 'development',
@@ -42,11 +40,11 @@ module.exports = {
 		path: outputPath,
 		filename: filename,
 		publicPath: '/assets/js/',
-		chunkFilename: '[name].bundle.js',
+		chunkFilename: '[name].bundle.js'
 	},
 
 	optimization: {
-		noEmitOnErrors: true, // NoEmitOnErrorsPlugin
+		noEmitOnErrors: true // NoEmitOnErrorsPlugin
 	},
 
 	plugins: [
@@ -55,8 +53,8 @@ module.exports = {
 			'process.env': {
 				NODE_ENV: JSON.stringify('development'),
 				DEV: process.env.NODE_ENV !== 'production',
-				IS_BROWSER: true,
-			},
+				IS_BROWSER: true
+			}
 		}),
 		new FriendlyErrorsWebpackPlugin({
 			onErrors: (severity, errors) => {
@@ -66,73 +64,73 @@ module.exports = {
 				notifier.notify({
 					title: 'Compilation Failed',
 					message: severity + ': ' + error.name,
-					subtitle: error.file || '',
+					subtitle: error.file || ''
 				});
-			},
+			}
 		}),
 		new webpack.HotModuleReplacementPlugin(),
-		new HardSourceWebpackPlugin(),
+		new HardSourceWebpackPlugin()
 	],
 
 	// i. e. through the resolve.alias option
 	// will be included in the bundle, no need to add and load vendor
 	resolve: {
 		extensions: ['.js', '.json', '.twig', '.html'],
-		modules: ['src/scripts/app/', 'src/scripts/vendors/', 'shared/', 'public/assets/', 'node_modules'],
+		modules: ['src/scripts/app/', 'src/scripts/vendors/', 'shared/', 'public/assets/', 'node_modules']
 	},
 
 	module: {
-		rules: [{
+		rules: [
+			{
 				test: /\.js$/,
 				exclude: /(node_modules|bower_components)/,
 				use: {
-					loader: 'babel-loader',
-				},
+					loader: 'babel-loader'
+				}
 			},
-			{
-				test: /\.twig$/,
-				use: 'twig-loader'
-			},
+			{ test: /\.twig$/, use: 'twig-loader' },
+			{ test: /\.art$/, use: 'art-template-loader' },
 			{
 				test: /\.scss$/,
-				use: [{
+				use: [
+					{
 						loader: 'style-loader',
 						// singleton is important here. On dev it will wait for CSS to be appended to start JS
 						options: {
 							singleton: true
-						},
+						}
 					},
 					{
 						loader: 'css-loader',
 						options: {
-							sourceMap: true,
-						},
+							sourceMap: true
+						}
 					},
 					{
 						loader: 'postcss-loader',
 						options: {
 							ident: 'postcss',
-							plugins: () => [require('autoprefixer')(postcssConfig.options)],
-						},
+							plugins: () => [require('autoprefixer')]
+						}
 					},
 					{
 						loader: 'sass-loader',
 						options: {
-							sourceMap: true,
-						},
-					},
-				],
-			},
-		],
+							sourceMap: true
+						}
+					}
+				]
+			}
+		]
 	},
 
 	stats: {
 		// Nice colored output
-		colors: true,
+		colors: true
 	},
 
 	// Create Sourcemaps for the bundle
-	devtool: devTool,
+	devtool: devTool
 
 	// devServer: {
 	// 	contentBase: './public',

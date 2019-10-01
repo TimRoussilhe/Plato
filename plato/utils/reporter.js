@@ -1,9 +1,9 @@
-const {createReporter} = require('yurnalist');
-const {stripIndent} = require('common-tags');
+const { createReporter } = require('yurnalist');
+const { stripIndent } = require('common-tags');
 const convertHrtime = require('convert-hrtime');
 // const tracer = require('opentracing').globalTracer();
 
-const reporter = createReporter({emoji: true, verbose: true});
+const reporter = createReporter({ emoji: true, verbose: true });
 
 const base = Object.getPrototypeOf(reporter);
 
@@ -54,7 +54,7 @@ module.exports = Object.assign(reporter, {
 			message = error.message;
 		}
 		base.error.call(this, message);
-		if (error) console.log(errorFormatter.render(error));
+		if (error) console.log(error);
 	},
 	/**
 	 * Set prefix on uptime.
@@ -87,7 +87,7 @@ module.exports = Object.assign(reporter, {
 			start: () => {
 				spinner.tick(name);
 			},
-			setStatus: (s) => {
+			setStatus: s => {
 				status = s;
 				spinner.tick(`${name} — ${status}`);
 			},
@@ -96,8 +96,8 @@ module.exports = Object.assign(reporter, {
 				const str = status ? `${name} — ${elapsedTime()} — ${status}` : `${name} — ${elapsedTime()}`;
 				reporter.success(str);
 				spinner.end();
-			},
+			}
 			// span: span,
 		};
-	},
+	}
 });

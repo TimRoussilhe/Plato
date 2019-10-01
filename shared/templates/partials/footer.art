@@ -1,10 +1,9 @@
 <!-- Scripts -->
-
-{% if manifest %}
+{{ if manifest }}
 <script src="{{manifest['main.js']}}"></script>
-{% else %}
+{{else}}
 <script src="/assets/js/bundle.js"></script>
-{% endif %}
+{{/if}}
 </body>
 
 </html>

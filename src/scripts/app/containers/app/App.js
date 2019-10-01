@@ -23,32 +23,32 @@ function pageLoader(chunkName, path) {
 		switch (ComponentName) {
 		case 'Homepage':
 			return import(/* webpackPrefetch: true */ /* webpackChunkName: "Homepage" */ 'containers/homepage/Homepage')
-				.then(({default: Page}) => {
+				.then(({ default: Page }) => {
 					resolve(Page);
 				})
-				.catch((error) => reject('An error occurred while loading the component'));
+				.catch(error => reject('An error occurred while loading the component'));
 		case 'About':
 			return import(/* webpackPrefetch: true */ /* webpackChunkName: "About" */ 'containers/about/About')
-				.then(({default: Page}) => {
+				.then(({ default: Page }) => {
 					resolve(Page);
 				})
-				.catch((error) => reject('An error occurred while loading the component'));
+				.catch(error => reject('An error occurred while loading the component'));
 		case 'Notfound':
 			return import(/* webpackPrefetch: true */ /* webpackChunkName: "Notfound" */ 'containers/notfound/Notfound')
-				.then(({default: Page}) => {
+				.then(({ default: Page }) => {
 					resolve(Page);
 				})
-				.catch((error) => reject('An error occurred while loading the component'));
+				.catch(error => reject('An error occurred while loading the component'));
 		}
 	});
 }
 
 // Constants
 // Selector
-import {getRoute} from './selectors';
+import { getRoute } from './selectors';
 
 // Actions
-import {setAnimating, setPage, setOldPage, setGlobalData} from './actions';
+import { setAnimating, setPage, setOldPage, setGlobalData } from './actions';
 import store from 'store';
 
 class App extends Base {
@@ -64,7 +64,7 @@ class App extends Base {
 		this.oldPage = null;
 
 		this.storeEvents = {
-			'app.location': (location, prevLocation) => this.onLocationChanged(location, prevLocation),
+			'app.location': (location, prevLocation) => this.onLocationChanged(location, prevLocation)
 		};
 	}
 
@@ -132,7 +132,7 @@ class App extends Base {
 		// Define first page and pass el if the page el is allready in the dom
 		this.page = new Page({
 			el: el ? el : null,
-			endPoint: currentRoute && currentRoute.json ? currentRoute.json : null,
+			endPoint: currentRoute && currentRoute.json ? currentRoute.json : null
 		});
 
 		store.dispatch(setPage(this.page));

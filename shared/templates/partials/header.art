@@ -10,13 +10,35 @@
 
 <head>
 
-	{% set metaTitle = data.meta.title|default(config.siteTitle) %}
-	{% set metaDescription = data.meta.description|default(config.siteDescription) %}
-	{% set metaSiteName = data.meta.description|default(config.metaSiteName) %}
-	{% set metaImage = data.meta.image|default(config.metaImage) %}
-	{% set metaTwitterName = data.meta.description|default(config.metaTwitterName) %}
-	{% set metaImageTwitter = data.meta.imageTwitter|default(metaImage) %}
+	{{ set metaTitle = config.siteTitle }}
+	{{if data.meta && data.meta.title}}
+		{{ set metaTitle =data.meta.title }}
+	{{/if}}
 
+	{{ set metaDescription = config.siteDescription }}
+	{{if data.meta && data.meta.description}}
+		{{ set metaDescription =data.meta.description }}
+	{{/if}}
+
+	{{ set metaSiteName = config.metaSiteName }}
+	{{if data.meta && data.meta.siteName}}
+		{{ set metaSiteName =data.meta.siteName }}
+	{{/if}}
+
+	{{ set metaImage = config.metaImage }}
+	{{if data.meta && data.meta.metaImage}}
+		{{ set metaImage =data.meta.metaImage }}
+	{{/if}}
+
+	{{ set metaTwitterName = config.metaTwitterName }}
+	{{if data.meta && data.meta.twitterName}}
+		{{ set metaTwitterName =data.meta.twitterName }}
+	{{/if}}
+
+	{{ set metaImageTwitter = config.metaImage }}
+	{{if data.meta && data.meta.twitterImage}}
+		{{ set metaImageTwitter =data.meta.twitterImage }}
+	{{/if}}
 	<meta charset="utf-8" />
 
 	<title>{{ metaTitle }}</title>
@@ -54,25 +76,25 @@
 	<meta name="theme-color" content="#ffffff" />
 
 	<!-- Ressource hinting -->
-	{% if config.preload %}
-	{% for preload in config.preload %}
-	{% if preload.type == 'font' %}
-	<link rel="preload" href="{{ preload.href }}" as="font" crossorigin="crossorigin" type="font/{{ preload.format }}" />
-	{% endif %}
-	{% endfor %}
-	{% endif %}
+	{{ if config.preload }}
+		{{ each config.preload }}
+			{{ if $value.type == 'font' }}
+			<link rel="preload" href="{{ $value.href }}" as="font" crossorigin="crossorigin" type="font/{{ $value.format }}" />
+			{{/if}}
+		{{/each}}
+	{{/if}}
 
 	<!-- CSS -->
-	{% if manifest %}
-	<link rel="stylesheet" type="text/css" href="{{ manifest['main.css'] }}" />
-	{% endif %}
+	{{ if manifest }}
+		<link rel="stylesheet" type="text/css" href="{{ manifest['main.css'] }}" />
+	{{/if}}
 
 	<!-- Global Data -->
-	{% if globalData %}
+	{{ if globalData }}
 	<script>
-		window.globalData = '{{ globalData }}';
+		window.globalData = '{{@ globalData }}';
 	</script>
-	{% endif %}
+	{{/if}}
 
 	<!-- <noscript><link rel="stylesheet" href="/assets/css/noscript.css"></noscript> -->
 </head>

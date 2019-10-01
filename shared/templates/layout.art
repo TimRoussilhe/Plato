@@ -1,0 +1,7 @@
+{{ include './partials/header.art' }}
+
+<div id="content">
+	{{@ html}}
+</div>
+
+{{ include './partials/footer.art' }}
