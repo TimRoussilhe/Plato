@@ -131,11 +131,11 @@ module.exports = async function develop(verbose, open) {
 				// TODO : check if change is not happening in an unlink template
 				for (let page of finalRoutes.routes) {
 					buildHTML(page, null, 'development', siteDir, globalData).catch(err => {
-						log(`Error: ${err}`);
+						reporter.log(`Error: ${err}`);
 					});
 				}
 			}
-			log(`File ${path} has been changed`);
+			reporter.log(`File ${path} has been changed`);
 		});
 
 	watcher.add('./shared/partials/');

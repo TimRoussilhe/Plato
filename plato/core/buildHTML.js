@@ -38,11 +38,13 @@ module.exports = (page, manifest, mode = 'development', siteDir, globalData) => 
 			reject(err);
 		});
 
-		let data;
-		try {
-			data = fse.readJsonSync(siteDir + 'data/' + page.json);
-		} catch (err) {
-			reject(new Error(err));
+		let data = {};
+		if(page.json){
+			try {
+				data = fse.readJsonSync(siteDir + 'data/' + page.json);
+			} catch (err) {
+				reject(new Error(err));
+			}
 		}
 
 		const templatePath = path.resolve(`./shared/templates/${page.template}.art`);
