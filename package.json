@@ -27,7 +27,9 @@
 		"build": "node plato build -v",
 		"build-and-test": "node plato build -v -o",
 		"deploy": "node plato build",
-		"bundleSizeAnalyser": "webpack --config ./config/webpack.prod.config.js --env bundleSize"
+		"bundleSizeAnalyser": "webpack --config ./config/webpack.prod.config.js --env bundleSize",
+		"prettier:check": "prettier --config ./.prettierrc --check src/**/**.{js,scss}",
+		"prettier:write": "prettier --config ./.prettierrc --write src/**/**.{js,scss}"
 	},
 	"devDependencies": {
 		"@babel/cli": "^7.6.2",
@@ -57,6 +59,7 @@
 		"optimize-css-assets-webpack-plugin": "^5.0.1",
 		"page": "^1.11.5",
 		"postcss-loader": "^3.0.0",
+		"prettier": "^1.19.1",
 		"redux": "^4.0.1",
 		"redux-logger": "^3.0.6",
 		"redux-responsive": "^4.3.8",

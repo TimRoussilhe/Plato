@@ -1,5 +1,5 @@
-import {combineReducers} from 'redux';
-import {createResponsiveStateReducer} from 'redux-responsive';
+import { combineReducers } from 'redux';
+import { createResponsiveStateReducer } from 'redux-responsive';
 
 import app from 'containers/app/reducers';
 import layout from 'containers/layout/reducers';

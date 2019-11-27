@@ -1,7 +1,4 @@
-import {
-	SET_ORIENTATION,
-
-} from './constants';
+import { SET_ORIENTATION } from './constants';
 
 export function setOrientation(window) {
 	return {

@@ -1,17 +1,10 @@
-import {
-	isMobile,
-	isTablet
-} from 'utils/is';
+import { isMobile, isTablet } from 'utils/is';
 import App from 'containers/app/App';
 import Router from 'router';
-import {
-	setDeviceType
-} from 'containers/app/actions';
+import { setDeviceType } from 'containers/app/actions';
 import store from 'store';
 import 'whatwg-fetch';
-import {
-	cleanURL
-} from 'utils/cleanURL';
+import { cleanURL } from 'utils/cleanURL';
 import './../../css/app.scss';
 
 class Entry {
@@ -43,17 +36,14 @@ class Entry {
 	}
 }
 
-(function () {
-	const {
-		hostname,
-		port
-	} = location;
+(function() {
+	const { hostname, port } = location;
 	if (hostname !== 'localhost' && port !== 8080 && 'serviceWorker' in navigator) {
 		navigator.serviceWorker.register('/assets/service-worker.js');
 	}
 })();
 
-(function () {
+(function() {
 	cleanURL(window.location.href.split('?')[0]);
 })();
 

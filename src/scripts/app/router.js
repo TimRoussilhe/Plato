@@ -5,18 +5,13 @@ import realRoutes from 'routes/real_routes.json';
 const routes = realRoutes.routes;
 
 // Actions
-import {
-	navigate,
-	setRoutes
-} from 'containers/app/actions';
+import { navigate, setRoutes } from 'containers/app/actions';
 // Selectors
 // Constants
 
 // Utils
 // import {MAIN_ENDPOINT} from 'constants/config';
-import {
-	isString
-} from 'utils/is';
+import { isString } from 'utils/is';
 
 class Router {
 	preRouting(ctx, next) {
@@ -43,7 +38,7 @@ class Router {
 				page(
 					route.url,
 					(ctx, next) => this.preRouting(ctx, next),
-					(ctx) => {
+					ctx => {
 						store.dispatch(navigate(route.id, ctx.params));
 					}
 				);
@@ -53,7 +48,7 @@ class Router {
 			page(
 				'*',
 				(ctx, next) => this.preRouting(ctx, next),
-				(ctx) => {
+				ctx => {
 					store.dispatch(navigate('404', ctx.params));
 				}
 			);

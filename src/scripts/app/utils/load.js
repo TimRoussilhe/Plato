@@ -1,16 +1,16 @@
-import {VIDEO_TYPE, IMAGE_TYPE, FILE_TYPE} from 'constants/misc';
+import { VIDEO_TYPE, IMAGE_TYPE, FILE_TYPE } from 'constants/misc';
 
 export const loadJSON = (url, options = {}) => {
 	return fetch(url, options)
-		.then((response) => {
+		.then(response => {
 			// console.log('response:url', url, response);
 			return response.json();
 		})
-		.catch((err) => {
+		.catch(err => {
 			console.error('load()::Json error', err, url);
 			return false;
 		})
-		.then((data) => {
+		.then(data => {
 			if (!data) {
 				console.info('data are empty', url);
 				return false;
@@ -24,12 +24,11 @@ export const loadJSON = (url, options = {}) => {
 
 			return data;
 		})
-		.catch((err) => {
+		.catch(err => {
 			console.error('load()::Data error', err, url);
 			return false;
 		});
 };
-
 
 export const loadImg = (url, options = {}) => {
 	return new Promise((resolve, reject) => {
@@ -47,7 +46,7 @@ export const loadImg = (url, options = {}) => {
 			xhr.open('GET', url, true);
 			xhr.responseType = 'arraybuffer';
 
-			xhr.onerror = (e) => {
+			xhr.onerror = e => {
 				xhr.abort();
 				xhr = null;
 
@@ -58,7 +57,7 @@ export const loadImg = (url, options = {}) => {
 					img.addEventListener('load', () => {
 						resolve(img);
 					});
-					img.addEventListener('onerror', (err) => {
+					img.addEventListener('onerror', err => {
 						reject(err);
 					});
 
@@ -66,7 +65,7 @@ export const loadImg = (url, options = {}) => {
 				}
 			};
 
-			xhr.onload = (e) => {
+			xhr.onload = e => {
 				if (xhr.readyState === 4) {
 					if (xhr.status === 200) {
 						let extension = url.split('.').pop();
@@ -76,14 +75,14 @@ export const loadImg = (url, options = {}) => {
 
 						// Obtain a blob: URL for the image data.
 						const arrayBufferView = new window.Uint8Array(xhr.response);
-						const blob = new Blob([arrayBufferView], {type: 'image/' + extension});
+						const blob = new Blob([arrayBufferView], { type: 'image/' + extension });
 						const imageUrl = URL.createObjectURL(blob);
 
 						// load from the cache as the blob is here already
 						img.addEventListener('load', () => {
 							resolve(img);
 						});
-						img.addEventListener('onerror', (err) => {
+						img.addEventListener('onerror', err => {
 							reject(err);
 						});
 
@@ -96,7 +95,7 @@ export const loadImg = (url, options = {}) => {
 						img.addEventListener('load', () => {
 							resolve(img);
 						});
-						img.addEventListener('onerror', (err) => {
+						img.addEventListener('onerror', err => {
 							reject(err);
 						});
 
@@ -113,7 +112,7 @@ export const loadImg = (url, options = {}) => {
 				console.log('img laoded!', url);
 				resolve(img);
 			});
-			img.addEventListener('onerror', (err) => {
+			img.addEventListener('onerror', err => {
 				reject(err);
 			});
 
@@ -122,7 +121,7 @@ export const loadImg = (url, options = {}) => {
 	});
 };
 
-export const loadVideo = (url, options = {autoplay: true, muted: true, loop: true, controls: false}) => {
+export const loadVideo = (url, options = { autoplay: true, muted: true, loop: true, controls: false }) => {
 	return new Promise((resolve, reject) => {
 		const video = document.createElement('video');
 
@@ -161,17 +160,19 @@ export const loadVideo = (url, options = {autoplay: true, muted: true, loop: tru
 };
 
 export const loadAsset = (asset_, options = {}) => {
-	const asset = typeof (asset_) === 'string' ? {src: asset_} : asset_;
+	const asset = typeof asset_ === 'string' ? { src: asset_ } : asset_;
 
 	// add type
 	if (asset.extension) options.extension = asset.extension;
 
 	switch (asset.type) {
-	case VIDEO_TYPE: return loadVideo(asset.src, options);
-	case IMAGE_TYPE: return loadImg(asset.src, options);
-	case FILE_TYPE: return loadJSON(asset.src, options);
-	default: return loadJSON(asset.src, options);
+		case VIDEO_TYPE:
+			return loadVideo(asset.src, options);
+		case IMAGE_TYPE:
+			return loadImg(asset.src, options);
+		case FILE_TYPE:
+			return loadJSON(asset.src, options);
+		default:
+			return loadJSON(asset.src, options);
 	}
 };
-
-

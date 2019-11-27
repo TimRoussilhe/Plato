@@ -1,15 +1,15 @@
 .f-title {
-  @include f-title;
+	@include f-title;
 }
 
 .f-body {
-  @include f-regular28;
+	@include f-regular28;
 
-  @media #{$mq-desktop-s} {
-    @include f-regular26;
-  }
+	@media #{$mq-desktop-s} {
+		@include f-regular26;
+	}
 
-  @media #{$mq-mobile} {
-    @include f-regular24;
-  }
+	@media #{$mq-mobile} {
+		@include f-regular24;
+	}
 }

@@ -35,7 +35,7 @@ class ScrollPrevent {
 
 			this.cb({
 				deltaY: this.currentDeltaY,
-				direction: direction
+				direction: direction,
 			});
 		}
 	}

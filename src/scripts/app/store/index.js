@@ -1,7 +1,7 @@
-import {applyMiddleware, compose, createStore} from 'redux';
+import { applyMiddleware, compose, createStore } from 'redux';
 import rootReducer from 'reducers';
-import {createLogger} from 'redux-logger';
-import {responsiveStoreEnhancer} from 'redux-responsive';
+import { createLogger } from 'redux-logger';
+import { responsiveStoreEnhancer } from 'redux-responsive';
 
 const USE_DEV_TOOLS = process.env.DEV && process.env.IS_BROWSER && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__;
 

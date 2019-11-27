@@ -2,7 +2,6 @@
 // import CV from 'config/currentValues';
 
 class ShareUtil {
-
 	constructor() {
 		this.sizes = {
 			facebook: [500, 600],
@@ -16,7 +15,8 @@ class ShareUtil {
 			// twitter: 'https://twitter.com/intent/tweet?url={{url}}&text={{desc}}&hashtags={{hashtags}}&via={{via}}',
 			twitter: 'https://twitter.com/intent/tweet?url={{url}}&text={{desc}}&hashtags={{hashtags}}',
 			google: 'https://plus.google.com/share?url={{url}}',
-			pinterest: 'http://www.pinterest.com/pin/create/button/?url={{url}}&media={{img}}&description={{title}},%20{{desc}}',
+			pinterest:
+				'http://www.pinterest.com/pin/create/button/?url={{url}}&media={{img}}&description={{title}},%20{{desc}}',
 		};
 
 		this.popup = null;
@@ -48,7 +48,7 @@ class ShareUtil {
 		}
 
 		// if you use SDK
-		if (data.id === 'facebook' && (typeof FB !== 'undefined' && FB !== null)) {
+		if (data.id === 'facebook' && typeof FB !== 'undefined' && FB !== null) {
 			const method = data.method ? data.method : 'feed';
 
 			const params = {
@@ -59,7 +59,7 @@ class ShareUtil {
 			};
 
 			FB.ui(params, function(response) {
-				const success = (response && response.post_id);
+				const success = response && response.post_id;
 			});
 
 			return;
@@ -77,7 +77,13 @@ class ShareUtil {
 
 		if (debug) console.log('href', href);
 
-		this.popup = window.open(href, data.id, `width=${w},height=${h},left=${this.getX(w)},top=${this.getY(h)},scrollbars=1,location=0,menubar=0,resizable=0,status=0,toolbar=0`);
+		this.popup = window.open(
+			href,
+			data.id,
+			`width=${w},height=${h},left=${this.getX(w)},top=${this.getY(
+				h
+			)},scrollbars=1,location=0,menubar=0,resizable=0,status=0,toolbar=0`
+		);
 		this.popup.focus();
 	}
 
@@ -155,9 +161,9 @@ class ShareUtil {
 	}
 
 	/**
-     * detect IE
-     * returns version of IE or false, if browser is not Internet Explorer
-     */
+	 * detect IE
+	 * returns version of IE or false, if browser is not Internet Explorer
+	 */
 	detectIE() {
 		const ua = window.navigator.userAgent;
 
@@ -183,7 +189,6 @@ class ShareUtil {
 		// other browser
 		return false;
 	}
-
 }
 
 export default new ShareUtil();

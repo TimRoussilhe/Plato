@@ -2,9 +2,9 @@
 // import Detectizr from 'detectizr';
 // import Modernizr from 'Modernizr';
 
-import {VIDEO_EXTENSIONS, IMAGE_EXTENSIONS, VIDEO_TYPE, IMAGE_TYPE, FILE_TYPE} from 'constants/misc';
+import { VIDEO_EXTENSIONS, IMAGE_EXTENSIONS, VIDEO_TYPE, IMAGE_TYPE, FILE_TYPE } from 'constants/misc';
 
-export const getExtension = (src) => {
+export const getExtension = src => {
 	let extension = src.split('.').pop();
 	extension = extension.split('?')[0].toLowerCase();
 
@@ -32,10 +32,18 @@ export const getAssetByDevice = (o = null, options = {}) => {
 	let asset = null;
 
 	switch (Detectizr.device.type) {
-	case 'desktop': asset = o.lg; break;
-	case 'tablet': asset = o.med; break;
-	case 'mobile': asset = o.sml; break;
-	default: asset = o.lg; break;
+		case 'desktop':
+			asset = o.lg;
+			break;
+		case 'tablet':
+			asset = o.med;
+			break;
+		case 'mobile':
+			asset = o.sml;
+			break;
+		default:
+			asset = o.lg;
+			break;
 	}
 
 	// special case
@@ -57,18 +65,19 @@ export const getAssetByDevice = (o = null, options = {}) => {
 	asset.type = getAssetType(asset.src, options);
 
 	switch (asset.type) {
-	case VIDEO_TYPE:
-		// dirty
-		asset.extension = getExtension(asset.src) ? getExtension(asset.src) : 'mp4';
-		asset.isVideo = true;
-		break;
-	case IMAGE_TYPE:
-		// dirty
-		asset.extension = getExtension(asset.src) ? getExtension(asset.src) : 'jpg';
-		if (Modernizr.webp) asset.extension = 'webp';
-		asset.isImage = true;
-		break;
-	default: break;
+		case VIDEO_TYPE:
+			// dirty
+			asset.extension = getExtension(asset.src) ? getExtension(asset.src) : 'mp4';
+			asset.isVideo = true;
+			break;
+		case IMAGE_TYPE:
+			// dirty
+			asset.extension = getExtension(asset.src) ? getExtension(asset.src) : 'jpg';
+			if (Modernizr.webp) asset.extension = 'webp';
+			asset.isImage = true;
+			break;
+		default:
+			break;
 	}
 
 	if (asset.isImage) {
@@ -114,29 +123,34 @@ export const getAssetByDevice = (o = null, options = {}) => {
 		// Width of the assets
 		if (!options.params.width) {
 			switch (Detectizr.device.type) {
-			case 'desktop':
-				options.params.width = dimensions.desktop.width;
-				// if (window.devicePixelRatio) options.params.width * window.devicePixelRatio <= MAX_WIDTH_DESKTOP ? options.params.width *= window.devicePixelRatio : options.params.width = MAX_WIDTH_DESKTOP;
-				asset.dimensions = dimensions.desktop;
-				break;
-			case 'tablet':
-				options.params.width = dimensions.tablet.width;
-				// if (window.devicePixelRatio && options.params.width * window.devicePixelRatio <= MAX_WIDTH_DESKTOP) options.params.width *= window.devicePixelRatio;
-				asset.dimensions = dimensions.tablet;
-				break;
-			case 'mobile':
-				options.params.width = dimensions.mobile.width;
-				// if (window.devicePixelRatio && options.params.width * window.devicePixelRatio <= MAX_WIDTH_DESKTOP) options.params.width *= window.devicePixelRatio;
-				asset.dimensions = dimensions.mobile;
-				break;
-			default: asset = o.lg; break;
+				case 'desktop':
+					options.params.width = dimensions.desktop.width;
+					// if (window.devicePixelRatio) options.params.width * window.devicePixelRatio <= MAX_WIDTH_DESKTOP ? options.params.width *= window.devicePixelRatio : options.params.width = MAX_WIDTH_DESKTOP;
+					asset.dimensions = dimensions.desktop;
+					break;
+				case 'tablet':
+					options.params.width = dimensions.tablet.width;
+					// if (window.devicePixelRatio && options.params.width * window.devicePixelRatio <= MAX_WIDTH_DESKTOP) options.params.width *= window.devicePixelRatio;
+					asset.dimensions = dimensions.tablet;
+					break;
+				case 'mobile':
+					options.params.width = dimensions.mobile.width;
+					// if (window.devicePixelRatio && options.params.width * window.devicePixelRatio <= MAX_WIDTH_DESKTOP) options.params.width *= window.devicePixelRatio;
+					asset.dimensions = dimensions.mobile;
+					break;
+				default:
+					asset = o.lg;
+					break;
 			}
 		}
 
 		// console.log('asset.dimensions', asset.dimensions);
 
 		// pixel ratio
-		if (window.devicePixelRatio) options.params.width * window.devicePixelRatio <= MAX_WIDTH_DESKTOP ? options.params.width *= window.devicePixelRatio : options.params.width = MAX_WIDTH_DESKTOP;
+		if (window.devicePixelRatio)
+			options.params.width * window.devicePixelRatio <= MAX_WIDTH_DESKTOP
+				? (options.params.width *= window.devicePixelRatio)
+				: (options.params.width = MAX_WIDTH_DESKTOP);
 		// if (window.devicePixelRatio) {
 		//     // If divice pixel ratio * current width is less greater than the maximum (origin size), then get this size
 		//     options.params.width = options.params.width * window.devicePixelRatio <= dimensions.desktop.width ? Math.round(options.params.width * window.devicePixelRatio) : o.dimensions.width;
@@ -151,7 +165,7 @@ export const getAssetByDevice = (o = null, options = {}) => {
 	return asset;
 };
 
-export const ordinalSuffixOf = (i) => {
+export const ordinalSuffixOf = i => {
 	const j = i % 10;
 	const k = i % 100;
 
@@ -170,7 +184,20 @@ export const ordinalSuffixOf = (i) => {
 export const getDate = (locale, dt) => {
 	const date = {};
 	const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-	const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+	const months = [
+		'January',
+		'February',
+		'March',
+		'April',
+		'May',
+		'June',
+		'July',
+		'August',
+		'September',
+		'October',
+		'November',
+		'December',
+	];
 
 	// const localeTime = dt.setUTCHours(GMT HERE);
 	// If non English
@@ -185,13 +212,19 @@ export const getDate = (locale, dt) => {
 	// date.month = dt.toLocaleString(locale, {month: 'long'});
 
 	date.month = months[dt.getUTCMonth()];
-	date.nbMonth = parseInt(dt.getUTCMonth() + 1, 10) < 10 ? '0' + parseInt(dt.getUTCMonth() + 1, 10) : parseInt(dt.getUTCMonth() + 1, 10);
+	date.nbMonth =
+		parseInt(dt.getUTCMonth() + 1, 10) < 10
+			? '0' + parseInt(dt.getUTCMonth() + 1, 10)
+			: parseInt(dt.getUTCMonth() + 1, 10);
 	date.year = dt.getFullYear();
 	date.hour = dt.getUTCHours();
 	if (date.hour > 12) date.hour -= 12;
 	date.minute = dt.getMinutes();
 	date.second = dt.getSeconds();
-	date.UTCHours = dt.getUTCHours() + (dt.getTimezoneOffset() / 60) < 10 ? '0' + dt.getUTCHours() + (dt.getTimezoneOffset() / 60) : dt.getUTCHours() + (dt.getTimezoneOffset() / 60);
+	date.UTCHours =
+		dt.getUTCHours() + dt.getTimezoneOffset() / 60 < 10
+			? '0' + dt.getUTCHours() + dt.getTimezoneOffset() / 60
+			: dt.getUTCHours() + dt.getTimezoneOffset() / 60;
 	date.UTCMinutes = dt.getUTCMinutes() < 10 ? '0' + dt.getUTCMinutes() : dt.getUTCMinutes();
 	date.UTCSeconds = dt.getUTCSeconds() < 10 ? '0' + dt.getUTCSeconds() : dt.getUTCSeconds();
 	date.tz = `${date.year}${date.nbMonth}${date.nbDay}T${date.UTCHours}${date.UTCMinutes}${date.UTCSeconds}Z`;
@@ -199,15 +232,15 @@ export const getDate = (locale, dt) => {
 	return date;
 };
 
-export const rad = (x) => {
-	return x * Math.PI / 180;
+export const rad = x => {
+	return (x * Math.PI) / 180;
 };
 
-export const metersToMiles = (meters) => {
+export const metersToMiles = meters => {
 	return meters * 0.00062137;
 };
 
-export const fitAsset = (config_) => {
+export const fitAsset = config_ => {
 	const wi = config_.width;
 	const hi = config_.height;
 	const ri = wi / hi;
@@ -218,11 +251,11 @@ export const fitAsset = (config_) => {
 
 	if (ri > rs) {
 		newDimensions.ratio = hs / hi;
-		newDimensions.w = Math.ceil(wi * hs / hi, newDimensions.h = hs);
+		newDimensions.w = Math.ceil((wi * hs) / hi, (newDimensions.h = hs));
 	} else {
 		newDimensions.ratio = ws / wi;
 		newDimensions.w = ws;
-		newDimensions.h = Math.ceil(hi * ws / wi);
+		newDimensions.h = Math.ceil((hi * ws) / wi);
 	}
 
 	newDimensions.top = (hs - newDimensions.h) / 2;

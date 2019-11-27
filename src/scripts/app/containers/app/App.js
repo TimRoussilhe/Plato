@@ -64,7 +64,7 @@ class App extends Base {
 		this.oldPage = null;
 
 		this.storeEvents = {
-			'app.location': (location, prevLocation) => this.onLocationChanged(location, prevLocation)
+			'app.location': (location, prevLocation) => this.onLocationChanged(location, prevLocation),
 		};
 	}
 
@@ -132,7 +132,7 @@ class App extends Base {
 		// Define first page and pass el if the page el is allready in the dom
 		this.page = new Page({
 			el: el ? el : null,
-			endPoint: currentRoute && currentRoute.json ? currentRoute.json : null
+			endPoint: currentRoute && currentRoute.json ? currentRoute.json : null,
 		});
 
 		store.dispatch(setPage(this.page));

@@ -1,3 +1,5 @@
+@import 'ui-resets';
+
 // import mixins
 @import 'mixins/mixins';
 @import 'mixins/aspect_ratio';
@@ -18,7 +20,6 @@
 
 // import grid
 // @import 'reflex';
-@import 'ui-resets';
 
 // Definitions
 @import 'font-defs';

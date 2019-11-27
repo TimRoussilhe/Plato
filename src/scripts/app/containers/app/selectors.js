@@ -5,7 +5,6 @@ export const getRoute = (location, params = null) => {
 	let currentRoute = null;
 
 	for (let key in routes) {
-
 		if (!routes.hasOwnProperty(key)) continue;
 
 		let route = routes[key];

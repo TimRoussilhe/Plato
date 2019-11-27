@@ -5,11 +5,11 @@ class Header extends AbstractDOMComponent {
 		super(props);
 
 		this.events = {
-			'click .logo': () => this.clickHome()
+			'click .logo': () => this.clickHome(),
 		};
 
 		this.storeEvents = {
-			'app.location': (location, prevLocation) => this.setActiveLink(location, prevLocation)
+			'app.location': (location, prevLocation) => this.setActiveLink(location, prevLocation),
 		};
 	}
 

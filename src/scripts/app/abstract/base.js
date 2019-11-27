@@ -72,12 +72,12 @@ class Base {
 		this.promises = {
 			init: {
 				resolve: null,
-				reject: null
-			}
+				reject: null,
+			},
 		};
 
 		this.state = {
-			isInit: false
+			isInit: false,
 		};
 	}
 
@@ -115,7 +115,10 @@ class Base {
 
 	setState(partialState = {}, callback, needRender = false) {
 		if (typeof partialState !== 'object' && typeof partialState !== 'function' && partialState !== null) {
-			console.error('setState(...): takes an object of state variables to update or a ' + 'function which returns an object of state variables.');
+			console.error(
+				'setState(...): takes an object of state variables to update or a ' +
+					'function which returns an object of state variables.'
+			);
 			return;
 		}
 

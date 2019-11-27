@@ -1,7 +1,4 @@
-import {
-	SHOW_HEADER,
-	HIDE_HEADER,
-} from './constants';
+import { SHOW_HEADER, HIDE_HEADER } from './constants';
 
 export function showHeader() {
 	return {

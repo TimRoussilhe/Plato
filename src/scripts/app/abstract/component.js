@@ -52,12 +52,12 @@ class Component extends Base {
 		this.promises = {
 			show: {
 				resolve: null,
-				reject: null
+				reject: null,
 			},
 			hidden: {
 				resolve: null,
-				reject: null
-			}
+				reject: null,
+			},
 		};
 
 		/**
@@ -76,7 +76,7 @@ class Component extends Base {
 		this.state = {
 			canUpdate: false,
 			isAnimating: false,
-			isShown: false
+			isShown: false,
 		};
 
 		/**
@@ -92,7 +92,7 @@ class Component extends Base {
 		this.actions = props.actions ? props.actions : {};
 
 		this.events = {
-			'click a': e => this.hyperlink(e)
+			'click a': e => this.hyperlink(e),
 		};
 	}
 
@@ -173,7 +173,7 @@ class Component extends Base {
 		this.bindEvents();
 		this.onInit();
 		this.setState({
-			canUpdate: true
+			canUpdate: true,
 		});
 	}
 
@@ -233,7 +233,7 @@ class Component extends Base {
 				uid: uid,
 				eventName: eventName,
 				selector: selector,
-				listener: listener
+				listener: listener,
 			});
 		}
 		return this;
@@ -305,7 +305,7 @@ class Component extends Base {
 			this.promises.show.reject = reject;
 			this.setState({
 				isAnimating: true,
-				canUpdate: true
+				canUpdate: true,
 			});
 			this.showComponent();
 		});
@@ -321,7 +321,7 @@ class Component extends Base {
 	onShown() {
 		this.setState({
 			isShown: true,
-			isAnimating: false
+			isAnimating: false,
 		});
 		this.promises.show.resolve();
 	}
@@ -334,7 +334,7 @@ class Component extends Base {
 			this.promises.hidden.resolve = resolve;
 			this.promises.hidden.reject = reject;
 			this.setState({
-				isAnimating: true
+				isAnimating: true,
 			});
 			this.hideComponent();
 		});
@@ -351,7 +351,7 @@ class Component extends Base {
 		this.setState({
 			isAnimating: false,
 			isShown: false,
-			canUpdate: false
+			canUpdate: false,
 		});
 		this.promises.hidden.resolve();
 	}
@@ -397,7 +397,7 @@ class Component extends Base {
 		this.setState({
 			isInit: false,
 			isShown: false,
-			canUpdate: false
+			canUpdate: false,
 		});
 		this.undelegateEvents();
 		this.handlers = {};

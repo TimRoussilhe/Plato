@@ -8,7 +8,7 @@ class HomepageContainer extends AbstractPageContainer {
 	constructor(props) {
 		super(props);
 		this.storeEvents = {
-			browser: window => this.onResize(window)
+			browser: window => this.onResize(window),
 		};
 		this.ComponentClass = Homepage;
 	}

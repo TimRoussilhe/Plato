@@ -12,15 +12,15 @@ class GlobalStore {
 				targetY: 0,
 				currentY: 0,
 			},
-			mouse:{
-				x:0,
-				y:0,
+			mouse: {
+				x: 0,
+				y: 0,
 			},
 		};
 	}
 
 	on(eventType, callback) {
-		if (this._eventTypes.findIndex((x) => x === eventType) === -1) {
+		if (this._eventTypes.findIndex(x => x === eventType) === -1) {
 			this._eventTypes.push(eventType);
 		}
 
@@ -33,7 +33,6 @@ class GlobalStore {
 	}
 
 	off(eventType, callback) {
-
 		if (this._callbackFunctions[eventType] !== undefined) {
 			for (let i = 0; i < this._callbackFunctions[eventType].length; i++) {
 				console.log('this._callbackFunctions[eventType][i]', this._callbackFunctions[eventType][i]);
@@ -43,7 +42,6 @@ class GlobalStore {
 				}
 			}
 		}
-
 	}
 
 	offRAF(callback) {
