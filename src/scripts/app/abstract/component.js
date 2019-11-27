@@ -12,8 +12,6 @@ const delegateEventSplitter = /^(\S+)\s*(.*)$/;
 
 class Component extends Base {
 	set events(events) {
-		console.log('events', events);
-
 		for (const event in events) {
 			if ({}.hasOwnProperty.call(events, event)) {
 				const uid = uniqueId('e');
@@ -45,7 +43,7 @@ class Component extends Base {
 		 * @type {Object}
 		 */
 		this._events = {};
-		this.bindedEvents = [];
+		this.boundEvents = [];
 
 		/**
 		 * Object as associative array of all the <promises> objects
@@ -83,7 +81,7 @@ class Component extends Base {
 
 		/**
 		* El
-		* If el is passed from parent, this means the DOM is allready render
+		* If el is passed from parent, this means the DOM is already render
 		and we just need to scope it
 		* @type {DOM}
 		*/
@@ -100,7 +98,7 @@ class Component extends Base {
 
 	/**
 	 * Init the component.
-	 * Override and trigger onInit when we have to wait for computer procesing, like canvas initialization for instance.
+	 * Override and trigger onInit when we have to wait for computer processing, like canvas initialization for instance.
 	 */
 	initComponent() {
 		this.render();
@@ -152,7 +150,6 @@ class Component extends Base {
 		this.initDOM();
 		this.setupDOM();
 		this.initTL();
-		this.bindEvents();
 		setTimeout(() => this.onDOMInit(), 0);
 	}
 
@@ -172,22 +169,23 @@ class Component extends Base {
 	initTL() {}
 
 	onDOMInit() {
-		// this.bindEvents();
+		this.delegateEvents();
+		this.bindEvents();
 		this.onInit();
 		this.setState({
 			canUpdate: true
 		});
 	}
 
-	// /**
-	//  * Bind your events here
-	//  */
-	// bindEvents() {}
+	/**
+	 * Bind your events here
+	 */
+	bindEvents() {}
 
-	// /**
-	//  * Unbind yout events here
-	//  */
-	// unbindEvents() {}
+	/**
+	 * Unbind your events here
+	 */
+	unbindEvents() {}
 
 	/**
 	 * Set callbacks, where `this.events` is a hash of
@@ -199,21 +197,19 @@ class Component extends Base {
 	 *      'click .button':     'save',
 	 *      'click .open':       function(e) { ... }
 	 *   }
-	 * @param {Object} Events Objcets
+	 * @param {Object} Events Object
 	 */
-	bindEvents(events) {
-		console.log('bindEvents', events);
-
+	delegateEvents(events) {
 		events || (events = this.events);
 		if (!events) return this;
-		this.unbindEvents();
+		this.undelegateEvents();
 		for (let key in events) {
 			if ({}.hasOwnProperty.call(events, key)) {
 				let method = events[key];
 				if (!isFunction(method)) method = this[method];
 				if (!method) continue;
 				let match = key.match(delegateEventSplitter);
-				this.bindEvent(match[1], match[2], method, method.uid);
+				this.delegateEvent(match[1], match[2], method, method.uid);
 			}
 		}
 		return this;
@@ -224,7 +220,7 @@ class Component extends Base {
 	 * using `selector`). This only works for delegate-able events: not `focus`,
 	 * `blur`, and not `change`, `submit`, and `reset` in Internet Explorer.
 	 */
-	bindEvent(eventName, selector, listener, uid) {
+	delegateEvent(eventName, selector, listener, uid) {
 		if (this.el) {
 			if (selector) {
 				const items = [...this.el.querySelectorAll(selector)];
@@ -233,7 +229,7 @@ class Component extends Base {
 				this.el.addEventListener(eventName, listener);
 			}
 
-			this.bindedEvents.push({
+			this.boundEvents.push({
 				uid: uid,
 				eventName: eventName,
 				selector: selector,
@@ -246,10 +242,10 @@ class Component extends Base {
 	// Clears all callbacks previously bound to the view by `delegateEvents`.
 	// You usually don't need to use this, but may wish to if you have multiple
 	// views attached to the same DOM element.
-	unbindEvents() {
+	undelegateEvents() {
 		if (this.el) {
-			this.bindedEvents.forEach(element => {
-				this.unbindEvent(element.eventName, element.selector, element.listener, element.uid);
+			this.boundEvents.forEach(element => {
+				this.undelegateEvent(element.eventName, element.selector, element.listener, element.uid);
 			});
 		}
 
@@ -258,7 +254,7 @@ class Component extends Base {
 
 	// A finer-grained `unbindEvents` for removing a single delegated event.
 	// `selector` and `listener` are both optional.
-	unbindEvent(eventName, selector, listener, uid) {
+	undelegateEvent(eventName, selector, listener, uid) {
 		if (this.el) {
 			if (selector) {
 				const items = [...this.el.querySelectorAll(selector)];
@@ -269,7 +265,7 @@ class Component extends Base {
 		}
 
 		// remove event from array based on uid
-		this.bindedEvents = this.bindedEvents.filter(event => {
+		this.boundEvents = this.boundEvents.filter(event => {
 			return event.uid === uid;
 		});
 
@@ -403,11 +399,9 @@ class Component extends Base {
 			isShown: false,
 			canUpdate: false
 		});
-		this.unbindEvents();
+		this.undelegateEvents();
 		this.handlers = {};
 		this.promises = {};
-
-		// this.undelegateEvents();
 		this.destroyTL();
 
 		this.el.parentNode.removeChild(this.el);

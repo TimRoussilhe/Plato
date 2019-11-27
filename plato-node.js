@@ -9,8 +9,9 @@ exports.createPages = siteDir => {
 			.then(res => res.json())
 			.then(body => {
 				(async () => {
-					for (let i = 0; i < body.directors.length; i++) {
-						let element = body.directors[i];
+					const country = body.countries[0];
+					for (let i = 0; i < country.directors.length; i++) {
+						let element = country.directors[i];
 
 						await createPage(
 							{
@@ -22,7 +23,7 @@ exports.createPages = siteDir => {
 							siteDir
 						);
 
-						if (i === body.directors.length - 1) {
+						if (i === country.directors.length - 1) {
 							resolve();
 						}
 					}

@@ -2,17 +2,7 @@
 	<div class="introduction">
 		<h1 class="f-title">Dynamic content: {{ data.content.title }}</h1>
 		<h2 class="f-body">INDEX RELOAD Static content</h2>
-
-		{{if data.content.title == 'Hello World Index'}}
-			<h1 class="f-title">Dynamic content: {{ data.content.title}}</h1>
-		{{/if}}
-		{{if data.content.number >= 2}}
-			<h1 class="f-title">Dynamic content: {{ data.content.title}}</h1>
-		{{/if}}
-
 		<span class="icon instagram">{{ include './svgs/instagram.art' }}</span>
-
-
 		<div class="grid">
 			<div class="col-12 col-md-6">
 				<p>Look at me!</p>

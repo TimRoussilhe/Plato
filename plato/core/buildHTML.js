@@ -39,7 +39,7 @@ module.exports = (page, manifest, mode = 'development', siteDir, globalData) => 
 		});
 
 		let data = {};
-		if(page.json){
+		if (page.json) {
 			try {
 				data = fse.readJsonSync(siteDir + 'data/' + page.json);
 			} catch (err) {

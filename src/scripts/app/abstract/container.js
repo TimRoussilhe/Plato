@@ -10,7 +10,7 @@ class AbstractContainer extends Base {
 		super(props);
 
 		/**
-		 * Component asociated to the container
+		 * Component associated to the container
 		 * @type {Object}
 		 */
 		this.component = null;

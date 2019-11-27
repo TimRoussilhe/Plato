@@ -1,9 +1,7 @@
 import Lethargy from 'lethargy';
 
-
 /* eslint-disable */
 class ScrollPrevent {
-
 	constructor() {
 		this.blockDelta = false;
 		this.currentDeltaY = 0;
@@ -47,7 +45,6 @@ class ScrollPrevent {
 
 		this.el.addEventListener('mousewheel', () => this.approveScroll(), false);
 		this.el.addEventListener('wheel', () => this.approveScroll(), false);
-
 	}
 
 	unbindEvents() {
@@ -55,13 +52,11 @@ class ScrollPrevent {
 
 		this.el.removeEventListener('mousewheel', () => this.approveScroll(), false);
 		this.el.removeEventListener('wheel', () => this.approveScroll(), false);
-
 	}
 
 	dispose() {
 		this.unbindEvents();
 	}
-
 }
 
 export default ScrollPrevent;
