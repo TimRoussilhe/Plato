@@ -25,7 +25,16 @@
 // letter spacing is optional for some edge cases
 @mixin fontStyle($font-size, $line-height, $letter-spacing: '') {
 	font-size: get-rem(get-value($font-size));
-	line-height: unitless-lh($font-size, $line-height);
+
+	@if $line-height != '' {
+		@if unit($line-height) == 'px' {
+			line-height: $line-height;
+		} @else if unit($line-height) == 'em' {
+			line-height: $line-height;
+		} @else {
+			line-height: unitless-lh($font-size, $line-height);
+		}
+	}
 
 	//basic check for letter spacing
 	@if $letter-spacing != '' {
