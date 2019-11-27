@@ -1,19 +1,10 @@
-import {
-	SET_ROUTES,
-	NAVIGATION,
-	SET_ANIMATING,
-	SET_META,
-	SET_PAGE,
-	SET_OLDPAGE,
-	SET_DEVICE_TYPE,
-	SET_GLOBAL_DATA
-} from './constants';
+import { SET_ROUTES, NAVIGATION, SET_ANIMATING, SET_META, SET_PAGE, SET_OLDPAGE, SET_DEVICE_TYPE, SET_GLOBAL_DATA } from './constants';
 
 export function navigate(location, params = {}) {
 	return {
 		type: NAVIGATION,
 		location: location,
-		params: params,
+		params: params
 	};
 }
 
@@ -28,14 +19,14 @@ export function setMeta(meta = null, isDefault = false) {
 export function setRoutes(routes) {
 	return {
 		type: SET_ROUTES,
-		routes,
+		routes
 	};
 }
 
 export function setAnimating(animatingState) {
 	return {
 		type: SET_ANIMATING,
-		isAnimating: animatingState,
+		isAnimating: animatingState
 	};
 }
 
@@ -56,7 +47,7 @@ export function setOldPage(page) {
 export function setDeviceType(deviceType) {
 	return {
 		type: SET_DEVICE_TYPE,
-		deviceType,
+		deviceType
 	};
 }
 

@@ -12,32 +12,32 @@
 
 	{{ set metaTitle = config.siteTitle }}
 	{{if data.meta && data.meta.title}}
-		{{ set metaTitle =data.meta.title }}
+	{{ set metaTitle =data.meta.title }}
 	{{/if}}
 
 	{{ set metaDescription = config.siteDescription }}
 	{{if data.meta && data.meta.description}}
-		{{ set metaDescription =data.meta.description }}
+	{{ set metaDescription =data.meta.description }}
 	{{/if}}
 
 	{{ set metaSiteName = config.metaSiteName }}
 	{{if data.meta && data.meta.siteName}}
-		{{ set metaSiteName =data.meta.siteName }}
+	{{ set metaSiteName =data.meta.siteName }}
 	{{/if}}
 
 	{{ set metaImage = config.metaImage }}
 	{{if data.meta && data.meta.metaImage}}
-		{{ set metaImage =data.meta.metaImage }}
+	{{ set metaImage =data.meta.metaImage }}
 	{{/if}}
 
 	{{ set metaTwitterName = config.metaTwitterName }}
 	{{if data.meta && data.meta.twitterName}}
-		{{ set metaTwitterName =data.meta.twitterName }}
+	{{ set metaTwitterName =data.meta.twitterName }}
 	{{/if}}
 
 	{{ set metaImageTwitter = config.metaImage }}
 	{{if data.meta && data.meta.twitterImage}}
-		{{ set metaImageTwitter =data.meta.twitterImage }}
+	{{ set metaImageTwitter =data.meta.twitterImage }}
 	{{/if}}
 	<meta charset="utf-8" />
 
@@ -77,16 +77,16 @@
 
 	<!-- Ressource hinting -->
 	{{ if config.preload }}
-		{{ each config.preload }}
-			{{ if $value.type == 'font' }}
-			<link rel="preload" href="{{ $value.href }}" as="font" crossorigin="crossorigin" type="font/{{ $value.format }}" />
-			{{/if}}
-		{{/each}}
+	{{ each config.preload }}
+	{{ if $value.type == 'font' }}
+	<link rel="preload" href="{{ $value.href }}" as="font" crossorigin="crossorigin" type="font/{{ $value.format }}" />
+	{{/if}}
+	{{/each}}
 	{{/if}}
 
 	<!-- CSS -->
 	{{ if manifest }}
-		<link rel="stylesheet" type="text/css" href="{{ manifest['main.css'] }}" />
+	<link rel="stylesheet" type="text/css" href="{{ manifest['main.css'] }}" />
 	{{/if}}
 
 	<!-- Global Data -->
@@ -104,10 +104,10 @@
 		<nav>
 			<h1 class="logo">LOGO</h1>
 			<ul class="menu">
-				<li><a data-page="HOMEPAGE" href="/" title="">Home</a></li>
-				<li><a data-page="ABOUT" href="/about" title="">About</a></li>
+				<li><a data-page="index" href="/" title="">Home</a></li>
+				<li><a data-page="about" href="/about" title="">About</a></li>
 				<li><a href="https://www.google.com" target="_blank" rel="noopener noreferrer">External Link</a></li>
-				<li><a href="/dsads" title="">Broken Link</a></li>
+				<li><a href="/error" title="">Broken Link</a></li>
 			</ul>
 		</nav>
 	</header>

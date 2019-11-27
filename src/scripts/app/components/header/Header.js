@@ -5,25 +5,19 @@ class Header extends AbstractDOMComponent {
 		super(props);
 
 		this.events = {
-			'click .logo': () => this.clickHome(),
+			'click .logo': () => this.clickHome()
 		};
 
 		this.storeEvents = {
-			'app.location': (location, prevLocation) => this.setActiveLink(location, prevLocation),
+			'app.location': (location, prevLocation) => this.setActiveLink(location, prevLocation)
 		};
-
-		// setTimeout(() => {
-		// 	this.undelegateEvents();
-		// }, 1000);
 	}
 
 	clickHome() {
-		console.log('_clickHome');
+		console.log('clickHome');
 	}
 
 	initDOM() {
-		console.log('HEADER');
-
 		this.$logo = this.el.querySelector('.logo');
 		this.$navItems = this.el.querySelectorAll('.menu li a');
 	}
@@ -32,7 +26,7 @@ class Header extends AbstractDOMComponent {
 		this.resetCurrentNavItem();
 
 		let $currentNavItem = null;
-		[...this.$navItems].forEach((navItem) => {
+		[...this.$navItems].forEach(navItem => {
 			if (navItem.dataset.page === location) $currentNavItem = navItem.parentNode;
 		});
 
@@ -43,7 +37,7 @@ class Header extends AbstractDOMComponent {
 	}
 
 	resetCurrentNavItem() {
-		[...this.$navItems].forEach((navItem) => {
+		[...this.$navItems].forEach(navItem => {
 			navItem.parentNode.classList.remove('active');
 		});
 	}

@@ -27,9 +27,7 @@ class HomepageContainer extends AbstractPageContainer {
 		super.initData();
 	}
 
-	onResize() {
-		console.log('HOMEPAGE RESIZE');
-	}
+	onResize() {}
 }
 
 export default HomepageContainer;

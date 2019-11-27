@@ -1,23 +1,21 @@
 import AbstractContainer from 'abstract/container';
-import {calculateResponsiveState} from 'redux-responsive';
+import { calculateResponsiveState } from 'redux-responsive';
 import store from 'store';
 
 // Components
 import Layout from 'components/layout/Layout';
 
 // Actions
-import {setOrientation} from './actions';
+import { setOrientation } from './actions';
 
 class LayoutContainer extends AbstractContainer {
 	constructor() {
 		super();
 		this.ComponentClass = Layout;
-		// console.log('this.ComponentClass', this.ComponentClass);
-		console.log('constructor component layout');
 	}
 
 	initActions() {
-		this.props.actions.resize = (wdw) => this.resizeAction(wdw);
+		this.props.actions.resize = wdw => this.resizeAction(wdw);
 		this.props.actions.setOrientation = () => this.setOrientation();
 	}
 
