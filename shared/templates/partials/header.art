@@ -89,13 +89,6 @@
 	<link rel="stylesheet" type="text/css" href="{{ manifest['main.css'] }}" />
 	{{/if}}
 
-	<!-- Global Data -->
-	{{ if globalData }}
-	<script>
-		window.globalData = '{{@ globalData }}';
-	</script>
-	{{/if}}
-
 	<!-- <noscript><link rel="stylesheet" href="/assets/css/noscript.css"></noscript> -->
 </head>
 

@@ -68,7 +68,7 @@ export const app = (state = InitialState, action) => {
 		case SET_OLDPAGE: {
 			return {
 				...state,
-				oldPage: action.oldPage,
+				oldPage: action.page,
 			};
 		}
 		case SET_DEVICE_TYPE: {

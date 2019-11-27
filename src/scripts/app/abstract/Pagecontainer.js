@@ -26,19 +26,34 @@ class PageContainer extends AbstractContainer {
 			return;
 		}
 
-		const url = JSON_ENDPOINTS + this.props.endPoint;
+		const { oldPage } = store.getState().app;
+		if (oldPage) {
+			const url = JSON_ENDPOINTS + this.props.endPoint;
 
-		fetch(url)
-			.then(response => {
-				return response.json();
-			})
-			.then(json => {
-				this.data = json;
-				this.promises.data.resolve();
-			})
-			.catch(ex => {
+			fetch(url)
+				.then(response => {
+					return response.json();
+				})
+				.then(json => {
+					this.setData(json);
+				})
+				.catch(ex => {
+					this.promises.data.reject();
+				});
+		} else {
+			const { globalData } = store.getState().app;
+			if (globalData && globalData.serverData) {
+				this.setData(globalData.serverData);
+			} else {
+				// weird thing here since globalData.serverData will always be defined from the node side
 				this.promises.data.reject();
-			});
+			}
+		}
+	}
+
+	setData(data) {
+		this.data = data;
+		this.promises.data.resolve();
 	}
 
 	loadAssets() {

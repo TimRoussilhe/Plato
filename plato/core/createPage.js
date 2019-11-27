@@ -33,7 +33,7 @@ exports.createPage = ({ id, url, template, data }, siteDir, dataMiddleware = nul
 			id,
 			url,
 			template,
-			json: id + '.json'
+			json: id + '.json',
 		};
 
 		updateRoutes([route]).then(() => {

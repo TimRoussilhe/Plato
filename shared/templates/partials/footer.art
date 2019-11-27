@@ -1,3 +1,9 @@
+<!-- Global Data -->
+{{ if globalData }}
+<script id="__PLATO_DATA__" type="application/json">
+{{@ globalData }}
+</script>
+{{/if}}
 <!-- Scripts -->
 {{ if manifest }}
 <script src="{{manifest['main.js']}}"></script>

@@ -8,6 +8,11 @@
 		},
 		{
 			"id": "about",
+			"url": "/about-no-data",
+			"template": "about"
+		},
+		{
+			"id": "about",
 			"url": "/about",
 			"template": "about",
 			"json": "about.json"

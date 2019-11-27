@@ -70,8 +70,8 @@ class App extends Base {
 
 	init() {
 		// grab server data
-		const data = window.globalData && JSON.parse(window.globalData);
-		console.log('data', data);
+		const data = JSON.parse(document.getElementById('__PLATO_DATA__').innerHTML);
+
 		if (data) {
 			store.dispatch(setGlobalData(data));
 		}
@@ -89,7 +89,7 @@ class App extends Base {
 		}
 	}
 
-	async routing(location, fromSamePage = false) {
+	async routing(location) {
 		console.log('-------------- routing ---------------', location);
 
 		let Page = null;
@@ -97,7 +97,7 @@ class App extends Base {
 
 		try {
 			// const PageAsync = await getComponent(currentRoute.template, currentRoute.template);
-			// we use template to defnie page Type
+			// we use template to define page Type
 			const PageAsync = await pageLoader(currentRoute.template, currentRoute.template);
 			Page = PageAsync;
 		} catch (error) {
@@ -113,7 +113,7 @@ class App extends Base {
 		}
 
 		// SAFETY HERE
-		// IF THERE IS STILL AN OLDPAGE HERE IT MEANS SOMETHING BEEN WRONG
+		// IF THERE IS STILL AN OLD PAGE HERE IT MEANS SOMETHING BEEN WRONG
 		// SO WE JUST KILL IT
 		// USUALLY HAPPENS IF USER PLAY WITH BROWSER BACK ARROWS WHILE ANIMATING
 		if (this.oldPage) {
@@ -129,7 +129,7 @@ class App extends Base {
 			store.dispatch(setOldPage(this.oldPage));
 		}
 
-		// Define first page and pass el if the page el is allready in the dom
+		// Define first page and pass el if the page el is already in the dom
 		this.page = new Page({
 			el: el ? el : null,
 			endPoint: currentRoute && currentRoute.json ? currentRoute.json : null,

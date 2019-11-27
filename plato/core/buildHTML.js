@@ -54,16 +54,17 @@ module.exports = (page, manifest, mode = 'development', siteDir, globalData) => 
 		artTemplatePromise(templatePath, {
 			data,
 			mode,
-			globalData
+			globalData,
 		})
 			.then(html => {
+				globalData.serverData = data;
 				artTemplatePromise(path.resolve('./shared/templates/layout.art'), {
 					html,
 					config,
 					data,
 					mode,
 					manifest,
-					globalData: JSON.stringify(globalData)
+					globalData: JSON.stringify(globalData),
 				})
 					.then(html => {
 						fse
