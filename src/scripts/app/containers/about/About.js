@@ -1,4 +1,4 @@
-import AbstractPageContainer from 'abstract/Pagecontainer';
+import AbstractPageContainer from 'abstract/pageContainer';
 import About from 'components/about/About';
 
 class AboutContainer extends AbstractPageContainer {

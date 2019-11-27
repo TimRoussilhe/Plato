@@ -1,4 +1,4 @@
-import AbstractPageContainer from 'abstract/Pagecontainer';
+import AbstractPageContainer from 'abstract/pageContainer';
 import Homepage from 'components/homepage/Homepage';
 
 // actions

@@ -1,4 +1,4 @@
-import AbstractPageComponent from 'abstract/Pagecomponent';
+import AbstractPageComponent from 'abstract/pageComponent';
 import Tpl from 'templates/notfound.art';
 
 class NotFound extends AbstractPageComponent {

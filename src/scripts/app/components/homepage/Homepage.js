@@ -1,4 +1,4 @@
-import AbstractPageComponent from 'abstract/Pagecomponent';
+import AbstractPageComponent from 'abstract/pageComponent';
 import Tpl from 'templates/homepage.art';
 
 // Constants
@@ -15,6 +15,10 @@ class Homepage extends AbstractPageComponent {
 	constructor(props) {
 		super(props);
 		this.template = Tpl;
+	}
+
+	onInit() {
+		super.onInit();
 	}
 
 	dispose() {

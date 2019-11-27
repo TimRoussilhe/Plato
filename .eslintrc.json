@@ -6,7 +6,7 @@
 		"curly": [2, "multi-line"],
 		"no-mixed-spaces-and-tabs": [2, "smart-tabs"],
 		"key-spacing": 0,
-		"indent": [2, "tab"],
+		"indent": [2, "tab", { "SwitchCase": 1 }],
 		"strict": [2, "global"],
 		"quotes": [2, "single"],
 		"quote-props": [2, "as-needed"],

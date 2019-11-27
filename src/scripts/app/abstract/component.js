@@ -73,7 +73,7 @@ class Component extends Base {
 		this.cid = uniqueId('component');
 
 		this.props = props;
-		this.states = {
+		this.state = {
 			canUpdate: false,
 			isAnimating: false,
 			isShown: false
@@ -106,7 +106,7 @@ class Component extends Base {
 
 	/**
 	 * Call render function if you wanna change the component
-	 * based on states/data
+	 * based on state/data
 	 */
 	render() {
 		// Default components just need to scope a piece of DOM from constructor
@@ -277,7 +277,7 @@ class Component extends Base {
 	 *
 	 */
 	update() {
-		if (this.states.canUpdate) this.onUpdate();
+		if (this.state.canUpdate) this.onUpdate();
 	}
 
 	/**

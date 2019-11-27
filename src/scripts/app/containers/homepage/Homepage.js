@@ -1,4 +1,4 @@
-import AbstractPageContainer from 'abstract/Pagecontainer';
+import AbstractPageContainer from 'abstract/pageContainer';
 import Homepage from 'components/homepage/Homepage';
 
 // actions
@@ -8,7 +8,7 @@ class HomepageContainer extends AbstractPageContainer {
 	constructor(props) {
 		super(props);
 		this.storeEvents = {
-			'browser': (window) => this.onResize(window),
+			browser: window => this.onResize(window)
 		};
 		this.ComponentClass = Homepage;
 	}

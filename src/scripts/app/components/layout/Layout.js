@@ -4,7 +4,7 @@ import store from 'store';
 // Containers
 import Header from 'containers/header/Header';
 
-import {debounce} from 'utils/misc';
+import { debounce } from 'utils/misc';
 
 class Layout extends DOMComponent {
 	constructor(props) {
@@ -18,7 +18,7 @@ class Layout extends DOMComponent {
 
 		this.storeEvents = {
 			'app.location': (location, prevLocation) => this.onLocationupdate(location, prevLocation),
-			'app.meta': (newVal, oldVal) => this.setMeta(newVal, oldVal),
+			'app.meta': (newVal, oldVal) => this.setMeta(newVal, oldVal)
 		};
 	}
 
@@ -40,7 +40,7 @@ class Layout extends DOMComponent {
 		const aInitPromises = [];
 
 		this.header = new Header({
-			el: document.getElementById('main-nav'),
+			el: document.getElementById('main-nav')
 		});
 
 		aInitPromises.push(this.header.init());
@@ -87,13 +87,13 @@ class Layout extends DOMComponent {
 			this.scrollTicket = false;
 			const scrollObj = {
 				x: window.scrollX || window.pageXOffset,
-				y: window.scrollY || window.pageYOffset,
+				y: window.scrollY || window.pageYOffset
 			};
 		}
 	}
 
 	showComponent() {
-		if (this.states.isShown) return;
+		if (this.state.isShown) return;
 
 		setTimeout(() => {
 			super.showComponent();
@@ -120,7 +120,7 @@ class Layout extends DOMComponent {
 	}
 
 	resize() {
-		if (!this.states.isShown) return;
+		if (!this.state.isShown) return;
 	}
 }
 

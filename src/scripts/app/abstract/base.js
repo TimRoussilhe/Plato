@@ -19,17 +19,17 @@ class Base {
 		return this._promises;
 	}
 
-	set states(states) {
-		if (!this._states) this._states = {};
-		for (const state in states) {
-			if ({}.hasOwnProperty.call(states, state)) {
-				this._states[state] = states[state];
+	set state(state) {
+		if (!this._state) this._state = {};
+		for (const subState in state) {
+			if ({}.hasOwnProperty.call(subState, state)) {
+				this._state[subState] = state[subState];
 			}
 		}
 	}
 
-	get states() {
-		return this._states;
+	get state() {
+		return this._state;
 	}
 
 	set storeEvents(storeEvents) {
@@ -52,10 +52,10 @@ class Base {
 		this._promises = {};
 
 		/**
-		 * Object as associative array of all the states
+		 * Object as associative array of the state
 		 * @type {Object}
 		 */
-		this._states = {};
+		this.state = {};
 
 		/**
 		 * Object as associative array of all <watcher> objects
@@ -76,7 +76,7 @@ class Base {
 			}
 		};
 
-		this.states = {
+		this.state = {
 			isInit: false
 		};
 	}
@@ -90,7 +90,7 @@ class Base {
 			this.promises.init.resolve = resolve;
 			this.promises.init.reject = reject;
 
-			const { isInit } = this.states;
+			const { isInit } = this.state;
 
 			if (isInit) {
 				this.promises.init.reject();
@@ -121,7 +121,7 @@ class Base {
 
 		for (const key in partialState) {
 			if ({}.hasOwnProperty.call(partialState, key)) {
-				this.states[key] = partialState[key];
+				this.state[key] = partialState[key];
 			}
 		}
 

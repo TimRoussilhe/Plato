@@ -21,24 +21,24 @@ function pageLoader(chunkName, path) {
 	return new Promise((resolve, reject) => {
 		const ComponentName = path.charAt(0).toUpperCase() + path.slice(1);
 		switch (ComponentName) {
-		case 'Homepage':
-			return import(/* webpackPrefetch: true */ /* webpackChunkName: "Homepage" */ 'containers/homepage/Homepage')
-				.then(({ default: Page }) => {
-					resolve(Page);
-				})
-				.catch(error => reject('An error occurred while loading the component'));
-		case 'About':
-			return import(/* webpackPrefetch: true */ /* webpackChunkName: "About" */ 'containers/about/About')
-				.then(({ default: Page }) => {
-					resolve(Page);
-				})
-				.catch(error => reject('An error occurred while loading the component'));
-		case 'Notfound':
-			return import(/* webpackPrefetch: true */ /* webpackChunkName: "Notfound" */ 'containers/notfound/Notfound')
-				.then(({ default: Page }) => {
-					resolve(Page);
-				})
-				.catch(error => reject('An error occurred while loading the component'));
+			case 'Homepage':
+				return import(/* webpackPrefetch: true */ /* webpackChunkName: "Homepage" */ 'containers/homepage/Homepage')
+					.then(({ default: Page }) => {
+						resolve(Page);
+					})
+					.catch(error => reject('An error occurred while loading the component'));
+			case 'About':
+				return import(/* webpackPrefetch: true */ /* webpackChunkName: "About" */ 'containers/about/About')
+					.then(({ default: Page }) => {
+						resolve(Page);
+					})
+					.catch(error => reject('An error occurred while loading the component'));
+			case 'Notfound':
+				return import(/* webpackPrefetch: true */ /* webpackChunkName: "Notfound" */ 'containers/notfound/Notfound')
+					.then(({ default: Page }) => {
+						resolve(Page);
+					})
+					.catch(error => reject('An error occurred while loading the component'));
 		}
 	});
 }
@@ -157,8 +157,6 @@ class App extends Base {
 	showPage() {
 		// Show next
 		this.page.show().then(() => {
-			// if (!this.getState().get('app').get('appLoaded')) this.dispatch(setAppLoaded(true));
-
 			store.dispatch(setAnimating(false));
 
 			// at this point, dispose
