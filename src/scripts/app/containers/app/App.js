@@ -133,6 +133,7 @@ class App extends Base {
 		this.page = new Page({
 			el: el ? el : null,
 			endPoint: currentRoute && currentRoute.json ? currentRoute.json : null,
+			type: currentRoute && currentRoute.template ? currentRoute.template : null,
 		});
 
 		store.dispatch(setPage(this.page));

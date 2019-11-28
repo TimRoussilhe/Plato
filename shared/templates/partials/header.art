@@ -5,7 +5,7 @@
 <!--[if IE 9]><html class="ie9 lt-ie11 lt-ie10 is-ie" lang="en"> <![endif]-->
 <!--[if IE 10]><html class="ie10 lt-ie11 is-ie" lang="en"> <![endif]-->
 <!--[if gt IE 10]><!-->
-<html lang="en">
+<html lang="en" {{if location}}location="{{location}}" {{/if}} {{if type}}type="{{type}}" {{/if}}>
 <!--<![endif]-->
 
 <head>

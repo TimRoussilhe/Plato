@@ -15,6 +15,7 @@ import { JSON_ENDPOINTS } from 'constants/config';
 class PageContainer extends AbstractContainer {
 	constructor(props) {
 		super(props);
+		this.type = props.type || 'default';
 	}
 
 	// to override if needed

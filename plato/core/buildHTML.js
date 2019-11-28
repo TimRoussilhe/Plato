@@ -50,13 +50,12 @@ module.exports = (page, manifest, mode = 'development', siteDir, globalData) => 
 		const templatePath = path.resolve(`./shared/templates/${page.template}.art`);
 		const exists = fse.existsSync(templatePath);
 		if (!exists) reject(new Error('Template file does not exists'));
-
 		artTemplatePromise(templatePath, {
 			data,
-			mode,
 			globalData,
 		})
 			.then(html => {
+				// adding serverData for the first render here
 				globalData.serverData = data;
 				artTemplatePromise(path.resolve('./shared/templates/layout.art'), {
 					html,
@@ -65,6 +64,8 @@ module.exports = (page, manifest, mode = 'development', siteDir, globalData) => 
 					mode,
 					manifest,
 					globalData: JSON.stringify(globalData),
+					location: page.id,
+					type: page.template,
 				})
 					.then(html => {
 						fse
