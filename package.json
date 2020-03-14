@@ -37,7 +37,7 @@
 		"@babel/plugin-syntax-dynamic-import": "^7.2.0",
 		"@babel/plugin-transform-runtime": "^7.6.2",
 		"@babel/preset-env": "^7.6.2",
-		"acorn": "^6.0.5",
+		"acorn": "^6.4.1",
 		"art-template-loader": "^1.4.3",
 		"autoprefixer": "^9.4.10",
 		"babel-loader": "^8.0.4",
