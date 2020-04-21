@@ -22,7 +22,7 @@ class Base {
 	set state(state) {
 		if (!this._state) this._state = {};
 		for (const subState in state) {
-			if ({}.hasOwnProperty.call(subState, state)) {
+			if ({}.hasOwnProperty.call(state, subState)) {
 				this._state[subState] = state[subState];
 			}
 		}
