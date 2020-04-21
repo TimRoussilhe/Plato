@@ -116,7 +116,7 @@ module.exports = async function develop(verbose, open) {
 	// Initialize watcher for template files
 	let watcher = chokidar.watch('./shared/templates/', {
 		ignored: /(^|[\/\\])\../,
-		persistent: true
+		persistent: true,
 	});
 	watcher
 		.on('add', path => reporter.log(`File ${path} has been added`))
@@ -144,7 +144,7 @@ module.exports = async function develop(verbose, open) {
 	let watcherAsset = chokidar.watch('./src/assets/', {
 		ignored: /(^|[\/\\])\../,
 		persistent: true,
-		ignoreInitial: true
+		ignoreInitial: true,
 	});
 
 	watcherAsset.on('add', path => copyAssetToPublicFolder(path));
@@ -176,8 +176,8 @@ module.exports = async function develop(verbose, open) {
 		noInfo: true,
 		watchContentBase: true,
 		watchOptions: {
-			poll: true
-		}
+			poll: true,
+		},
 	};
 
 	WebpackDevServer.addDevServerEntrypoints(webpackConfig, options);
