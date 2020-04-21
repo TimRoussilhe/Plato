@@ -12,7 +12,7 @@ const defaultColors = {
 	error: chalk.red,
 	success: chalk.green,
 	bigError: chalk.bold.red,
-	bigSucces: chalk.bold.blue
+	bigSucces: chalk.bold.blue,
 };
 
 function Reporter() {
@@ -38,8 +38,10 @@ function Reporter() {
 		log(this.colors.error(message));
 		if (exit) process.exit(1);
 	};
-	this.failure = function(message) {
+
+	this.failure = function(message, error) {
 		log(this.colors.bigError(message));
+		this.error(error);
 		process.exit(1);
 	};
 	this.success = function(message) {
@@ -68,15 +70,19 @@ function Activity(activityName, activityEmoji = '', reporter) {
 				let elapsed = process.hrtime(this.startTime);
 				return `${convertHrtime(elapsed)['seconds'].toFixed(3)} s`;
 			};
-			verbose && log(reporter.colors.info(`update ${activityEmoji}`), reporter.colors.log(`${activityName} - ${elapsedTime()}`));
+			verbose &&
+				log(reporter.colors.info(`update ${activityEmoji}`), reporter.colors.log(`${activityName} - ${elapsedTime()}`));
 		},
 		end: () => {
 			const elapsedTime = () => {
 				let elapsed = process.hrtime(this.startTime);
 				return `${convertHrtime(elapsed)['seconds'].toFixed(3)} s`;
 			};
-			log(reporter.colors.success(`success ${activityEmoji}`), reporter.colors.log(`${activityName} - ${elapsedTime()}`));
-		}
+			log(
+				reporter.colors.success(`success ${activityEmoji}`),
+				reporter.colors.log(`${activityName} - ${elapsedTime()}`)
+			);
+		},
 	};
 }
 

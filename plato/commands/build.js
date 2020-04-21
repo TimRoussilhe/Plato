@@ -10,11 +10,6 @@ const distDataPath = './build/data';
 
 // report
 const reporter = require('../utils/reporter');
-function reportFailure(msg, err) {
-	report.log('');
-	report.panic(msg, err);
-}
-
 const routes = require('../../shared/routes/routes.json');
 const routeDestPath = path.resolve(__dirname + '/../../shared/routes/real_routes.json');
 
@@ -49,6 +44,7 @@ module.exports = async function build(verbose, open) {
 
 	// copy assets folder
 	fse.copySync(`${srcPath}/.htaccess`, `${siteDir}/.htaccess`);
+	fse.copySync(`${srcPath}/_headers`, `${siteDir}/_headers`);
 	fse.copySync(`${srcPath}/assets`, `${siteDir}/assets`);
 	fse.copySync(`${srcPath}/data`, `${siteDir}/data`);
 
@@ -67,7 +63,7 @@ module.exports = async function build(verbose, open) {
 			if (route.data) saveRemoteDataFromSource(route.data, route.json, siteDir + 'data/');
 		}
 	} catch (err) {
-		reportFailure('Error during saving static file: ' + err);
+		reporter.failure('Error during saving static file: ' + err);
 	}
 	activity.end();
 
@@ -105,10 +101,11 @@ module.exports = async function build(verbose, open) {
 	activity = reporter.activity('Build Javascript', '📁');
 	activity.start();
 	// Build Javascript and CSS Production Bundle Return the manifest with files and
-	// ther hashed path.
+	// their hashed path.
 	const manifestFile = await buildProductionBundle().catch(err => {
-		reportFailure('Generating JavaScript bundles failed', err);
+		reporter.failure('Generating JavaScript bundles failed', err);
 	});
+
 	activity.end();
 
 	activity = reporter.activity('Build HTML', '💻');
@@ -120,7 +117,7 @@ module.exports = async function build(verbose, open) {
 			files.push(filename);
 		}
 	} catch (err) {
-		reportFailure('Error during page generation: ' + err);
+		reporter.failure('Error during page generation: ' + err);
 	}
 	activity.end();
 
