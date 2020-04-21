@@ -1,8 +1,5 @@
 import AbstractDOMComponent from 'abstract/component';
-// import {TweenLite, TimelineLite, CSSPlugin} from 'gsap/TweenMax';
-// const plugins = [CSSPlugin];
-import { gsap } from 'gsap/dist/gsap';
-// const plugins = [CSSPlugin];
+import { gsap, Cubic } from 'gsap';
 
 /**
  * PageComponent: Defines a page
@@ -11,7 +8,7 @@ import { gsap } from 'gsap/dist/gsap';
  */
 class PageComponent extends AbstractDOMComponent {
 	setupDOM() {
-		TweenLite.set(this.el, { autoAlpha: 0 });
+		gsap.set(this.el, { autoAlpha: 0 });
 	}
 
 	initTL() {

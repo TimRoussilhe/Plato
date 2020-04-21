@@ -110,17 +110,22 @@ class Layout extends DOMComponent {
 		this.$metaDescription.textContent = meta.description;
 	}
 
-	if(gtag) {
-		const routes = store.getState().app.routes;
-		let pagePath = '/';
-		routes.forEach(route => {
-			if (route.id === location) pagePath = route.url;
-		});
+	onLocationUpdate(location) {
+		this.el.setAttribute('location', location);
 
-		gtag('config', 'UA-157006906-1', {
-			page_title: location,
-			page_path: pagePath,
-		});
+		// Analytics single app page view
+		if (window.gtag) {
+			const routes = store.getState().app.routes;
+			let pagePath = '/';
+			routes.forEach(route => {
+				if (route.id === location) pagePath = route.url;
+			});
+
+			gtag('config', 'UA-157006906-1', {
+				page_title: location,
+				page_path: pagePath,
+			});
+		}
 	}
 
 	onPageUpdate(page) {
