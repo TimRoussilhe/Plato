@@ -52,12 +52,6 @@ class Base {
 		this._promises = {};
 
 		/**
-		 * Object as associative array of the state
-		 * @type {Object}
-		 */
-		this.state = {};
-
-		/**
 		 * Object as associative array of all <watcher> objects
 		 * @type {Object}
 		 */
