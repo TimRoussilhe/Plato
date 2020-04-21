@@ -1,6 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const WebpackBundleSizeAnalyzerPlugin = require('webpack-bundle-size-analyzer').WebpackBundleSizeAnalyzerPlugin;
 const WebpackChunkHash = require('webpack-chunk-hash');
@@ -34,7 +34,7 @@ module.exports = env => {
 
 	return {
 		node: {
-			fs: 'empty'
+			fs: 'empty',
 		},
 		mode: 'production',
 		entry: entryPoints,
@@ -44,26 +44,26 @@ module.exports = env => {
 			path: outputPath,
 			filename: 'js/[name].[chunkhash].js',
 			chunkFilename: 'js/[name].[chunkhash].js',
-			publicPath: '/assets/'
+			publicPath: '/assets/',
 		},
 
 		optimization: {
 			noEmitOnErrors: true,
 			concatenateModules: true,
 			minimizer: [
-				new UglifyJsPlugin({
-					uglifyOptions: {
+				new TerserPlugin({
+					terserOptions: {
 						warnings: false,
 						compress: {
-							drop_console: true
+							drop_console: true,
 						},
 						ie8: false,
 						keep_classnames: false,
 						keep_fnames: false,
 						output: {
-							comments: false
-						}
-					}
+							comments: false,
+						},
+					},
 				}),
 				new OptimizeCSSAssetsPlugin({
 					cssProcessorOptions: {
@@ -71,35 +71,35 @@ module.exports = env => {
 						// we disable to use autoprefixer
 						autoprefixer: { disable: true },
 						discardComments: {
-							removeAll: true
-						}
-					}
-				})
-			]
+							removeAll: true,
+						},
+					},
+				}),
+			],
 		},
 
 		plugins: [
 			new webpack.DefinePlugin({
-				'process.env.NODE_ENV': JSON.stringify('production')
+				'process.env.NODE_ENV': JSON.stringify('production'),
 			}),
 			new MiniCssExtractPlugin({
 				// Options similar to the same options in webpackOptions.output
 				// both options are optional
-				filename: 'css/[name].[contenthash].css'
+				filename: 'css/[name].[contenthash].css',
 			}),
 			new WebpackBundleSizeAnalyzerPlugin(reportPath),
 			new webpack.optimize.ModuleConcatenationPlugin(),
 			new webpack.HashedModuleIdsPlugin(),
 			new WebpackChunkHash(),
 			new ManifestPlugin({
-				publicPath: '/assets/'
+				publicPath: '/assets/',
 			}),
 			new WorkboxPlugin.GenerateSW(),
-			...envPlugins
+			...envPlugins,
 		],
 		resolve: {
 			extensions: ['.js', '.json', '.art', '.html'],
-			modules: ['src/scripts/app/', 'src/scripts/vendors/', 'shared/', 'public/assets/', 'node_modules']
+			modules: ['src/scripts/app/', 'src/scripts/vendors/', 'shared/', 'public/assets/', 'node_modules'],
 		},
 
 		module: {
@@ -107,7 +107,7 @@ module.exports = env => {
 				{
 					test: /\.js?$/,
 					exclude: /(node_modules|bower_components)/,
-					use: 'babel-loader'
+					use: 'babel-loader',
 				},
 				{ test: /\.art$/, use: 'art-template-loader' },
 				{
@@ -119,21 +119,21 @@ module.exports = env => {
 							loader: 'postcss-loader',
 							options: {
 								ident: 'postcss',
-								plugins: () => [require('autoprefixer')]
-							}
+								plugins: () => [require('autoprefixer')],
+							},
 						},
-						'sass-loader'
-					]
-				}
-			]
+						'sass-loader',
+					],
+				},
+			],
 		},
 
 		stats: {
 			// Nice colored output
-			colors: true
+			colors: true,
 		},
 
 		// Create Sourcemaps for the bundle
-		devtool: devTool
+		devtool: devTool,
 	};
 };
