@@ -1,47 +1,6 @@
-@mixin responsive-font($responsive, $min, $max: false, $fallback: false) {
-	$responsive-unitless: $responsive / ($responsive - $responsive + 1);
-	$dimension: if(unit($responsive) == 'vh', 'height', 'width');
-	$min-breakpoint: $min / $responsive-unitless * 100;
-
-	@media (max-#{$dimension}: #{$min-breakpoint}) {
-		font-size: $min;
-	}
-
-	@if $max {
-		$max-breakpoint: $max / $responsive-unitless * 100;
-
-		@media (min-#{$dimension}: #{$max-breakpoint}) {
-			font-size: $max;
-		}
-	}
-
-	@if $fallback {
-		font-size: $fallback;
-	}
-
-	font-size: $responsive;
-}
-
-/*
- * Styles a <textarea> with horizontal line rules
- * $line-height: px value of textarea's line-height
- * $rule-height: px value of desired rule height
- * $rule-color: desired color of horizontal rules
+/**
+ * Add Generic SASS mixin here
  */
-@mixin multiline-input($line-height, $rule-height, $rule-color) {
-	background-image: linear-gradient(from top, transparent, transparent $line-height, $rule-color 0);
-	background-image: -ms-linear-gradient(top, transparent, transparent $line-height, $rule-color 0);
-	background-image: -o-linear-gradient(top, transparent, transparent $line-height, $rule-color 0);
-	background-image: -moz-linear-gradient(top, transparent, transparent $line-height, $rule-color 0);
-	background-image: -webkit-linear-gradient(top, transparent, transparent $line-height, $rule-color 0);
-	background-size: 100% $line-height + $rule-height;
-	line-height: $line-height;
-
-	resize: none;
-	-moz-appearance: none;
-	-webkit-appearance: none;
-	appearance: none;
-}
 
 @mixin replaceText() {
 	display: block;
@@ -54,31 +13,4 @@
 
 @mixin photoshop-letterspacing-to-ems($val) {
 	letter-spacing: ($val / 1000) * 1em;
-}
-
-// custom scrollbar
-@mixin scrollbar($size, $foreground-color, $background-color: rgba($foreground-color, 0.25)) {
-	// For Google Chrome
-	&::-webkit-scrollbar {
-		width: $size;
-		height: $size;
-	}
-
-	&::-webkit-scrollbar-thumb {
-		background: $foreground-color;
-	}
-
-	&::-webkit-scrollbar-track {
-		background: $background-color;
-	}
-
-	// For Internet Explorer
-	& {
-		scrollbar-face-color: $foreground-color;
-		scrollbar-track-color: $background-color;
-	}
-}
-
-@function responsive-font($breakpoint, $px) {
-	@return #{$px * 100 / $breakpoint}vw;
 }

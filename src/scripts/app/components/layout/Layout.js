@@ -110,14 +110,17 @@ class Layout extends DOMComponent {
 		this.$metaDescription.textContent = meta.description;
 	}
 
-	onLocationUpdate(location) {
-		this.el.setAttribute('location', location);
+	if(gtag) {
+		const routes = store.getState().app.routes;
+		let pagePath = '/';
+		routes.forEach(route => {
+			if (route.id === location) pagePath = route.url;
+		});
 
-		// Analytics single app page view
-		if (window.ga) {
-			ga('set', 'page', location);
-			ga('send', 'pageview');
-		}
+		gtag('config', 'UA-157006906-1', {
+			page_title: location,
+			page_path: pagePath,
+		});
 	}
 
 	onPageUpdate(page) {

@@ -18,7 +18,7 @@ exports.createPages = siteDir => {
 								id: 'director' + element.id,
 								url: element.slug,
 								template: 'about',
-								data: element
+								data: element,
 							},
 							siteDir
 						);
@@ -36,8 +36,8 @@ exports.createGlobalData = () => {
 	return new Promise((resolve, reject) => {
 		resolve({
 			globals: {
-				array: [1, 2, 3, 4, 5]
-			}
+				array: [1, 2, 3, 4, 5],
+			},
 		});
 	});
 };

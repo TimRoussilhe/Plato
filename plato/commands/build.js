@@ -44,7 +44,6 @@ module.exports = async function build(verbose, open) {
 
 	// copy assets folder
 	fse.copySync(`${srcPath}/.htaccess`, `${siteDir}/.htaccess`);
-	fse.copySync(`${srcPath}/_headers`, `${siteDir}/_headers`);
 	fse.copySync(`${srcPath}/assets`, `${siteDir}/assets`);
 	fse.copySync(`${srcPath}/data`, `${siteDir}/data`);
 

@@ -1,4 +1,10 @@
-@import '../font-faces';
+@font-face {
+	font-family: 'Untitled Sans';
+	src: url('/assets/fonts/UntitledSans-Regular.woff2') format('woff2'),
+		url('/assets/fonts/UntitledSans-Regular.woff') format('woff');
+	font-weight: normal;
+	font-style: normal;
+}
 
 // font families
 $ff-title: 'Untitled Sans', 'Helvetica', 'Arial', sans-serif;
@@ -10,7 +16,8 @@ $fw-regular: normal;
 
 // font sizes
 $fs-base: 1.4rem;
-$lh-base: 1.8;
+$lh-base: 1.6em;
+$lh-title: 1.33em;
 
 // Font Definitions
 @mixin ffRegular() {

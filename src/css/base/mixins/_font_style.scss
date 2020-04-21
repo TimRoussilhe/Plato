@@ -14,13 +14,8 @@
 @function unitless-lh($font-size, $line-height) {
 	@return get-value($line-height / $font-size);
 }
-// Usage:
-// .foo {
-//     font-size: 26px;
-//     line-height: get-line-height(26px, 32px); //1.23077
-// }
 
-// mixins for use to easily input Font Style Guide
+// mixin for use to easily input Font Style Guide
 // px is optional too!
 // letter spacing is optional for some edge cases
 @mixin fontStyle($font-size, $line-height, $letter-spacing: '') {

@@ -1,11 +1,11 @@
 // Fonts definition here, we define each style of font.
-// We can them create some font Style with different viewport in the _font_styles.scss file
+// Create all font Styles as mixin here
 
-@mixin f-title {
+@mixin fs-title {
 	@include ffRegular;
 	@include responsiveFontSize(53, 1500, $bp-desktop-s, $bp-desktop-l);
 
-	line-height: 1.13em;
+	line-height: 1.33em;
 
 	@media #{$mq-desktop-s} {
 		@include responsiveFontSize(48, 1200, $bp-mobile, $bp-desktop-s);
@@ -16,29 +16,27 @@
 	}
 }
 
-@mixin f-regular28 {
+@mixin fs-subtitle {
 	@include ffRegular;
 	@include fontStyle(28, 36, 0);
 }
 
-.f-regular28 {
-	@include f-regular28;
-}
-
-@mixin f-regular26 {
+@mixin fs-paragraph {
 	@include ffRegular;
-	@include fontStyle(26, 30, 0);
+	@include fontStyle(12, $lh-base, 0);
 }
 
-.f-regular26 {
-	@include f-regular26;
+// Apply the font style to re-usable class that represent element of the design
+
+.fs-title {
+	@include fs-title;
 }
 
-@mixin f-regular24 {
-	@include ffRegular;
-	@include fontStyle(24, 32, 0);
+.fs-subtitle {
+	@include fs-subtitle;
 }
 
-.f-regular24 {
-	@include f-regular24;
+.fs-paragraph,
+.fs-body {
+	@include fs-paragraph;
 }

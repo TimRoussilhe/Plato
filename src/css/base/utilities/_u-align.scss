@@ -1,4 +1,4 @@
-%u-flex-align {
+@mixin u-flex-align {
 	display: flex;
 	align-items: center;
 	justify-content: center;

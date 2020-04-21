@@ -14,14 +14,13 @@
 @import 'vars/media-queries';
 @import 'vars/icons';
 
-// import utlities
-// @import 'utilities/_u-align';
-// @import 'utilities/_u-scroll';
+// import utilities
+@import 'utilities/_u-align';
+@import 'utilities/_u-overlay';
 
 // import grid
 // @import 'reflex';
 
 // Definitions
-@import 'font-defs';
-@import 'font-styles';
+@import 'typography';
 @import 'ui-defs';
