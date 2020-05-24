@@ -7,6 +7,14 @@ import 'whatwg-fetch';
 import { cleanURL } from 'utils/cleanURL';
 import './../../css/app.scss';
 
+// add Art Template filters
+import runtime from 'art-template/lib/runtime';
+import filters from 'templates/filters/';
+
+for (let [key, value] of Object.entries(filters)) {
+	runtime[key] = value;
+}
+
 class Entry {
 	constructor() {
 		console.log('--- APP STARTED ---');
