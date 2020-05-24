@@ -5,6 +5,7 @@ import store from 'store';
 import Header from 'containers/header/Header';
 
 import { debounce } from 'utils/misc';
+import { Prefetch } from './Prefetch';
 
 class Layout extends DOMComponent {
 	constructor(props) {
@@ -21,6 +22,8 @@ class Layout extends DOMComponent {
 			'app.page': page => this.onPageUpdate(page),
 			'app.meta': (newVal, oldVal) => this.setMeta(newVal, oldVal),
 		};
+
+		this.prefect = new Prefetch();
 	}
 
 	initDOM() {
@@ -73,6 +76,7 @@ class Layout extends DOMComponent {
 		);
 
 		this.actions.resize(window);
+		this.prefect.bindPrefetch();
 
 		// enable a flag to grab scroll position during update
 		// window.addEventListener('scroll', () => {
@@ -130,6 +134,7 @@ class Layout extends DOMComponent {
 
 	onPageUpdate(page) {
 		this.el.setAttribute('type', page.type);
+		this.prefect && this.prefect.resetPrefetch();
 	}
 
 	resize() {

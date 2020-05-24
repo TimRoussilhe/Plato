@@ -16,6 +16,7 @@ const InitialState = {
 	params: null,
 	location: null,
 	isAnimating: false,
+	// This is updated when the page is added to the DOM
 	page: null,
 	oldPage: null,
 	meta: {},

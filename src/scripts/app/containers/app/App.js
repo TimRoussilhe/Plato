@@ -3,7 +3,6 @@ import Base from 'abstract/base';
 
 // Containers
 import Layout from 'containers/layout/Layout';
-import Cache from './Cache.js';
 
 // dynamic import
 // function getComponent(chunkName, path) {
@@ -140,10 +139,10 @@ class App extends Base {
 			type: currentRoute && currentRoute.template ? currentRoute.template : null,
 		});
 
-		store.dispatch(setPage(this.page));
-
 		// Init the next page now
 		this.page.init().then(() => {
+			store.dispatch(setPage(this.page));
+
 			// Resize the current page for position
 			this.layout.triggerResize();
 

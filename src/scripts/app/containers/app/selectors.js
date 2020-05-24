@@ -13,3 +13,20 @@ export const getRoute = (location, params = null) => {
 
 	return currentRoute;
 };
+
+export const getRouteByURL = href => {
+	const routes = store.getState().app.routes;
+
+	let currentRoute = null;
+	for (let key in routes) {
+		if (!routes.hasOwnProperty(key)) continue;
+
+		let route = routes[key];
+		if (route.url === href) {
+			currentRoute = route;
+			break;
+		}
+	}
+
+	return currentRoute;
+};
