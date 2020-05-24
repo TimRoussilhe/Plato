@@ -1,8 +1,15 @@
 const template = require('art-template');
+
+const filters = require('../../shared/templates/filters');
+for (let [key, value] of Object.entries(filters)) {
+	template.defaults.imports[key] = value;
+}
+
 const fse = require('fs-extra');
 const path = require('path');
 const Promise = require('bluebird');
 const reporter = require('../utils/reporter');
+const mkdirp = require('mkdirp');
 
 const config = require('../../site-config.js');
 
@@ -18,10 +25,22 @@ let artTemplatePromise = (templatePath, data) => {
 	});
 };
 
+const getDirName = require('path').dirname;
+function writeFileWithDirectory(path, contents, cb) {
+	return new Promise((resolve, reject) => {
+		// return value is a Promise resolving to the first directory created
+		mkdirp(getDirName(path))
+			.then(made => {
+				fse.writeFile(path, contents);
+				resolve();
+			})
+			.catch(err => reject(err));
+	});
+}
+
 module.exports = (page, manifest, mode = 'development', siteDir, globalData) => {
 	return new Promise((resolve, reject) => {
 		const distPath = siteDir;
-
 		let destPath;
 		let fileName = page.fileName || 'index.html';
 		if (page.id === 'index' || page.id === '404') {
@@ -50,6 +69,7 @@ module.exports = (page, manifest, mode = 'development', siteDir, globalData) => 
 		const templatePath = path.resolve(`./shared/templates/${page.template}.art`);
 		const exists = fse.existsSync(templatePath);
 		if (!exists) reject(new Error('Template file does not exists'));
+
 		artTemplatePromise(templatePath, {
 			data,
 			globalData,
@@ -63,13 +83,13 @@ module.exports = (page, manifest, mode = 'development', siteDir, globalData) => 
 					data,
 					mode,
 					manifest,
+					globals: globalData,
 					globalData: JSON.stringify(globalData),
 					location: page.id,
 					type: page.template,
 				})
 					.then(html => {
-						fse
-							.writeFile(`${destPath}${fileName}`, html)
+						writeFileWithDirectory(`${destPath}${fileName}`, html)
 							.then(() => {
 								reporter.info(`Page Built : ${destPath}${fileName}`);
 								resolve(`${destPath}${fileName}`);
