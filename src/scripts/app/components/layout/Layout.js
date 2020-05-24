@@ -121,7 +121,7 @@ class Layout extends DOMComponent {
 				if (route.id === location) pagePath = route.url;
 			});
 
-			gtag('config', 'UA-157006906-1', {
+			gtag('config', 'UA-XXX', {
 				page_title: location,
 				page_path: pagePath,
 			});

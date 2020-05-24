@@ -399,6 +399,7 @@ class Component extends Base {
 			isShown: false,
 			canUpdate: false,
 		});
+		this.unbindEvents();
 		this.undelegateEvents();
 		this.handlers = {};
 		this.promises = {};

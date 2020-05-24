@@ -124,7 +124,11 @@ module.exports = async function build(verbose, open) {
 	activity.start();
 
 	for (const file of files) {
-		await buildCritical(file);
+		try {
+			await buildCritical(file);
+		} catch (err) {
+			reporter.failure('Error during Critical generation: ' + err);
+		}
 	}
 	activity.end();
 	globalActivity.end();

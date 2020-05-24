@@ -22,7 +22,7 @@
     "start": "node plato develop -v -o",
     "plato:develop": "node plato develop",
     "plato:deploy": "node plato build",
-    "develop": "node plato develop -v -o",
+    "develop": "node plato develop -v",
     "serve": "webpack-dev-server --config ./config/webpack.dev.config.js",
     "build": "node plato build -v",
     "build-and-test": "node plato build -v -o",
