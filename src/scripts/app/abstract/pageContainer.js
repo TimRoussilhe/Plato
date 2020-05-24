@@ -7,6 +7,9 @@ import { setMeta } from 'containers/app/actions';
 // Config
 import { JSON_ENDPOINTS } from 'constants/config';
 
+import { getRoute } from './../containers/app/selectors';
+import Cache from './../containers/app/Cache';
+
 /**
  * PageContainer: Defines a page container
  * @extends AbstractContainer
@@ -27,24 +30,34 @@ class PageContainer extends AbstractContainer {
 			return;
 		}
 
-		const { oldPage } = store.getState().app;
+		const { oldPage, location } = store.getState().app;
+		const currentRoute = getRoute(location);
+
 		if (oldPage) {
 			const url = JSON_ENDPOINTS + this.props.endPoint;
 
-			fetch(url)
-				.then(response => {
-					return response.json();
-				})
-				.then(json => {
-					this.setData(json);
-				})
-				.catch(ex => {
-					this.promises.data.reject();
-				});
+			const data = Cache.has(currentRoute.url) ? Cache.getData(currentRoute.url) : null;
+			if (data) {
+				this.setData(data);
+			} else {
+				fetch(url)
+					.then(response => {
+						return response.json();
+					})
+					.then(json => {
+						this.setData(json);
+						Cache.set(currentRoute.url, json);
+					})
+					.catch(ex => {
+						this.promises.data.reject();
+					});
+			}
 		} else {
 			const { globalData } = store.getState().app;
 			if (globalData && globalData.serverData) {
 				this.setData(globalData.serverData);
+				// Save server data in the Cache
+				Cache.set(currentRoute.url, globalData.serverData);
 			} else {
 				// weird thing here since globalData.serverData will always be defined from the node side
 				this.promises.data.reject();

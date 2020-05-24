@@ -3,6 +3,7 @@ import Base from 'abstract/base';
 
 // Containers
 import Layout from 'containers/layout/Layout';
+import Cache from './Cache.js';
 
 // dynamic import
 // function getComponent(chunkName, path) {
