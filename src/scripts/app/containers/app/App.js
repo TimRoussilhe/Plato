@@ -122,6 +122,9 @@ class App extends Base {
 			this.page.dispose();
 			this.page = null;
 			console.log('KILL PAGE !!!!!!');
+
+			// This will just reload the page actually.
+			window.location.assign(window.location.href);
 		}
 
 		if (this.page) {
