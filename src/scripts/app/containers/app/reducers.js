@@ -9,8 +9,6 @@ import {
 	SET_GLOBAL_DATA,
 } from './constants';
 
-import { DEFAULT_META_TITLE, DEFAULT_META_DESCRIPTION } from '../../constants/metas';
-
 const InitialState = {
 	routes: [],
 	params: null,
@@ -31,8 +29,8 @@ export const app = (state = InitialState, action) => {
 			let meta = action.meta !== null ? action.meta : {};
 			// if no meta from data we used default one
 			if (action.meta === null) {
-				meta.title = DEFAULT_META_TITLE;
-				meta.description = DEFAULT_META_DESCRIPTION;
+				meta.title = 'DEFAULT_META_TITLE';
+				meta.description = 'DEFAULT_META_DESCRIPTION';
 			}
 
 			return {

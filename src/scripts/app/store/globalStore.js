@@ -1,5 +1,4 @@
 // Global store in addition of the STATE, Animation / mouse state when State is in charge of Application State.
-
 class GlobalStore {
 	constructor() {
 		this._type = 'CommonModel';
@@ -35,9 +34,7 @@ class GlobalStore {
 	off(eventType, callback) {
 		if (this._callbackFunctions[eventType] !== undefined) {
 			for (let i = 0; i < this._callbackFunctions[eventType].length; i++) {
-				console.log('this._callbackFunctions[eventType][i]', this._callbackFunctions[eventType][i]);
 				if (callback === this._callbackFunctions[eventType][i]) {
-					console.log('MATCH', this._callbackFunctions[eventType][i]);
 					this._callbackFunctions[eventType].splice(i, 1);
 				}
 			}
