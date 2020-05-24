@@ -4,10 +4,8 @@ const InitialState = {
 	isShown: true,
 };
 
-const initialState = new InitialState();
-
 // Updates an entity cache in response to any action with response.entities.
-export const header = (state = initialState, action) => {
+export const header = (state = InitialState, action) => {
 	switch (action.type) {
 		case SHOW_HEADER: {
 			return {
