@@ -31,13 +31,12 @@ class Layout extends DOMComponent {
 		this.$title = this.el.querySelector('head > title');
 		this.$metaDescription = this.el.querySelector('head > meta[name=description]');
 
-		// if you need to remove fastclick event of an element
-		// just add needsclick as a class
-		// const needsClick = FastClick.prototype.needsClick;
-		// FastClick.prototype.needsClick = function(target) {
-		//     return needsClick.apply(this, arguments);
-		// };
-		// FastClick.attach(this.el);
+		this.$metaOGTitle = this.el.querySelector('head > meta[property="og:title"]');
+		this.$metaOGDescription = this.el.querySelector('head > meta[property="og:description"]');
+		this.$metaOGImage = this.el.querySelector('head > meta[property="og:image"]');
+		this.$metaTwitterTitle = this.el.querySelector('head > meta[name="twitter:title"]');
+		this.$metaTwitterDescription = this.el.querySelector('head > meta[name="twitter:description"]');
+		this.$metaTwitterImage = this.el.querySelector('head > meta[name="twitter:image"]');
 	}
 
 	onDOMInit() {
@@ -110,8 +109,26 @@ class Layout extends DOMComponent {
 	}
 
 	setMeta(meta, oldMeta) {
-		this.$title.textContent = meta.title;
-		this.$metaDescription.textContent = meta.description;
+		const { oldPage } = store.getState().app;
+
+		if (!oldPage) {
+			return;
+		}
+
+		if (meta.title) {
+			this.$title.textContent = meta.title;
+			this.$metaOGTitle.setAttribute('content', meta.title);
+			this.$metaTwitterTitle.setAttribute('content', meta.title);
+		}
+		if (meta.description) {
+			this.$metaDescription.setAttribute('content', meta.description);
+			this.$metaOGDescription.setAttribute('content', meta.description);
+			this.$metaTwitterDescription.setAttribute('content', meta.description);
+		}
+		if (meta.shareImage) {
+			this.$metaOGImage.setAttribute('content', meta.shareImage);
+			this.$metaTwitterImage.setAttribute('content', meta.shareImage);
+		}
 	}
 
 	onLocationUpdate(location) {
