@@ -1,0 +1,6 @@
+{{set widthIncrement = widthIncrement || 200}}
+{{set maxWidth = maxWidth || image.metadata.dimensions.width}}
+{{set iterationIndex = maxWidth/widthIncrement}}
+<% for(var i = 1; i <= iterationIndex; i++){ %>
+{{ image.url }}?w={{widthIncrement*i}}&fit=max&auto=format&q=100 {{widthIncrement*i}}w,
+<% } %>

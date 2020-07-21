@@ -1,0 +1,20 @@
+{{if image}}
+{{ if heightBasedAspectRatio == true }}
+{{ set aspectRatioKey = 'width' }}
+{{ set aspectRatioStyle = image.metadata.dimensions.width / image.metadata.dimensions.height | round2decimals }}
+{{ set aspectRatioUnit = 'vh' }}
+{{ else }}
+{{ set aspectRatioKey = 'padding-top' }}
+{{ set aspectRatioStyle = image.metadata.dimensions.height/image.metadata.dimensions.width*100 | round2decimals }}
+{{ set aspectRatioUnit = '%' }}
+{{/if }}
+<div
+  class="responsive-image{{if transparent }} responsive-image--transparent{{/if }}{{if useCover }} responsive-image--useCover{{/if }}{{if useContain }} responsive-image--useContain{{/if }}{{if useBgImage }} responsive-image--use-bg-image{{/if}}{{if additionClass }} {{additionClass}}{{/if }}{{if useContainDesktop }} responsive-image--useContain-desktop{{/if }}"
+  style="{{aspectRatioKey}}: {{aspectRatioStyle}}{{aspectRatioUnit}};background-color:{{image.metadata.palette.muted.background}}">
+  <img class="lazy" data-src="{{image.url}}" data-sizes="{{ sizes || '100vw' }}"
+    data-srcset="<% include('./srcset.art', {image: image, widthIncrement: widthIncrement, maxWidth:maxWidth }) %>"
+    data-width="{{image.metadata.dimensions.width}}" data-height="{{image.metadata.dimensions.height}}"
+    alt="{{image.label || image.title}}">
+  <noscript><img alt="{{image.alt}}" src="{{ image.url }}" /></noscript>
+</div>
+{{/if }}
