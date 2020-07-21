@@ -115,16 +115,15 @@ class Base {
 			);
 			return;
 		}
-
-		for (const key in partialState) {
-			if ({}.hasOwnProperty.call(partialState, key)) {
-				this.state[key] = partialState[key];
-			}
-		}
+		const prevState = Object.assign({}, this.state);
+		this.state = { ...this.state, ...partialState };
 
 		if (callback) callback();
 		if (needRender) this.render();
+		this.stateDidUpdate(this.state, prevState);
 	}
+
+	stateDidUpdate(state, oldState) {}
 
 	subscribe(o) {
 		// When an object is givin for a specific subscription
