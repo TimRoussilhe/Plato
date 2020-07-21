@@ -1,5 +1,6 @@
 import AbstractDOMComponent from 'abstract/component';
 import { gsap, Cubic } from 'gsap';
+import store from 'store';
 
 /**
  * PageComponent: Defines a page
@@ -21,6 +22,10 @@ class PageComponent extends AbstractDOMComponent {
 
 	onDOMInit() {
 		// append to main container
+		const { oldPage } = store.getState().app;
+		if (oldPage) {
+			this.el.classList.add('next-page');
+		}
 		document.getElementById('content').appendChild(this.el);
 		super.onDOMInit();
 	}
@@ -32,7 +37,6 @@ class PageComponent extends AbstractDOMComponent {
 	}
 
 	hideComponent() {
-		console.log('hideComponent');
 		setTimeout(() => {
 			this.TL.hide.play(0);
 		}, 0);

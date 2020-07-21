@@ -148,6 +148,8 @@ class App extends Base {
 
 			if (this.oldPage) {
 				this.oldPage.hide().then(() => {
+					this.page.component.el.classList.remove('next-page');
+					this.oldPage.component.el.classList.add('next-page');
 					this.oldPage.dispose();
 					this.oldPage = null;
 					this.showPage();
