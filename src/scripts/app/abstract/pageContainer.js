@@ -36,9 +36,15 @@ class PageContainer extends AbstractContainer {
 		if (oldPage) {
 			const url = JSON_ENDPOINTS + this.props.endPoint;
 
-			const data = Cache.has(currentRoute.url) ? Cache.getData(currentRoute.url) : null;
+			const data = Cache.has(currentRoute.id) ? Cache.getData(currentRoute.id) : null;
 			if (data) {
-				this.setData(data);
+				if (Promise.resolve(data) == data) {
+					data.then(data => {
+						this.setData(Cache.getData(currentRoute.id));
+					});
+				} else {
+					this.setData(data);
+				}
 			} else {
 				fetch(url)
 					.then(response => {
@@ -46,7 +52,7 @@ class PageContainer extends AbstractContainer {
 					})
 					.then(json => {
 						this.setData(json);
-						Cache.set(currentRoute.url, json);
+						Cache.set(currentRoute.id, json);
 					})
 					.catch(ex => {
 						this.promises.data.reject();
@@ -57,7 +63,7 @@ class PageContainer extends AbstractContainer {
 			if (globalData && globalData.serverData) {
 				this.setData(globalData.serverData);
 				// Save server data in the Cache
-				Cache.set(currentRoute.url, globalData.serverData);
+				Cache.set(currentRoute.id, globalData.serverData);
 			} else {
 				// weird thing here since globalData.serverData will always be defined from the node side
 				this.promises.data.reject();

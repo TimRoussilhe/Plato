@@ -65,17 +65,7 @@ export class Prefetch {
 			return;
 		}
 
-		this.prefetch(route.url, JSON_ENDPOINTS + route.json);
-
-		// Save data in the Cache
-		// Cache.set(currentRoute.url, globalData.serverData);
-		// this.cache.set(
-		// 	href,
-		// 	this.request(href, this.timeout, this.onRequestError.bind(this, link)).catch(error => {
-		// 		console.error(error);
-		// 	}),
-		// 	'enter'
-		// );
+		this.prefetch(route.id, JSON_ENDPOINTS + route.json);
 	}
 
 	/**
