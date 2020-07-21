@@ -67,6 +67,13 @@ class Component extends Base {
 		this.TL = {};
 
 		/**
+		 * Object as associative array of all the timers
+		 * Meant to be used with gsap delayedCall timers.
+		 * @type {Object}
+		 */
+		this.timers = {};
+
+		/**
 		 * uniqueId
 		 * @type {String}
 		 */
@@ -391,6 +398,16 @@ class Component extends Base {
 	}
 
 	/**
+	 * Kill all the timers
+	 */
+	destroyTimers() {
+		for (const name in this.timers) {
+			if (this.timers[name]) this.timers[name].kill();
+		}
+		this.timers = {};
+	}
+
+	/**
 	 * Dispose the component
 	 */
 	dispose() {
@@ -404,6 +421,7 @@ class Component extends Base {
 		this.handlers = {};
 		this.promises = {};
 		this.destroyTL();
+		this.destroyTimers();
 
 		this.el.parentNode.removeChild(this.el);
 		this.el = null;
