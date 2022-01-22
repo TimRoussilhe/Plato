@@ -97,7 +97,7 @@
     "lodash": "^4.17.19",
     "meow": "^6.1.0",
     "mkdirp": "^1.0.4",
-    "node-fetch": "^2.3.0",
+    "node-fetch": "^3.1.1",
     "opentracing": "^0.14.3",
     "opn": "^5.4.0",
     "serve-static": "^1.14.1",
