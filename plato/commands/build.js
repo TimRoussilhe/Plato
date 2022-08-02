@@ -123,13 +123,26 @@ module.exports = async function build(verbose, open) {
 	activity = reporter.activity('Build Critical CSS and minify HTML', '🎨');
 	activity.start();
 
-	for (const file of files) {
-		try {
-			await buildCritical(file);
-		} catch (err) {
-			reporter.failure('Error during Critical generation: ' + err);
+	function startNewJob() {
+		const file = files.pop(); // NOTE: mutates urls array
+		if (!file) {
+			// no more new jobs to process (might still be jobs currently in process)
+			return Promise.resolve();
 		}
+		return buildCritical(file)
+			.then(() => {
+				// Then call to see if there are more jobs to process
+				reporter.info(`Critical Built : ${file}`);
+				return startNewJob();
+			})
+			.catch(err => reporter.failure('Error during Critical generation: ' + err));
 	}
+	// how many jobs do we want to handle in paralell?
+	// Below, 3:
+	await Promise.all([startNewJob(), startNewJob(), startNewJob()]).catch(err =>
+		reporter.failure('Error during Critical generations: ' + err)
+	);
+
 	activity.end();
 	globalActivity.end();
 

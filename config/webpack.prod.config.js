@@ -2,9 +2,11 @@ const path = require('path');
 const webpack = require('webpack');
 const TerserPlugin = require('terser-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const WebpackBundleSizeAnalyzerPlugin = require('webpack-bundle-size-analyzer').WebpackBundleSizeAnalyzerPlugin;
-const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
+
+const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
+
+const WebpackBundleSizeAnalyzerPlugin = require('webpack-bundle-size-analyzer').WebpackBundleSizeAnalyzerPlugin;
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 const appEntryPoint = path.join(__dirname, '../src/scripts/app/index.js');
@@ -63,9 +65,6 @@ module.exports = env => {
 		},
 
 		plugins: [
-			new webpack.DefinePlugin({
-				'process.env.NODE_ENV': JSON.stringify('production'),
-			}),
 			new MiniCssExtractPlugin({
 				// Options similar to the same options in webpackOptions.output
 				// both options are optional
@@ -93,20 +92,7 @@ module.exports = env => {
 				{ test: /\.art$/, use: 'art-template-loader' },
 				{
 					test: /\.scss$/,
-					use: [
-						MiniCssExtractPlugin.loader,
-						'css-loader',
-						{
-							loader: 'postcss-loader',
-							options: {
-								postcssOptions: {
-									ident: 'postcss',
-									plugins: () => [require('autoprefixer')],
-								},
-							},
-						},
-						'sass-loader',
-					],
+					use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader', 'sass-loader'],
 				},
 			],
 		},

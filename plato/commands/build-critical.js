@@ -18,7 +18,7 @@ module.exports = filename => {
 		try {
 			// You now have critical-path CSS
 			// Works with and without dest specified
-			result = minify(css, {
+			result = minify(html, {
 				removeAttributeQuotes: true,
 				collapseWhitespace: true,
 				preserveLineBreaks: true,
@@ -33,6 +33,7 @@ module.exports = filename => {
 			encoding: 'utf8',
 			flag: 'w',
 		});
+
 		resolve();
 	});
 };

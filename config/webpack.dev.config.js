@@ -24,17 +24,7 @@ module.exports = {
 		emitOnErrors: true,
 	},
 
-	plugins: [
-		new SizePlugin(),
-		new webpack.DefinePlugin({
-			'process.env': {
-				NODE_ENV: JSON.stringify('development'),
-				DEV: process.env.NODE_ENV !== 'production',
-				IS_BROWSER: true,
-			},
-		}),
-		new webpack.HotModuleReplacementPlugin(),
-	],
+	plugins: [new SizePlugin(), new webpack.HotModuleReplacementPlugin()],
 
 	// i. e. through the resolve.alias option
 	// will be included in the bundle, no need to add and load vendor

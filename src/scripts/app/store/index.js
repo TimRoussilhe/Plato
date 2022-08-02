@@ -3,7 +3,8 @@ import rootReducer from 'reducers';
 import { createLogger } from 'redux-logger';
 import { responsiveStoreEnhancer } from 'redux-responsive';
 
-const USE_DEV_TOOLS = process.env.DEV && process.env.IS_BROWSER && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__;
+const IS_LOCALHOST = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+const USE_DEV_TOOLS = IS_LOCALHOST && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__;
 
 const logger = createLogger({
 	collapsed: true,
