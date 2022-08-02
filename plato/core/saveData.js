@@ -1,8 +1,6 @@
 const fse = require('fs-extra');
 const path = require('path');
-const Promise = require('bluebird');
 const fetch = require('node-fetch');
-fetch.Promise = Promise;
 
 const reporter = require('../utils/reporter');
 

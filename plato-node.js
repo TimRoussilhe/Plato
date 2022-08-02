@@ -1,6 +1,4 @@
-const Promise = require('bluebird');
 const fetch = require('node-fetch');
-fetch.Promise = Promise;
 const { createPage } = require('./plato/core/createPage');
 
 exports.createPages = siteDir => {

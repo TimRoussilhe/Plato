@@ -165,32 +165,35 @@ module.exports = async function develop(verbose, open) {
 	}
 	activity.end();
 
+	let dynamicRewrite = [];
+	dynamicRewrite.push({ from: '/furniture/*', to: '/furniture/' });
+
 	const options = {
-		contentBase: './public',
-		publicPath: '/assets/js/',
 		port,
 		hot: true,
-		inline: true,
+		headers: {
+			'Cache-Control': 'max-age=0',
+		},
 		host: 'localhost',
-		disableHostCheck: true,
-		noInfo: true,
-		watchContentBase: true,
-		watchOptions: {
-			poll: true,
+		allowedHosts: 'all',
+		historyApiFallback: {
+			rewrites: dynamicRewrite,
+		},
+		static: {
+			directory: 'public',
+			watch: true,
+			serveIndex: true,
 		},
 	};
-
-	WebpackDevServer.addDevServerEntrypoints(webpackConfig, options);
 	const compiler = webpack(webpackConfig);
-	const server = new WebpackDevServer(compiler, options);
+	const server = new WebpackDevServer(options, compiler);
 
-	server.listen(port, 'localhost', function(err) {
-		if (err) {
-			reporter.error(err);
-		} else {
-			globalActivity.end();
-			reporter.displayUrl('Development server started', 'http://localhost:' + port);
-			if (open) opn('http://localhost:' + port);
-		}
-	});
+	const runServer = async () => {
+		console.log('Starting server...');
+		await server.start();
+		reporter.displayUrl('Development server started', 'http://localhost:' + port);
+		if (open) opn('http://localhost:' + port);
+	};
+
+	runServer();
 };

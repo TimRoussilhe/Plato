@@ -3,15 +3,5 @@
 		<h1 class="fs-title">Dynamic content: {{ data.content.title }}</h1>
 		<h2 class="fs-body">INDEX RELOAD Static content</h2>
 		<span class="icon instagram">{{ include './svgs/instagram.art' }}</span>
-		<div class="grid">
-			<div class="col-12 col-md-6">
-				<p>Look at me!</p>
-			</div>
-			<div class="col-12 col-md-6">
-				<p>I am a Reflex grid!</p>
-				<button>TEST</button>
-				<input type="text">
-			</div>
-		</div>
 	</div>
 </section>

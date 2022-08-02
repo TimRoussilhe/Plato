@@ -45,13 +45,6 @@ class Entry {
 }
 
 (function() {
-	const { hostname, port } = location;
-	if (hostname !== 'localhost' && port !== 8080 && 'serviceWorker' in navigator) {
-		navigator.serviceWorker.register('/assets/service-worker.js');
-	}
-})();
-
-(function() {
 	cleanURL(window.location.href.split('?')[0]);
 })();
 

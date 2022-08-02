@@ -7,7 +7,6 @@ for (let [key, value] of Object.entries(filters)) {
 
 const fse = require('fs-extra');
 const path = require('path');
-const Promise = require('bluebird');
 const reporter = require('../utils/reporter');
 const mkdirp = require('mkdirp');
 

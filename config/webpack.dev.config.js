@@ -1,9 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
 const devTool = 'source-map';
-const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
-const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
-const notifier = require('node-notifier');
 const SizePlugin = require('size-plugin');
 
 const appEntryPoint = path.join(__dirname, '../src/scripts/app/index.js');
@@ -12,16 +9,6 @@ const filename = 'bundle.js';
 const entryPoints = appEntryPoint;
 
 module.exports = {
-	/*
-	ENTRY
-	If you pass a string: The string is resolved to a module which is loaded upon startup.
-	If you pass an array: All modules are loaded upon startup. The last one is exported.
-	If you pass an object: Multiple entry bundles are created. The key is the chunk name. The value can be a string or an array.
-	*/
-	node: {
-		fs: 'empty'
-	},
-
 	mode: 'development',
 	entry: entryPoints,
 
@@ -30,11 +17,11 @@ module.exports = {
 		path: outputPath,
 		filename: filename,
 		publicPath: '/assets/js/',
-		chunkFilename: '[name].bundle.js'
+		chunkFilename: '[name].bundle.js',
 	},
 
 	optimization: {
-		noEmitOnErrors: true // NoEmitOnErrorsPlugin
+		emitOnErrors: true,
 	},
 
 	plugins: [
@@ -43,35 +30,17 @@ module.exports = {
 			'process.env': {
 				NODE_ENV: JSON.stringify('development'),
 				DEV: process.env.NODE_ENV !== 'production',
-				IS_BROWSER: true
-			}
-		}),
-		new FriendlyErrorsWebpackPlugin({
-			onErrors: (severity, errors) => {
-				if (severity !== 'error') return;
-
-				const error = errors[0];
-				notifier.notify({
-					title: 'Compilation Failed',
-					message: severity + ': ' + error.name,
-					subtitle: error.file || ''
-				});
-			}
+				IS_BROWSER: true,
+			},
 		}),
 		new webpack.HotModuleReplacementPlugin(),
-		new HardSourceWebpackPlugin({
-			info: {
-				mode: 'none',
-				level: 'warn'
-			}
-		})
 	],
 
 	// i. e. through the resolve.alias option
 	// will be included in the bundle, no need to add and load vendor
 	resolve: {
 		extensions: ['.js', '.json', '.art', '.html'],
-		modules: ['src/scripts/app/', 'src/scripts/vendors/', 'shared/', 'public/assets/', 'node_modules']
+		modules: ['src/scripts/app/', 'src/scripts/vendors/', 'shared/', 'public/assets/', 'node_modules'],
 	},
 
 	module: {
@@ -80,49 +49,47 @@ module.exports = {
 				test: /\.js$/,
 				exclude: /(node_modules|bower_components)/,
 				use: {
-					loader: 'babel-loader'
-				}
+					loader: 'babel-loader',
+				},
 			},
 			{ test: /\.art$/, use: 'art-template-loader' },
 			{
-				test: /\.scss$/,
+				test: /\.(scss|css)$/,
 				use: [
 					{
 						loader: 'style-loader',
-						// singleton is important here. On dev it will wait for CSS to be appended to start JS
-						options: {
-							singleton: true
-						}
 					},
 					{
 						loader: 'css-loader',
 						options: {
-							sourceMap: true
-						}
+							sourceMap: true,
+						},
 					},
 					{
 						loader: 'postcss-loader',
 						options: {
-							ident: 'postcss',
-							plugins: () => [require('autoprefixer')]
-						}
+							postcssOptions: {
+								ident: 'postcss',
+								plugins: () => [require('autoprefixer')],
+							},
+						},
 					},
 					{
 						loader: 'sass-loader',
 						options: {
-							sourceMap: true
-						}
-					}
-				]
-			}
-		]
+							sourceMap: true,
+						},
+					},
+				],
+			},
+		],
 	},
 
 	stats: {
 		// Nice colored output
-		colors: true
+		colors: true,
 	},
 
 	// Create Sourcemaps for the bundle
-	devtool: devTool
+	devtool: devTool,
 };

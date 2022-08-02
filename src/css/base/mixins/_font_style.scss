@@ -1,18 +1,18 @@
 // simple function to get back rem value;
 // in our case body is set to 62.5% so our base font-size is a 10 multiple
 @function get-rem($font-size) {
-	@return $font-size/10 * 1rem;
+	@return calc($font-size/10 * 1rem);
 }
 
 // helper function to make sure the unit type (px, rem)
 // is removed we want just the raw value no unit
 @function get-value($n) {
-	@return $n / ($n * 0 + 1);
+	@return calc($n / ($n * 0 + 1));
 }
 
 // return ratio line-height / font-size
 @function unitless-lh($font-size, $line-height) {
-	@return get-value($line-height / $font-size);
+	@return get-value(calc($line-height / $font-size));
 }
 
 // mixin for use to easily input Font Style Guide

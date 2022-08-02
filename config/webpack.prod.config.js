@@ -3,29 +3,15 @@ const webpack = require('webpack');
 const TerserPlugin = require('terser-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const WebpackBundleSizeAnalyzerPlugin = require('webpack-bundle-size-analyzer').WebpackBundleSizeAnalyzerPlugin;
-const WebpackChunkHash = require('webpack-chunk-hash');
-const ManifestPlugin = require('webpack-manifest-plugin');
-const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-const WorkboxPlugin = require('workbox-webpack-plugin');
+const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 const appEntryPoint = path.join(__dirname, '../src/scripts/app/index.js');
 const outputPath = path.join(__dirname, '../build/assets/');
-// const publicPath = path.join(__dirname, '../build/assets');
 const reportPath = path.join(__dirname, '../reports/plain-report.txt');
-// const filename = 'bundle.min.js';
 
 const devTool = false;
-// 'hidden-source-map';
-
-// devTool = 'inline-source-map';
-// console.log('\n ---- WEBPACK ----\n \n running in production \n');
-
-// console.log(path.join(' running webpack in ', __dirname));
-// console.log(' filename: ' + filename);
-// console.log(' devTool: ' + devTool);
-// console.log(' outputPath path ' + outputPath + '\n');
-
 const entryPoints = appEntryPoint;
 
 module.exports = env => {
@@ -33,22 +19,19 @@ module.exports = env => {
 	if (env && env === 'bundleSize') envPlugins.push(new BundleAnalyzerPlugin());
 
 	return {
-		node: {
-			fs: 'empty',
-		},
 		mode: 'production',
 		entry: entryPoints,
 
 		// if multiple outputs, use [name] and it will use the name of the entry point, and loop through them
 		output: {
 			path: outputPath,
-			filename: 'js/[name].[chunkhash].js',
-			chunkFilename: 'js/[name].[chunkhash].js',
+			filename: 'js/[name].[contenthash].js',
+			chunkFilename: 'js/[name].[contenthash].js',
 			publicPath: '/assets/',
 		},
 
 		optimization: {
-			noEmitOnErrors: true,
+			emitOnErrors: false,
 			concatenateModules: true,
 			minimizer: [
 				new TerserPlugin({
@@ -65,17 +48,18 @@ module.exports = env => {
 						},
 					},
 				}),
-				new OptimizeCSSAssetsPlugin({
-					cssProcessorOptions: {
-						safe: true,
-						// we disable to use autoprefixer
-						autoprefixer: { disable: true },
-						discardComments: {
-							removeAll: true,
-						},
+				new CssMinimizerPlugin({
+					minimizerOptions: {
+						preset: [
+							'default',
+							{
+								discardComments: { removeAll: true },
+							},
+						],
 					},
 				}),
 			],
+			moduleIds: 'deterministic',
 		},
 
 		plugins: [
@@ -89,12 +73,9 @@ module.exports = env => {
 			}),
 			new WebpackBundleSizeAnalyzerPlugin(reportPath),
 			new webpack.optimize.ModuleConcatenationPlugin(),
-			new webpack.HashedModuleIdsPlugin(),
-			new WebpackChunkHash(),
-			new ManifestPlugin({
+			new WebpackManifestPlugin({
 				publicPath: '/assets/',
 			}),
-			new WorkboxPlugin.GenerateSW(),
 			...envPlugins,
 		],
 		resolve: {
@@ -118,8 +99,10 @@ module.exports = env => {
 						{
 							loader: 'postcss-loader',
 							options: {
-								ident: 'postcss',
-								plugins: () => [require('autoprefixer')],
+								postcssOptions: {
+									ident: 'postcss',
+									plugins: () => [require('autoprefixer')],
+								},
 							},
 						},
 						'sass-loader',
