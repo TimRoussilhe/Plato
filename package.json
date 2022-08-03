@@ -8,10 +8,6 @@
     "Tim Roussilhe"
   ],
   "app": {},
-  "engines": {
-    "node": "16.0.0",
-    "npm": "8.4.0"
-  },
   "scripts": {
     "start": "npm run clean &&  node plato develop -v -o",
     "plato:develop": "node plato develop",
