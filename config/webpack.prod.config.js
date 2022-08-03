@@ -13,12 +13,17 @@ const appEntryPoint = path.join(__dirname, '../src/scripts/app/index.js');
 const outputPath = path.join(__dirname, '../build/assets/');
 const reportPath = path.join(__dirname, '../reports/plain-report.txt');
 
-const devTool = false;
 const entryPoints = appEntryPoint;
 
 module.exports = env => {
 	const envPlugins = [];
-	if (env && env === 'bundleSize') envPlugins.push(new BundleAnalyzerPlugin());
+	if (env && env.bundleSize)
+		envPlugins.push(
+			new BundleAnalyzerPlugin({
+				analyzerMode: 'static',
+				generateStatsFile: 'true',
+			})
+		);
 
 	return {
 		mode: 'production',
@@ -86,7 +91,7 @@ module.exports = env => {
 			rules: [
 				{
 					test: /\.js?$/,
-					exclude: /(node_modules|bower_components)/,
+					exclude: /node_modules/,
 					use: 'babel-loader',
 				},
 				{ test: /\.art$/, use: 'art-template-loader' },
@@ -102,7 +107,6 @@ module.exports = env => {
 			colors: true,
 		},
 
-		// Create Sourcemaps for the bundle
-		devtool: devTool,
+		devtool: false,
 	};
 };

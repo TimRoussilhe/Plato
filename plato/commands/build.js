@@ -1,5 +1,6 @@
 const fse = require('fs-extra');
 const path = require('path');
+const opn = require('opn');
 
 const connect = require('connect');
 const serveStatic = require('serve-static');
@@ -124,7 +125,7 @@ module.exports = async function build(verbose, open) {
 	activity.start();
 
 	function startNewJob() {
-		const file = files.pop(); // NOTE: mutates urls array
+		const file = files.pop(); // NOTE: mutates file array
 		if (!file) {
 			// no more new jobs to process (might still be jobs currently in process)
 			return Promise.resolve();

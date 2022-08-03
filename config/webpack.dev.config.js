@@ -1,6 +1,5 @@
 const path = require('path');
 const webpack = require('webpack');
-const devTool = 'source-map';
 const SizePlugin = require('size-plugin');
 
 const appEntryPoint = path.join(__dirname, '../src/scripts/app/index.js');
@@ -37,7 +36,7 @@ module.exports = {
 		rules: [
 			{
 				test: /\.js$/,
-				exclude: /(node_modules|bower_components)/,
+				exclude: /node_modules/,
 				use: {
 					loader: 'babel-loader',
 				},
@@ -51,9 +50,6 @@ module.exports = {
 					},
 					{
 						loader: 'css-loader',
-						options: {
-							sourceMap: true,
-						},
 					},
 					{
 						loader: 'postcss-loader',
@@ -81,5 +77,5 @@ module.exports = {
 	},
 
 	// Create Sourcemaps for the bundle
-	devtool: devTool,
+	devtool: 'eval-source-map',
 };

@@ -3,7 +3,6 @@ const path = require('path');
 const fetch = require('node-fetch');
 
 const reporter = require('../utils/reporter');
-
 const routeDestPath = path.resolve(__dirname + '/../../shared/routes/real_routes.json');
 
 const saveFile = (destination, data) => {
@@ -64,7 +63,7 @@ exports.updateRoutes = routes => {
 			});
 		} else {
 			const routesObject = {
-				routes
+				routes,
 			};
 
 			fse.writeFile(routeDestPath, JSON.stringify(routesObject), 'utf8').then(() => {

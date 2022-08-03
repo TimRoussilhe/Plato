@@ -12,7 +12,6 @@ module.exports = {
 	themeColor: '#000',
 	backgroundColor: '#fff',
 	pathPrefix: null,
-	logo: path.resolve(__dirname, 'src/images/icon.png'),
 	social: {
 		twitter: 'Plato',
 		fbAppId: '550534890534809345890',

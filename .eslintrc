@@ -1,6 +1,6 @@
 {
 	"extends": ["google", "prettier"],
-	"parser": "babel-eslint",
+	"parser": "@babel/eslint-parser",
 	"rules": {
 		"global-require": 0,
 		"curly": [2, "multi-line"],
@@ -30,11 +30,12 @@
 		"browser": true
 	},
 	"parserOptions": {
-		"sourceType": "module",
-		"allowImportExportEverywhere": false,
-		"ecmaVersion": 2017,
-		"ecmaFeatures": {
-			"experimentalObjectRestSpread": true
+		"requireConfigFile": false,
+		"babelOptions": {
+			"babelrc": false,
+			"configFile": false,
+			// your babel options
+			"presets": ["@babel/preset-env"]
 		}
 	}
 }

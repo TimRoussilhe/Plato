@@ -4,13 +4,17 @@
 			"@babel/env",
 			{
 				"targets": {
-					"browsers": ["last 2 versions", "ie >= 10"]
+					// https://jamie.build/last-2-versions
+					"browsers": [">0.25%", "not op_mini all", "not ie 11"]
+					// https://web.dev/serve-modern-code-to-modern-browsers/
+					// "esmodules": true
 				},
-				"useBuiltIns": "entry",
+				"debug": true,
+				"useBuiltIns": "usage",
+				"bugfixes": true,
 				"corejs": 3
 			}
 		]
 	],
-	"sourceType": "unambiguous",
-	"plugins": ["@babel/plugin-syntax-dynamic-import", "@babel/plugin-transform-runtime"]
+	"plugins": ["@babel/plugin-transform-runtime"]
 }

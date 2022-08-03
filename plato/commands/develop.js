@@ -64,6 +64,7 @@ module.exports = async function develop(verbose, open) {
 	 */
 	activity = reporter.activity('Build Routes and save remote Data from Static routes', '🛣️');
 	activity.start();
+
 	// add static routes to final_routes
 	// save remote endpoint for static routes
 	try {
