@@ -1,10 +1,13 @@
 import { isMobile, isTablet } from 'utils/is';
 import App from 'containers/app/App';
 import Router from 'router';
+
 import { setDeviceType } from 'containers/app/actions';
 import store from 'store';
-import 'whatwg-fetch';
+
 import { cleanURL } from 'utils/cleanURL';
+import { loadScript, browserSupportsAllFeatures } from 'utils/loadScript';
+
 import './../../css/app.scss';
 
 // add Art Template filters
@@ -47,7 +50,23 @@ class Entry {
 	cleanURL(window.location.href.split('?')[0]);
 })();
 
-// initialize the APP do not make a global reference to it.
-const entry = new Entry();
-entry.init();
-console.log('HELLO WORLD');
+console.log('browserSupportsAllFeatures(', browserSupportsAllFeatures());
+
+if (browserSupportsAllFeatures()) {
+	// Browsers that support all features run `main()` immediately.
+	main();
+} else {
+	// All other browsers loads polyfills and then run `main()`.
+	loadScript('https://cdn.jsdelivr.net/npm/whatwg-fetch@3.6.2/dist/fetch.umd.min.js', main);
+}
+
+function main(err) {
+	// Initiate all other code paths.
+	// If there's an error loading the polyfills, handle that
+	// case gracefully and track that the error occurred.
+
+	// initialize the APP do not make a global reference to it.
+	const entry = new Entry();
+	entry.init();
+	console.log('HELLO WORLD');
+}

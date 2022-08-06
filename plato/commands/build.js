@@ -17,6 +17,7 @@ const routeDestPath = path.resolve(__dirname + '/../../shared/routes/real_routes
 
 const buildHTML = require('../core/buildHTML');
 const { saveRemoteDataFromSource, updateRoutes } = require('../core/saveData');
+const { createPages } = require('../core/createPages');
 const buildProductionBundle = require('./build-javascript.js');
 const buildCritical = require('./build-critical.js');
 
