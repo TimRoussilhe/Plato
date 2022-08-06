@@ -9,12 +9,14 @@
 					// https://web.dev/serve-modern-code-to-modern-browsers/
 					// "esmodules": true
 				},
-				"debug": true,
+				// "debug": true,
 				"useBuiltIns": "usage",
 				"bugfixes": true,
 				"corejs": 3
 			}
 		]
 	],
+	// needed to support both node common modules and escma js ones
+	"sourceType": "unambiguous",
 	"plugins": ["@babel/plugin-transform-runtime"]
 }

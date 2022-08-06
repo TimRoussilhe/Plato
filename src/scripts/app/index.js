@@ -10,7 +10,6 @@ import './../../css/app.scss';
 // add Art Template filters
 import runtime from 'art-template/lib/runtime';
 import filters from 'templates/filters/';
-
 for (let [key, value] of Object.entries(filters)) {
 	runtime[key] = value;
 }
@@ -50,5 +49,5 @@ class Entry {
 
 // initialize the APP do not make a global reference to it.
 const entry = new Entry();
-export default entry;
-document.addEventListener('DOMContentLoaded', () => entry.init());
+entry.init();
+console.log('HELLO WORLD');

@@ -24,21 +24,20 @@ const reporter = require('../utils/reporter');
  * @return {Promise} createPage Promise
  */
 
-exports.createPage = ({ id, url, template, data }, siteDir, dataMiddleware = null) => {
-	return new Promise((resolve, reject) => {
-		// create JSON File
-		saveRemoteData(JSON.stringify(data), id + '.json', siteDir, dataMiddleware);
+exports.createPages = async (pagesProps, siteDir, dataMiddleware = null) => {
+	// create JSON Files
+	pagesProps.forEach(({ data, id }) => {
+		saveRemoteData(JSON.stringify(data), id + '.json', siteDir + 'data/', dataMiddleware);
+	});
 
-		const route = {
+	const routes = pagesProps.map(({ id, url, template }) => {
+		return {
 			id,
 			url,
 			template,
 			json: id + '.json',
 		};
-
-		updateRoutes([route]).then(() => {
-			reporter.info(`Created Page : ${id}`);
-			resolve();
-		});
 	});
+
+	await updateRoutes(routes);
 };

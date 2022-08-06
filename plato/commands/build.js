@@ -8,6 +8,7 @@ const serveStatic = require('serve-static');
 const srcPath = './src';
 // const distPath = './build';
 const distDataPath = './build/data';
+const siteDir = './build/';
 
 // report
 const reporter = require('../utils/reporter');
@@ -19,8 +20,9 @@ const { saveRemoteDataFromSource, updateRoutes } = require('../core/saveData');
 const buildProductionBundle = require('./build-javascript.js');
 const buildCritical = require('./build-critical.js');
 
+const nodeAPI = require('../../plato-node');
+
 const files = [];
-const siteDir = './build/';
 
 module.exports = async function build(verbose, open) {
 	reporter.verbose = verbose;
@@ -68,19 +70,28 @@ module.exports = async function build(verbose, open) {
 	activity.end();
 
 	/**
-	 * Create Pages from Plato Node API createPages method
+	 * Get Pages data from Plato Node API getStaticPagesProps method
 	 */
-	activity = reporter.activity('Run Plato Node API', '🤖');
-	activity.start();
-	// check if node API is used and if so check if createPages is used
-	let nodeAPI = require('../../plato-node');
-
+	activity = reporter.activity('Create Pages from Plato API', '🤖');
+	activity.start(true);
+	let pagesProps;
 	try {
-		if (nodeAPI && nodeAPI.createPages) {
-			await nodeAPI.createPages(siteDir + 'data/');
+		if (nodeAPI && nodeAPI.getStaticPagesProps) {
+			pagesProps = await nodeAPI.getStaticPagesProps();
 		}
 	} catch (err) {
-		console.log('No API found: ' + err);
+		reporter.info('Error during getStaticPagesProps call');
+	}
+
+	/**
+	 * Create Pages from Plato Node API getStaticPagesProps method
+	 */
+	try {
+		if (pagesProps && pagesProps.length > 0) {
+			await createPages(pagesProps, siteDir);
+		}
+	} catch (err) {
+		reporter.error('Error during page creation ' + err);
 	}
 
 	// check if node API is used and if so, check if createGlobalData is used

@@ -1,4 +1,5 @@
 // Reminders: FILTERS don’t seem to work when using with Set, just as output…
+// The idea is then to move the conditional logic to the "back-end" side
 const filters = {
 	round: function(value) {
 		return Math.round(value);

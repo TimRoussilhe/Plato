@@ -6,9 +6,9 @@
 {{/if}}
 <!-- Scripts -->
 {{ if manifest }}
-<script src="{{manifest['main.js']}}"></script>
+<script defer src="{{manifest['main.js']}}"></script>
 {{else}}
-<script src="/assets/js/bundle.js"></script>
+<script defer src="/assets/js/bundle.js"></script>
 {{/if}}
 </body>
 

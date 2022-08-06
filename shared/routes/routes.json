@@ -18,11 +18,11 @@
 			"json": "about.json"
 		},
 		{
-			"id": "directors",
-			"url": "/directors",
+			"id": "pokemon",
+			"url": "/pokemon",
 			"template": "about",
-			"data": "https://d1ijeakjvj2nvu.cloudfront.net/newland-directors.json",
-			"json": "directors.json"
+			"data": "https://pokeapi.co/api/v2/pokemon/?limit=6",
+			"json": "pokemon.json"
 		},
 		{
 			"id": "404",

@@ -1,33 +1,25 @@
 const fetch = require('node-fetch');
-const { createPage } = require('./plato/core/createPage');
 
-exports.createPages = siteDir => {
-	return new Promise((resolve, reject) => {
-		fetch('https://d1ijeakjvj2nvu.cloudfront.net/newland-directors.json')
-			.then(res => res.json())
-			.then(body => {
-				(async () => {
-					const country = body.countries[0];
-					for (let i = 0; i < country.directors.length; i++) {
-						let element = country.directors[i];
+function timeout(ms) {
+	return new Promise(resolve => setTimeout(resolve, ms));
+}
 
-						await createPage(
-							{
-								id: 'director' + element.id,
-								url: element.slug,
-								template: 'about',
-								data: element,
-							},
-							siteDir
-						);
+exports.getStaticPagesProps = async () => {
+	// const res = await fetch('https://deelay.me/6000/https://pokeapi.co/api/v2/pokemon/?limit=6');
+	const res = await fetch('https://pokeapi.co/api/v2/pokemon/?limit=6');
+	const posts = await res.json();
+	// await timeout(1000);
 
-						if (i === country.directors.length - 1) {
-							resolve();
-						}
-					}
-				})();
-			});
+	const pages = posts.results.map((pokemon, i) => {
+		return {
+			id: pokemon.name,
+			url: pokemon.name,
+			template: 'about',
+			data: pokemon,
+		};
 	});
+
+	return pages;
 };
 
 exports.createGlobalData = () => {
