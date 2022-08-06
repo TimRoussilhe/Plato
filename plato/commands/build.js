@@ -114,14 +114,28 @@ module.exports = async function build(verbose, open) {
 	activity.start();
 	// Build Javascript and CSS Production Bundle Return the manifest with files and
 	// their hashed path.
-	const manifestFile = await buildProductionBundle().catch(err => {
+	await buildProductionBundle().catch(err => {
 		reporter.failure('Generating JavaScript bundles failed', err);
+	});
+
+	activity.end();
+
+	/**
+	 * Build legacy javascript using webpack
+	 */
+	activity = reporter.activity('Build Legacy Javascript', '👴');
+	activity.start();
+	await buildProductionBundle('legacy').catch(err => {
+		reporter.failure('Generating Legacy JavaScript bundles failed', err);
 	});
 
 	activity.end();
 
 	activity = reporter.activity('Build HTML', '💻');
 	activity.start();
+
+	// manifest created by webpack prod build
+	const manifestFile = fse.readJsonSync('./build/assets/manifest.json');
 	const finalRoutes = fse.readJsonSync(routeDestPath);
 	try {
 		for (let page of finalRoutes.routes) {
@@ -157,6 +171,7 @@ module.exports = async function build(verbose, open) {
 	);
 
 	activity.end();
+
 	globalActivity.end();
 
 	// open HTTP server serving our local files

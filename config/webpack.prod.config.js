@@ -13,6 +13,7 @@ const appEntryPoint = path.join(__dirname, '../src/scripts/app/index.js');
 const outputPath = path.join(__dirname, '../build/assets/');
 const reportPath = path.join(__dirname, '../reports/plain-report.txt');
 
+const { babelLegacyLoaderRules } = require('./babel.legacy.config');
 const entryPoints = appEntryPoint;
 
 module.exports = env => {
@@ -25,6 +26,15 @@ module.exports = env => {
 			})
 		);
 
+	if (env !== 'legacy') {
+		envPlugins.push(new WebpackBundleSizeAnalyzerPlugin(reportPath));
+		envPlugins.push(
+			new WebpackManifestPlugin({
+				publicPath: '/assets/',
+			})
+		);
+	}
+
 	return {
 		mode: 'production',
 		entry: entryPoints,
@@ -32,8 +42,8 @@ module.exports = env => {
 		// if multiple outputs, use [name] and it will use the name of the entry point, and loop through them
 		output: {
 			path: outputPath,
-			filename: 'js/[name].[contenthash].js',
-			chunkFilename: 'js/[name].[contenthash].js',
+			filename: env !== 'legacy' ? 'js/[name].[contenthash].js' : 'js/legacy.js',
+			chunkFilename: env !== 'legacy' ? 'js/[name].[contenthash].js' : 'js/[name].[contenthash]-legacy.js',
 			publicPath: '/assets/',
 		},
 
@@ -75,11 +85,7 @@ module.exports = env => {
 				// both options are optional
 				filename: 'css/[name].[contenthash].css',
 			}),
-			new WebpackBundleSizeAnalyzerPlugin(reportPath),
 			new webpack.optimize.ModuleConcatenationPlugin(),
-			new WebpackManifestPlugin({
-				publicPath: '/assets/',
-			}),
 			...envPlugins,
 		],
 		resolve: {
@@ -89,11 +95,15 @@ module.exports = env => {
 
 		module: {
 			rules: [
-				{
-					test: /\.js?$/,
-					exclude: /node_modules/,
-					use: 'babel-loader',
-				},
+				...(env !== 'legacy'
+					? [
+							{
+								test: /\.js?$/,
+								exclude: /node_modules/,
+								use: 'babel-loader',
+							},
+					  ]
+					: [babelLegacyLoaderRules]),
 				{ test: /\.art$/, use: 'art-template-loader' },
 				{
 					test: /\.scss$/,

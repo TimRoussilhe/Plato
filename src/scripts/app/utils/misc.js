@@ -58,18 +58,14 @@ export const fitAssetContains = config_ => {
 // be triggered. The function will be called after it stops being called for
 // N milliseconds. If `immediate` is passed, trigger the function on the
 // leading edge, instead of the trailing.
-export const debounce = (func, wait, immediate) => {
-	let timeout = null;
-	return () => {
-		const args = arguments;
-		const later = () => {
-			timeout = null;
-			if (!immediate) func.apply(this, args);
-		};
-		const callNow = immediate && !timeout;
-		clearTimeout(timeout);
-		timeout = setTimeout(later, wait);
-		if (callNow) func.apply(this, args);
+// https://www.joshwcomeau.com/snippets/javascript/debounce/
+export const debounce = (callback, wait) => {
+	let timeoutId = null;
+	return (...args) => {
+		window.clearTimeout(timeoutId);
+		timeoutId = window.setTimeout(() => {
+			callback.apply(null, args);
+		}, wait);
 	};
 };
 

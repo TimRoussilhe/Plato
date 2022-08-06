@@ -5,9 +5,10 @@
 			{
 				"targets": {
 					// https://jamie.build/last-2-versions
-					"browsers": [">0.25%", "not op_mini all", "not ie 11"]
+					// "browsers": [">0.25%", "not op_mini all", "not ie 11"]
 					// https://web.dev/serve-modern-code-to-modern-browsers/
-					// "esmodules": true
+					// https://philipwalton.com/articles/deploying-es2015-code-in-production-today/
+					"esmodules": true
 				},
 				// "debug": true,
 				"useBuiltIns": "usage",

@@ -6,7 +6,11 @@
 {{/if}}
 <!-- Scripts -->
 {{ if manifest }}
-<script defer src="{{manifest['main.js']}}"></script>
+<script src="{{manifest['main.js']}}" type=module></script>
+
+<!-- Legacy browser not supporting modules -->
+<script src="/assets/js/legacy.js" nomodule async defer></script>
+
 {{else}}
 <script defer src="/assets/js/bundle.js"></script>
 {{/if}}

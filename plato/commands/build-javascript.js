@@ -2,9 +2,9 @@ const fse = require('fs-extra');
 const webpack = require('webpack');
 const webpackConfig = require('../../config/webpack.prod.config');
 
-module.exports = async () => {
+module.exports = async env => {
 	return new Promise((resolve, reject) => {
-		webpack(webpackConfig()).run((err, stats) => {
+		webpack(webpackConfig(env)).run((err, stats) => {
 			if (err) {
 				console.error(err.stack || err);
 				if (err.details) {
@@ -26,9 +26,7 @@ module.exports = async () => {
 				console.warn(info.warnings);
 			}
 
-			const manifest = fse.readJsonSync('./build/assets/manifest.json');
-
-			resolve(manifest);
+			resolve();
 		});
 	});
 };
