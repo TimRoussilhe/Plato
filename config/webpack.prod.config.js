@@ -16,7 +16,7 @@ const reportPath = path.join(__dirname, '../reports/plain-report.txt');
 const { babelLegacyLoaderRules } = require('./babel.legacy.config');
 const entryPoints = appEntryPoint;
 
-module.exports = env => {
+module.exports = (env) => {
 	const envPlugins = [];
 	if (env && env.bundleSize)
 		envPlugins.push(
@@ -95,6 +95,15 @@ module.exports = env => {
 
 		module: {
 			rules: [
+				// copy fonts for us
+				// https://webpack.js.org/guides/asset-modules/
+				{
+					test: /\.(woff(2)?|ttf|eot)$/,
+					type: 'asset/resource',
+					generator: {
+						filename: './fonts/[name][ext]',
+					},
+				},
 				...(env !== 'legacy'
 					? [
 							{
