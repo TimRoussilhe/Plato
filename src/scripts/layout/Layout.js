@@ -27,7 +27,6 @@ class Layout extends DOMComponent {
 	}
 
 	initDOM() {
-		this.$content = this.el.querySelector('#content');
 		this.$title = this.el.querySelector('head > title');
 		this.$metaDescription = this.el.querySelector('head > meta[name=description]');
 

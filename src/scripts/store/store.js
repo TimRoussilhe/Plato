@@ -29,12 +29,12 @@ const validateAction = (action) => {
 };
 
 const Logger = (previousState, state, action) => {
-	console.groupCollapsed(`%c action %c${action.type}`, 'color: #00b8d0', 'color: #ffa693');
-	console.groupCollapsed('%c previousState', 'color: #00d061', previousState);
+	console.groupCollapsed(`%c 🍳 action %c${action.type}`, 'color: #00b8d0', 'color: #ffa693');
+	console.groupCollapsed('%c 👴 previousState', 'color: #00d061', previousState);
 	console.groupEnd();
-	console.groupCollapsed('%c action', 'color: #00d061', action);
+	console.groupCollapsed('%c 🎬 action', 'color: #00d061', action);
 	console.groupEnd();
-	console.groupCollapsed('%c state', 'color: #00d061', state);
+	console.groupCollapsed('%c 🔮 state', 'color: #00d061', state);
 	console.groupEnd();
 	console.groupEnd();
 };
