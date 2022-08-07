@@ -2,7 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 const SizePlugin = require('size-plugin');
 
-const appEntryPoint = path.join(__dirname, '../src/scripts/app/index.js');
+const appEntryPoint = path.join(__dirname, '../src/scripts/index.js');
 const outputPath = path.join(__dirname, '../public/assets/js/');
 const filename = 'bundle.js';
 const entryPoints = appEntryPoint;
@@ -29,7 +29,7 @@ module.exports = {
 	// will be included in the bundle, no need to add and load vendor
 	resolve: {
 		extensions: ['.js', '.json', '.art', '.html'],
-		modules: ['src/scripts/app/', 'src/scripts/vendors/', 'shared/', 'public/assets/', 'node_modules'],
+		modules: ['src/scripts/', 'src/scripts/vendors/', 'shared/', 'public/assets/', 'node_modules'],
 	},
 
 	module: {

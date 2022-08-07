@@ -19,5 +19,5 @@
 	],
 	// needed to support both node common modules and escma js ones
 	"sourceType": "unambiguous",
-	"plugins": ["@babel/plugin-transform-runtime"]
+	"plugins": ["@babel/plugin-transform-runtime", "minify-dead-code-elimination"]
 }

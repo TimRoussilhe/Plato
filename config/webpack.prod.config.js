@@ -9,7 +9,7 @@ const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 const WebpackBundleSizeAnalyzerPlugin = require('webpack-bundle-size-analyzer').WebpackBundleSizeAnalyzerPlugin;
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
-const appEntryPoint = path.join(__dirname, '../src/scripts/app/index.js');
+const appEntryPoint = path.join(__dirname, '../src/scripts/index.js');
 const outputPath = path.join(__dirname, '../build/assets/');
 const reportPath = path.join(__dirname, '../reports/plain-report.txt');
 
@@ -53,11 +53,10 @@ module.exports = (env) => {
 			minimizer: [
 				new TerserPlugin({
 					terserOptions: {
-						warnings: false,
 						compress: {
 							drop_console: true,
+							dead_code: true,
 						},
-						ie8: false,
 						keep_classnames: false,
 						keep_fnames: false,
 						output: {
@@ -90,7 +89,7 @@ module.exports = (env) => {
 		],
 		resolve: {
 			extensions: ['.js', '.json', '.art', '.html'],
-			modules: ['src/scripts/app/', 'src/scripts/vendors/', 'shared/', 'public/assets/', 'node_modules'],
+			modules: ['src/scripts/', 'src/scripts/vendors/', 'shared/', 'public/assets/', 'node_modules'],
 		},
 
 		module: {

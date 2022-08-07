@@ -30,6 +30,7 @@
 		"art-template-loader": "^1.4.3",
 		"autoprefixer": "^10.4.8",
 		"babel-loader": "^8.2.5",
+		"babel-plugin-minify-dead-code-elimination": "^0.5.2",
 		"chokidar": "^3.5.3",
 		"critical": "^4.0.1",
 		"css-loader": "^6.7.1",
