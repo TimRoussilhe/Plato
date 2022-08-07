@@ -1,23 +1,17 @@
+import store from 'store';
+
 // Abstract
 import Base from 'abstract/base';
 
 // Containers
 import Layout from 'layout/Layout';
 
-// dynamic import
-// function getComponent(chunkName, path) {
-// 	return new Promise((resolve, reject) => {
-// 		const ComponentName = path.charAt(0).toUpperCase() + path.slice(1);
-// 		import(/* webpackChunkName: "[request]" */ `containers/${path}/${ComponentName}`)
-// 			.then(({default: Page}) => {
-// 				resolve(Page);
-// 			})
-// 			.catch((error) => reject('An error occurred while loading the component'));
-// 	});
-// }
+// Selector
+import { getRoute } from './selectors';
 
-// TODO: Make this dynamic based on route
-// not so dynamic import
+// Actions
+import { setAnimating, setPage, setOldPage, setGlobalData } from './actions';
+
 function pageLoader(chunkName, path) {
 	return new Promise((resolve, reject) => {
 		const ComponentName = path.charAt(0).toUpperCase() + path.slice(1);
@@ -43,14 +37,6 @@ function pageLoader(chunkName, path) {
 		}
 	});
 }
-
-// Constants
-// Selector
-import { getRoute } from './selectors';
-
-// Actions
-import { setAnimating, setPage, setOldPage, setGlobalData } from './actions';
-import store from 'store';
 
 class App extends Base {
 	constructor(props) {
@@ -97,7 +83,6 @@ class App extends Base {
 		const currentRoute = getRoute(location);
 
 		try {
-			// const PageAsync = await getComponent(currentRoute.template, currentRoute.template);
 			// we use template to define page Type
 			const PageAsync = await pageLoader(currentRoute.template, currentRoute.template);
 			Page = PageAsync;
