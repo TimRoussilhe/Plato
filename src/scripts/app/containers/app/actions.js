@@ -42,14 +42,20 @@ export function setAnimating(animatingState) {
 export function setPage(page) {
 	return {
 		type: SET_PAGE,
-		page,
+		page: {
+			type: page.type,
+			data: page.data,
+		},
 	};
 }
 
 export function setOldPage(page) {
 	return {
 		type: SET_OLDPAGE,
-		page,
+		page: {
+			type: page.type,
+			data: page.data,
+		},
 	};
 }
 

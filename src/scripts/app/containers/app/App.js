@@ -26,19 +26,19 @@ function pageLoader(chunkName, path) {
 					.then(({ default: Page }) => {
 						resolve(Page);
 					})
-					.catch(error => reject('An error occurred while loading the component'));
+					.catch((error) => reject('An error occurred while loading the component'));
 			case 'About':
 				return import(/* webpackPrefetch: true */ /* webpackChunkName: "About" */ 'containers/about/About')
 					.then(({ default: Page }) => {
 						resolve(Page);
 					})
-					.catch(error => reject('An error occurred while loading the component'));
+					.catch((error) => reject('An error occurred while loading the component'));
 			case 'Notfound':
 				return import(/* webpackPrefetch: true */ /* webpackChunkName: "Notfound" */ 'containers/notfound/Notfound')
 					.then(({ default: Page }) => {
 						resolve(Page);
 					})
-					.catch(error => reject('An error occurred while loading the component'));
+					.catch((error) => reject('An error occurred while loading the component'));
 		}
 	});
 }

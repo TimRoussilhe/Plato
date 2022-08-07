@@ -46,11 +46,9 @@ class Entry {
 	}
 }
 
-(function() {
+(function () {
 	cleanURL(window.location.href.split('?')[0]);
 })();
-
-console.log('browserSupportsAllFeatures(', browserSupportsAllFeatures());
 
 if (browserSupportsAllFeatures()) {
 	// Browsers that support all features run `main()` immediately.
@@ -68,5 +66,4 @@ function main(err) {
 	// initialize the APP do not make a global reference to it.
 	const entry = new Entry();
 	entry.init();
-	console.log('HELLO WORLD');
 }

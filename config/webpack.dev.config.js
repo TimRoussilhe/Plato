@@ -34,6 +34,15 @@ module.exports = {
 
 	module: {
 		rules: [
+			// copy fonts for us, this is needed to avoid webpack renaing the font via css-loader
+			// https://webpack.js.org/guides/asset-modules/
+			{
+				test: /\.(woff(2)?|ttf|eot)$/,
+				type: 'asset/resource',
+				generator: {
+					filename: './../fonts/[name][ext]',
+				},
+			},
 			{
 				test: /\.js$/,
 				exclude: /node_modules/,

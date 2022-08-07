@@ -1,6 +1,5 @@
 import store from 'store';
-import watch from 'redux-watch';
-
+import { storeWatcher } from 'store/storeWatcher';
 /**
  * Component: Defines a component with basic methods
  * @constructor
@@ -126,9 +125,11 @@ class Base {
 	stateDidUpdate(state, oldState) {}
 
 	subscribe(o) {
+		console.log('subscribe', this);
 		// When an object is givin for a specific subscription
 		if (o) {
 			if (this.subscriptions[o.path]) {
+				// To unsubscribe the change listener, invoke the function returned by subscribe.
 				this.subscriptions[o.path]();
 			}
 
@@ -139,8 +140,8 @@ class Base {
 
 			this._storeEvents[o.path] = method;
 
-			const watcher = watch(store.getState, o.path);
-			this.subscriptions[o.path] = store.subscribe(watcher(method));
+			const watcher = storeWatcher(store.getState, path);
+			this.subscriptions[path] = store.subscribe(() => watcher(method));
 
 			return;
 		}
@@ -148,6 +149,7 @@ class Base {
 		for (const path in this.storeEvents) {
 			if ({}.hasOwnProperty.call(this.storeEvents, path)) {
 				if (!this.storeEvents[path]) continue;
+				// To unsubscribe the change listener, invoke the function returned by subscribe.
 				if (this.subscriptions[path]) this.subscriptions[path]();
 
 				let method = this.storeEvents[path];
@@ -155,7 +157,7 @@ class Base {
 				if (typeof method !== 'function') method = this[method];
 				if (!method) continue;
 
-				const watcher = watch(store.getState, path);
+				const watcher = storeWatcher(store.getState, path);
 				this.subscriptions[path] = store.subscribe(watcher(method));
 			}
 		}
@@ -172,10 +174,8 @@ class Base {
 
 		for (const path in this.subscriptions) {
 			if (!this.subscriptions[path]) continue;
-
 			// To unsubscribe the change listener, invoke the function returned by subscribe.
 			// Ex : let unsubscribe = store.subscribe(handleChange)
-			// unsubscribe()
 			this.subscriptions[path]();
 		}
 		this.subscriptions = {};

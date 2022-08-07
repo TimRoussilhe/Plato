@@ -11,15 +11,13 @@ class Layout extends DOMComponent {
 	constructor(props) {
 		super(props);
 
-		this.scrollTicket = false;
-
 		this.header = null;
 
 		this.el = document.documentElement;
 
 		this.storeEvents = {
 			'app.location': (location, prevLocation) => this.onLocationUpdate(location, prevLocation),
-			'app.page': page => this.onPageUpdate(page),
+			'app.page': (page) => this.onPageUpdate(page),
 			'app.meta': (newVal, oldVal) => this.setMeta(newVal, oldVal),
 		};
 
@@ -68,7 +66,6 @@ class Layout extends DOMComponent {
 		window.addEventListener(
 			'resize',
 			debounce(() => {
-				this.actions.setOrientation(window);
 				this.actions.resize(window);
 			}, 300),
 			false
@@ -76,24 +73,6 @@ class Layout extends DOMComponent {
 
 		this.actions.resize(window);
 		this.prefect.bindPrefetch();
-
-		// enable a flag to grab scroll position during update
-		// window.addEventListener('scroll', () => {
-		// 	this.scrollTicket = true;
-		// }, false);
-
-		// Actually, unsubscribe to any this.events to avoid any double trigger because of body
-		// this.unbindEvents();
-	}
-
-	onUpdate() {
-		if (this.scrollTicket) {
-			this.scrollTicket = false;
-			const scrollObj = {
-				x: window.scrollX || window.pageXOffset,
-				y: window.scrollY || window.pageYOffset,
-			};
-		}
 	}
 
 	showComponent() {
@@ -108,7 +87,7 @@ class Layout extends DOMComponent {
 		window.dispatchEvent(new Event('resize'));
 	}
 
-	setMeta(meta, oldMeta) {
+	setMeta(meta) {
 		const { oldPage } = store.getState().app;
 
 		if (!oldPage) {
@@ -138,7 +117,7 @@ class Layout extends DOMComponent {
 		if (window.gtag) {
 			const routes = store.getState().app.routes;
 			let pagePath = '/';
-			routes.forEach(route => {
+			routes.forEach((route) => {
 				if (route.id === location) pagePath = route.url;
 			});
 

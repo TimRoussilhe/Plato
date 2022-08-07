@@ -99,7 +99,7 @@ class Component extends Base {
 		this.actions = props.actions ? props.actions : {};
 
 		this.events = {
-			'click a': e => this.hyperlink(e),
+			'click a': (e) => this.hyperlink(e),
 		};
 	}
 
@@ -231,7 +231,7 @@ class Component extends Base {
 		if (this.el) {
 			if (selector) {
 				const items = [...this.el.querySelectorAll(selector)];
-				if (items.length > 0) items.forEach(item => item.addEventListener(eventName, listener));
+				if (items.length > 0) items.forEach((item) => item.addEventListener(eventName, listener));
 			} else {
 				this.el.addEventListener(eventName, listener);
 			}
@@ -251,7 +251,7 @@ class Component extends Base {
 	// views attached to the same DOM element.
 	undelegateEvents() {
 		if (this.el) {
-			this.boundEvents.forEach(element => {
+			this.boundEvents.forEach((element) => {
 				this.undelegateEvent(element.eventName, element.selector, element.listener, element.uid);
 			});
 		}
@@ -265,14 +265,14 @@ class Component extends Base {
 		if (this.el) {
 			if (selector) {
 				const items = [...this.el.querySelectorAll(selector)];
-				if (items.length > 0) items.forEach(item => item.removeEventListener(eventName, listener));
+				if (items.length > 0) items.forEach((item) => item.removeEventListener(eventName, listener));
 			} else {
 				this.el.removeEventListener(eventName, listener);
 			}
 		}
 
 		// remove event from array based on uid
-		this.boundEvents = this.boundEvents.filter(event => {
+		this.boundEvents = this.boundEvents.filter((event) => {
 			return event.uid === uid;
 		});
 

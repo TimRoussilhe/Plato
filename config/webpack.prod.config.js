@@ -95,7 +95,7 @@ module.exports = (env) => {
 
 		module: {
 			rules: [
-				// copy fonts for us
+				// copy fonts for us, this is needed to avoid webpack renaing the font via css-loader
 				// https://webpack.js.org/guides/asset-modules/
 				{
 					test: /\.(woff(2)?|ttf|eot)$/,
