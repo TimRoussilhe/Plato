@@ -1,22 +1,25 @@
-const path = require('path');
-const webpack = require('webpack');
-const TerserPlugin = require('terser-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
+import path from 'path';
+import { fileURLToPath } from 'url';
+import webpack from 'webpack';
+import TerserPlugin from 'terser-webpack-plugin';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
 
-const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
+import { WebpackManifestPlugin } from 'webpack-manifest-plugin';
 
-const WebpackBundleSizeAnalyzerPlugin = require('webpack-bundle-size-analyzer').WebpackBundleSizeAnalyzerPlugin;
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+import { WebpackBundleSizeAnalyzerPlugin } from 'webpack-bundle-size-analyzer';
+import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 const appEntryPoint = path.join(__dirname, '../src/scripts/index.js');
 const outputPath = path.join(__dirname, '../build/assets/');
 const reportPath = path.join(__dirname, '../reports/plain-report.txt');
 
-const { babelLegacyLoaderRules } = require('./babel.legacy.config');
+import { babelLegacyLoaderRules } from './babel.legacy.config.js';
 const entryPoints = appEntryPoint;
 
-module.exports = (env) => {
+export default (env) => {
 	const envPlugins = [];
 	if (env && env.bundleSize)
 		envPlugins.push(

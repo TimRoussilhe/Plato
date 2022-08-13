@@ -1,35 +1,35 @@
 import store from 'store';
 
 // Abstract
-import Base from 'abstract/base';
+import Base from 'abstract/base.js';
 
 // Containers
-import Layout from 'layout/Layout';
+import Layout from 'layout/Layout.js';
 
 // Selector
-import { getRoute } from './selectors';
+import { getRoute } from './selectors.js';
 
 // Actions
-import { setAnimating, setPage, setOldPage, setGlobalData } from './actions';
+import { setAnimating, setPage, setOldPage, setGlobalData } from './actions.js';
 
 function pageLoader(chunkName, path) {
 	return new Promise((resolve, reject) => {
 		const ComponentName = path.charAt(0).toUpperCase() + path.slice(1);
 		switch (ComponentName) {
 			case 'Homepage':
-				return import(/* webpackPrefetch: true */ /* webpackChunkName: "Homepage" */ 'pages/homepage/Homepage')
+				return import(/* webpackPrefetch: true */ /* webpackChunkName: "Homepage" */ 'pages/homepage/Homepage.js')
 					.then(({ default: Page }) => {
 						resolve(Page);
 					})
 					.catch((error) => reject('An error occurred while loading the component'));
 			case 'About':
-				return import(/* webpackPrefetch: true */ /* webpackChunkName: "About" */ 'pages/about/About')
+				return import(/* webpackPrefetch: true */ /* webpackChunkName: "About" */ 'pages/about/About.js')
 					.then(({ default: Page }) => {
 						resolve(Page);
 					})
 					.catch((error) => reject('An error occurred while loading the component'));
 			case 'Notfound':
-				return import(/* webpackPrefetch: true */ /* webpackChunkName: "Notfound" */ 'pages/notfound/Notfound')
+				return import(/* webpackPrefetch: true */ /* webpackChunkName: "Notfound" */ 'pages/notfound/Notfound.js')
 					.then(({ default: Page }) => {
 						resolve(Page);
 					})

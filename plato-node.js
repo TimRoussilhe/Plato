@@ -1,10 +1,10 @@
-const fetch = require('node-fetch');
+import fetch from 'node-fetch';
 
 function timeout(ms) {
-	return new Promise(resolve => setTimeout(resolve, ms));
+	return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-exports.getStaticPagesProps = async () => {
+export const getStaticPagesProps = async () => {
 	// const res = await fetch('https://deelay.me/6000/https://pokeapi.co/api/v2/pokemon/?limit=6');
 	const res = await fetch('https://pokeapi.co/api/v2/pokemon/?limit=6');
 	const posts = await res.json();
@@ -22,7 +22,7 @@ exports.getStaticPagesProps = async () => {
 	return pages;
 };
 
-exports.createGlobalData = () => {
+export const createGlobalData = () => {
 	return new Promise((resolve, reject) => {
 		resolve({
 			globals: {

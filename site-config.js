@@ -1,6 +1,4 @@
-const path = require('path');
-
-module.exports = {
+const config = {
 	siteTitle: 'Plato',
 	siteTitleShort: 'Plato Plato',
 	siteDescription: 'Super Duper Static Site generator',
@@ -24,3 +22,5 @@ module.exports = {
 		},
 	],
 };
+
+export default config;

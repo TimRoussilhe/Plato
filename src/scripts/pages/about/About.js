@@ -1,4 +1,4 @@
-import Page from 'abstract/page';
+import Page from 'abstract/page.js';
 import Template from 'templates/about.art';
 
 class AboutContainer extends Page {

@@ -1,4 +1,4 @@
-import { SET_ORIENTATION, CALCULATE_RESPONSIVE_STATE } from './constants';
+import { SET_ORIENTATION, CALCULATE_RESPONSIVE_STATE } from './constants.js';
 
 export function setOrientation(window) {
 	return {

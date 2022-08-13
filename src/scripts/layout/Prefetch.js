@@ -1,8 +1,8 @@
-import Cache from 'app/Cache';
-import { getPath, clean } from 'utils/url';
-import { getRouteByURL } from 'app/selectors';
-import { Prevent } from './Prevent';
-import { JSON_ENDPOINTS } from 'constants/config';
+import Cache from 'app/Cache.js';
+import { getPath, clean } from 'utils/url.js';
+import { getRouteByURL } from 'app/selectors.js';
+import { Prevent } from './Prevent.js';
+import { JSON_ENDPOINTS } from 'constants/config.js';
 
 export class Prefetch {
 	constructor() {

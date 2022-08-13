@@ -1,4 +1,4 @@
-module.exports.babelLegacyLoaderRules = {
+export const babelLegacyLoaderRules = {
 	test: /\.js$/,
 	exclude: /node_modules/,
 

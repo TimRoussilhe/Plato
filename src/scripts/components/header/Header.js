@@ -1,4 +1,4 @@
-import AbstractDOMComponent from 'abstract/component';
+import AbstractDOMComponent from 'abstract/component.js';
 
 class Header extends AbstractDOMComponent {
 	constructor(props) {

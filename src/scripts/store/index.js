@@ -1,4 +1,4 @@
-import { createStore } from './store';
+import { createStore } from './store.js';
 import rootReducer from 'reducers';
 
 const IS_LOCALHOST = location.hostname === 'localhost' || location.hostname === '127.0.0.1';

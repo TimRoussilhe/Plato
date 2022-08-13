@@ -1,5 +1,4 @@
-const { saveRemoteData, updateRoutes } = require('./saveData.js');
-const reporter = require('../utils/reporter');
+import { saveRemoteData, updateRoutes } from './saveData.js';
 
 // Things we need for a page
 // id
@@ -24,20 +23,29 @@ const reporter = require('../utils/reporter');
  * @return {Promise} createPage Promise
  */
 
-exports.createPages = async (pagesProps, siteDir, dataMiddleware = null) => {
-	// create JSON Files
-	pagesProps.forEach(({ data, id }) => {
-		saveRemoteData(JSON.stringify(data), id + '.json', siteDir + 'data/', dataMiddleware);
-	});
+export const createPages = (pagesProps, siteDir) => {
+	return new Promise<string>(async (resolve, reject) => {
+		// create JSON Files
+		pagesProps.forEach(({ data, id }) => {
+			saveRemoteData(JSON.stringify(data), id + '.json', siteDir + '/data/');
+		});
 
-	const routes = pagesProps.map(({ id, url, template }) => {
-		return {
-			id,
-			url,
-			template,
-			json: id + '.json',
-		};
-	});
+		const routes = pagesProps.map(({ id, url, template }) => {
+			return {
+				id,
+				url,
+				template,
+				json: id + '.json',
+			};
+		});
 
-	await updateRoutes(routes);
+		try {
+			const activeRoutes = await updateRoutes(routes);
+			resolve(JSON.parse(activeRoutes));
+		} catch (error) {
+			reject(error);
+		}
+
+		reject('sad');
+	});
 };

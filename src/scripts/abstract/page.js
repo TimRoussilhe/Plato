@@ -1,13 +1,13 @@
-import AbstractDOMComponent from 'abstract/component';
+import AbstractDOMComponent from 'abstract/component.js';
 import { gsap, Cubic } from 'gsap';
 import store from 'store';
 
-import { JSON_ENDPOINTS } from 'constants/config';
-import { getRoute } from './../app/selectors';
-import Cache from './../app/Cache';
+import { JSON_ENDPOINTS } from 'constants/config.js';
+import { getRoute } from './../app/selectors.js';
+import Cache from './../app/Cache.js';
 
 // Actions
-import { setMeta } from './../app/actions';
+import { setMeta } from './../app/actions.js';
 
 /**
  * PageComponent: Defines a page

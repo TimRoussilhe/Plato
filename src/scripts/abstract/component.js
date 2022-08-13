@@ -1,6 +1,6 @@
 import store from 'store';
-import Base from './base';
-import uniqueId from 'utils/uniqueId';
+import Base from './base.js';
+import uniqueId from 'utils/uniqueId.js';
 
 /**
  * Component: Defines a component with basic methods

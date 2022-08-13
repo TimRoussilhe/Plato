@@ -1,4 +1,4 @@
-import { SHOW_HEADER, HIDE_HEADER } from './constants';
+import { SHOW_HEADER, HIDE_HEADER } from './constants.js';
 
 const InitialState = {
 	isShown: true,

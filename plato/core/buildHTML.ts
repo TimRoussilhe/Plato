@@ -1,16 +1,16 @@
-const template = require('art-template');
+import fse from 'fs-extra';
+import path from 'path';
+import template from 'art-template';
 
-const filters = require('../../shared/templates/filters');
+import reporter from '../utils/reporter.js';
+import config from '../../site-config.js';
+
+// Set ART FILTERS
+import { filters } from '../../shared/templates/filters/index.js';
 for (let [key, value] of Object.entries(filters)) {
+	// @ts-expect-error
 	template.defaults.imports[key] = value;
 }
-
-const fse = require('fs-extra');
-const path = require('path');
-const reporter = require('../utils/reporter');
-const mkdirp = require('mkdirp');
-
-const config = require('../../site-config.js');
 
 // A function that returns a promise to resolve into the data //fetched from the API or an error
 let artTemplatePromise = (templatePath, data) => {
@@ -24,48 +24,53 @@ let artTemplatePromise = (templatePath, data) => {
 	});
 };
 
-const getDirName = require('path').dirname;
-function writeFileWithDirectory(path, contents, cb) {
-	return new Promise((resolve, reject) => {
+function writeFileWithDirectory(dirPath, contents) {
+	return new Promise<void>((resolve, reject) => {
 		// return value is a Promise resolving to the first directory created
-		mkdirp(getDirName(path))
-			.then(made => {
-				fse.writeFile(path, contents);
+		fse
+			.mkdirp(path.dirname(dirPath))
+			.then(() => {
+				fse.writeFile(dirPath, contents);
 				resolve();
 			})
-			.catch(err => reject(err));
+			.catch((err) => reject(err));
 	});
 }
 
-module.exports = (page, manifest, mode = 'development', siteDir, globalData) => {
+export default (page, manifest, mode = 'development', siteDir, globalData) => {
 	return new Promise((resolve, reject) => {
-		const distPath = siteDir;
 		let destPath;
+		// this will be provided to critical
+		let source;
+
+		// needed to genere 404.html
 		let fileName = page.fileName || 'index.html';
 		if (page.id === 'index' || page.id === '404') {
-			destPath = distPath;
+			destPath = path.join(siteDir, '/');
+			source = fileName;
 		} else {
 			try {
-				destPath = path.join(distPath, page.url, '/');
+				destPath = path.join(siteDir, page.url, '/');
+				source = `${page.url}/${fileName}`;
 			} catch (err) {
-				reject(new Error(err));
+				reject(err);
 			}
 		}
 
-		fse.mkdirs(destPath).catch(err => {
+		fse.mkdirs(destPath).catch((err) => {
 			reject(err);
 		});
 
 		let data = {};
 		if (page.json) {
 			try {
-				data = fse.readJsonSync(siteDir + 'data/' + page.json);
+				data = fse.readJsonSync(path.resolve(global.siteDir, './data/', page.json));
 			} catch (err) {
-				reject(new Error(err));
+				reject(err);
 			}
 		}
 
-		const templatePath = path.resolve(`./shared/templates/${page.template}.art`);
+		const templatePath = path.resolve(global.appRoot, `./shared/templates/${page.template}.art`);
 		const exists = fse.existsSync(templatePath);
 		if (!exists) reject(new Error('Template file does not exists'));
 
@@ -73,7 +78,7 @@ module.exports = (page, manifest, mode = 'development', siteDir, globalData) => 
 			data,
 			globalData,
 		})
-			.then(html => {
+			.then((html) => {
 				// adding serverData for the first render here
 				globalData.serverData = data;
 				artTemplatePromise(path.resolve('./shared/templates/layout.art'), {
@@ -87,18 +92,18 @@ module.exports = (page, manifest, mode = 'development', siteDir, globalData) => 
 					location: page.id,
 					type: page.template,
 				})
-					.then(html => {
-						writeFileWithDirectory(`${destPath}${fileName}`, html)
+					.then((html) => {
+						writeFileWithDirectory(path.resolve(destPath, fileName), html)
 							.then(() => {
 								reporter.info(`Page Built : ${destPath}${fileName}`);
-								resolve(`${destPath}${fileName}`);
+								resolve(source);
 							})
-							.catch(err => {
+							.catch((err) => {
 								reject(err);
 							});
 					})
-					.catch(err => reject(err));
+					.catch((err) => reject(err));
 			})
-			.catch(err => reject(err));
+			.catch((err) => reject(err));
 	});
 };

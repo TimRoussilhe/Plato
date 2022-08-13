@@ -1,14 +1,14 @@
-import DOMComponent from 'abstract/component';
+import DOMComponent from 'abstract/component.js';
 import store from 'store';
 
 // Containers
-import Header from 'components/header/Header';
+import Header from 'components/header/Header.js';
 
 // Actions
-import { setOrientation, calculateResponsiveState } from './actions';
+import { setOrientation, calculateResponsiveState } from './actions.js';
 
-import { debounce } from 'utils/misc';
-import { Prefetch } from './Prefetch';
+import { debounce } from 'utils/misc.js';
+import { Prefetch } from './Prefetch.js';
 
 class Layout extends DOMComponent {
 	constructor(props) {

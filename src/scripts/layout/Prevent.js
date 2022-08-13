@@ -66,6 +66,6 @@ export class Prevent {
 	 * Run test suite
 	 */
 	checkLink(el, event, href) {
-		return this.suite.some(name => this.run(name, el, event, href));
+		return this.suite.some((name) => this.run(name, el, event, href));
 	}
 }

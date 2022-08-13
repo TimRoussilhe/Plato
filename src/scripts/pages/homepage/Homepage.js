@@ -1,4 +1,4 @@
-import Page from 'abstract/page';
+import Page from 'abstract/page.js';
 import template from 'templates/homepage.art';
 // Constants
 

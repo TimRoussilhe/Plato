@@ -1,73 +1,76 @@
-const convertHrtime = require('convert-hrtime');
-const chalk = require('chalk');
-const terminalLink = require('terminal-link');
-const boxen = require('boxen');
+import convertHrtime from 'convert-hrtime';
+import chalk from 'chalk';
+import terminalLink from 'terminal-link';
+import boxen from 'boxen';
+const { BorderStyle } = boxen;
+
 const log = console.log;
 
 const defaultColors = {
 	activityStart: chalk.magentaBright,
 	log: chalk.white,
 	info: chalk.grey,
-	warn: chalk.orange,
+	warn: chalk.yellow,
 	error: chalk.red,
 	success: chalk.green,
 	bigError: chalk.bold.red,
 	bigSucces: chalk.bold.blue,
 };
 
-function Reporter() {
-	this.verbose = false;
-	this.colors = defaultColors;
+class Reporter {
+	verbose = false;
+	colors = defaultColors;
 
-	this.updateColors = function(colors) {
+	updateColors(colors) {
 		this.colors = Object.assign(colors, defaultColors);
-	};
+	}
 
-	this.log = function(message) {
+	log(message) {
 		log(this.colors.log(message));
-	};
+	}
 
-	this.info = function(message) {
+	info(message) {
 		// info is only printed if verbose is precised
 		this.verbose && log(this.colors.info(message));
-	};
-	this.warn = function(message) {
+	}
+
+	warn(message) {
 		log(this.colors.warn(message));
-	};
-	this.error = function(message, exit = false) {
+	}
+
+	error(message, exit = false) {
 		log(this.colors.error(message));
 		if (exit) process.exit(1);
-	};
+	}
 
-	this.failure = function(message, error) {
+	failure(message, error) {
 		log(this.colors.bigError(message));
 		this.error(error);
 		process.exit(1);
-	};
-	this.success = function(message) {
+	}
+
+	success(message) {
 		log(this.colors.success(message));
+	}
+
+	displayUrl = function (message, url) {
+		log(boxen(`${message} \n ${terminalLink(url, url)}`, { padding: 1, margin: 0, borderStyle: BorderStyle.Double }));
 	};
 
-	this.displayUrl = function(message, url) {
-		log(boxen(`${message} \n ${terminalLink(url, url)}`, { padding: 1, margin: 0, round: 1 }));
-	};
-
-	// this.reportFailure();
+	activity(activityName, activityEmoji) {
+		return Activity(activityName, activityEmoji, this);
+	}
 }
-
-Reporter.prototype.activity = function(activityName, activityEmoji) {
-	return new Activity(activityName, activityEmoji, this);
-};
 
 function Activity(activityName, activityEmoji = '', reporter) {
 	return {
 		start: (verbose = false) => {
-			this.startTime = process.hrtime();
+			reporter.startTime = process.hrtime();
 			verbose && log(reporter.colors.activityStart(`starting ${activityEmoji} ${activityName}`));
 		},
 		update: (verbose = false) => {
 			const elapsedTime = () => {
-				let elapsed = process.hrtime(this.startTime);
+				let elapsed = process.hrtime(reporter.startTime);
 				return `${convertHrtime(elapsed)['seconds'].toFixed(3)} s`;
 			};
 			verbose &&
@@ -75,7 +78,7 @@ function Activity(activityName, activityEmoji = '', reporter) {
 		},
 		end: () => {
 			const elapsedTime = () => {
-				let elapsed = process.hrtime(this.startTime);
+				let elapsed = process.hrtime(reporter.startTime);
 				return `${convertHrtime(elapsed)['seconds'].toFixed(3)} s`;
 			};
 			log(
@@ -87,4 +90,4 @@ function Activity(activityName, activityEmoji = '', reporter) {
 }
 
 const reporter = new Reporter();
-module.exports = reporter;
+export default reporter;

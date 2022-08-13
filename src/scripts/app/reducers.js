@@ -7,7 +7,7 @@ import {
 	SET_META,
 	SET_DEVICE_TYPE,
 	SET_GLOBAL_DATA,
-} from './constants';
+} from './constants.js';
 
 const InitialState = {
 	routes: [],

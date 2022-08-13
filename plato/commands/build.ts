@@ -1,32 +1,26 @@
-const fse = require('fs-extra');
-const path = require('path');
-const opn = require('opn');
-
-const connect = require('connect');
-const serveStatic = require('serve-static');
-
-const srcPath = './src';
-// const distPath = './build';
-const distDataPath = './build/data';
-const siteDir = './build/';
+import fse from 'fs-extra';
+import path from 'path';
+import opn from 'opn';
+import connect from 'connect';
+import serveStatic from 'serve-static';
 
 // report
-const reporter = require('../utils/reporter');
-const routes = require('../../shared/routes/routes.json');
-const routeDestPath = path.resolve(__dirname + '/../../shared/routes/real_routes.json');
+import reporter from '../utils/reporter.js';
+import buildHTML from '../core/buildHTML.js';
+import { saveRemoteDataFromSource, updateRoutes } from '../core/saveData.js';
+import { createPages } from '../core/createPages.js';
+import buildProductionBundle from './build-javascript.js';
+import buildCritical from './build-critical.js';
 
-const buildHTML = require('../core/buildHTML');
-const { saveRemoteDataFromSource, updateRoutes } = require('../core/saveData');
-const { createPages } = require('../core/createPages');
-const buildProductionBundle = require('./build-javascript.js');
-const buildCritical = require('./build-critical.js');
+// check if node API is used and if so, check if createPages is used
+import { createGlobalData, getStaticPagesProps } from './../../plato-node.js';
 
-const nodeAPI = require('../../plato-node');
-
-const files = [];
-
-module.exports = async function build(verbose, open) {
+export default async function build(verbose, open) {
 	reporter.verbose = verbose;
+
+	// Grab static routes
+	let rawdata = fse.readFileSync(path.resolve(global.appRoot, './shared/routes.json'));
+	const staticRoutes = JSON.parse(rawdata).staticRoutes;
 
 	let globalActivity;
 	globalActivity = reporter.activity('Plato Build', '🤔');
@@ -40,19 +34,19 @@ module.exports = async function build(verbose, open) {
 	activity.start();
 
 	// clear destination folder
-	fse.emptyDirSync(siteDir);
-	fse.emptyDirSync(distDataPath);
+	fse.emptyDirSync(global.siteDir);
+	fse.emptyDirSync(path.resolve(global.siteDir, './data'));
 
 	// remove real_routes files
-	fse.removeSync('./shared/routes/real_routes.json');
+	fse.emptyDirSync(global.routeDest);
 
 	// copy assets folder
-	fse.copySync(`${srcPath}/.htaccess`, `${siteDir}/.htaccess`);
-	fse.copySync(`${srcPath}/assets`, `${siteDir}/assets`);
-	fse.copySync(`${srcPath}/data`, `${siteDir}/data`);
+	fse.copySync(`${global.srcPath}/.htaccess`, `${global.siteDir}/.htaccess`);
+	fse.copySync(`${global.srcPath}/assets`, `${global.siteDir}/assets`);
+	fse.copySync(`${global.srcPath}/data`, `${global.siteDir}/data`);
 
 	// add static routes to final_routes
-	await updateRoutes(routes.staticRoutes);
+	await updateRoutes(staticRoutes);
 	activity.end();
 
 	/**
@@ -62,11 +56,11 @@ module.exports = async function build(verbose, open) {
 	activity.start();
 	// save remote endpoint for static routes
 	try {
-		for (const route of routes.staticRoutes) {
-			if (route.data) saveRemoteDataFromSource(route.data, route.json, siteDir + 'data/');
+		for (const route of staticRoutes) {
+			if (route.data) saveRemoteDataFromSource(route.data, route.json, global.siteDir + '/data/');
 		}
 	} catch (err) {
-		reporter.failure('Error during saving static file: ' + err);
+		reporter.failure('Error during saving static file: ', err);
 	}
 	activity.end();
 
@@ -77,8 +71,8 @@ module.exports = async function build(verbose, open) {
 	activity.start(true);
 	let pagesProps;
 	try {
-		if (nodeAPI && nodeAPI.getStaticPagesProps) {
-			pagesProps = await nodeAPI.getStaticPagesProps();
+		if (getStaticPagesProps) {
+			pagesProps = await getStaticPagesProps();
 		}
 	} catch (err) {
 		reporter.info('Error during getStaticPagesProps call');
@@ -87,9 +81,10 @@ module.exports = async function build(verbose, open) {
 	/**
 	 * Create Pages from Plato Node API getStaticPagesProps method
 	 */
+	let finalRoutes;
 	try {
 		if (pagesProps && pagesProps.length > 0) {
-			await createPages(pagesProps, siteDir);
+			finalRoutes = await createPages(pagesProps, global.siteDir);
 		}
 	} catch (err) {
 		reporter.error('Error during page creation ' + err);
@@ -98,8 +93,8 @@ module.exports = async function build(verbose, open) {
 	// check if node API is used and if so, check if createGlobalData is used
 	let globalData;
 	try {
-		if (nodeAPI && nodeAPI.createGlobalData) {
-			globalData = await nodeAPI.createGlobalData();
+		if (createGlobalData) {
+			globalData = await createGlobalData();
 		}
 	} catch (err) {
 		console.log('No API found: ' + err);
@@ -114,7 +109,7 @@ module.exports = async function build(verbose, open) {
 	activity.start();
 	// Build Javascript and CSS Production Bundle Return the manifest with files and
 	// their hashed path.
-	await buildProductionBundle().catch((err) => {
+	await buildProductionBundle('').catch((err) => {
 		reporter.failure('Generating JavaScript bundles failed', err);
 	});
 
@@ -135,15 +130,15 @@ module.exports = async function build(verbose, open) {
 	activity.start();
 
 	// manifest created by webpack prod build
+	const files: any[] = [];
 	const manifestFile = fse.readJsonSync('./build/assets/manifest.json');
-	const finalRoutes = fse.readJsonSync(routeDestPath);
 	try {
 		for (let page of finalRoutes.routes) {
-			const filename = await buildHTML(page, manifestFile, 'production', siteDir, globalData);
+			const filename = await buildHTML(page, manifestFile, 'production', global.siteDir, globalData);
 			files.push(filename);
 		}
 	} catch (err) {
-		reporter.failure('Error during page generation: ' + err);
+		reporter.failure('Error during page generation: ', err);
 	}
 	activity.end();
 
@@ -156,32 +151,33 @@ module.exports = async function build(verbose, open) {
 			// no more new jobs to process (might still be jobs currently in process)
 			return Promise.resolve();
 		}
-		return buildCritical(file)
+		const dest = path.join(global.siteDir, file);
+		console.log('dest', dest);
+		return buildCritical(file, dest)
 			.then(() => {
 				// Then call to see if there are more jobs to process
 				reporter.info(`Critical Built : ${file}`);
 				return startNewJob();
 			})
-			.catch((err) => reporter.failure('Error during Critical generation: ' + err));
+			.catch((err) => reporter.failure('Error during Critical generation: ', err));
 	}
 	// how many jobs do we want to handle in paralell?
 	// Below, 3:
 	await Promise.all([startNewJob(), startNewJob(), startNewJob()]).catch((err) =>
-		reporter.failure('Error during Critical generations: ' + err)
+		reporter.failure('Error during Critical generations: ', err)
 	);
 
 	activity.end();
-
 	globalActivity.end();
 
 	// open HTTP server serving our local files
 	if (open) {
 		const port = 8080;
 		connect()
-			.use(serveStatic(siteDir))
+			.use(serveStatic(global.siteDir))
 			.listen(port, function () {
 				reporter.displayUrl(`Server running on ${port}`, 'http://localhost:' + port);
 				opn('http://localhost:' + port);
 			});
 	}
-};
+}

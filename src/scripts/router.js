@@ -1,14 +1,14 @@
 import page from 'page';
 import store from 'store';
-import realRoutes from 'routes/real_routes.json';
 
+import realRoutes from './../../.plato/routes.json';
 const routes = realRoutes.routes;
 
 // Actions
-import { navigate, setRoutes } from 'app/actions';
+import { navigate, setRoutes } from 'app/actions.js';
 
 // Utils
-import { isString } from 'utils/is';
+import { isString } from 'utils/is.js';
 
 class Router {
 	preRouting(ctx, next) {

@@ -1,5 +1,5 @@
 import store from 'store';
-import { storeWatcher } from 'store/storeWatcher';
+import { storeWatcher } from 'store/storeWatcher.js';
 /**
  * Component: Defines a component with basic methods
  * @constructor

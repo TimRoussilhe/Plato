@@ -1,4 +1,4 @@
-import Page from 'abstract/page';
+import Page from 'abstract/page.js';
 import Tpl from 'templates/notfound.art';
 
 class NotFound extends Page {

@@ -1,4 +1,4 @@
-import { SET_ORIENTATION, CALCULATE_RESPONSIVE_STATE, BREAKPOINTS } from './constants';
+import { SET_ORIENTATION, CALCULATE_RESPONSIVE_STATE, BREAKPOINTS } from './constants.js';
 
 const InitialState = {
 	orientation: null,

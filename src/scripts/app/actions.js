@@ -7,7 +7,7 @@ import {
 	SET_OLDPAGE,
 	SET_DEVICE_TYPE,
 	SET_GLOBAL_DATA,
-} from './constants';
+} from './constants.js';
 
 export function navigate(location, params = {}) {
 	return {

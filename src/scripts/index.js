@@ -1,18 +1,18 @@
-import { isMobile, isTablet } from 'utils/is';
-import App from 'app/App';
-import Router from 'router';
+import { isMobile, isTablet } from 'utils/is.js';
+import App from 'app/App.js';
+import Router from 'router.js';
 
-import { setDeviceType } from 'app/actions';
+import { setDeviceType } from 'app/actions.js';
 import store from 'store';
 
-import { cleanURL } from 'utils/cleanURL';
-import { loadScript, browserSupportsAllFeatures } from 'utils/loadScript';
+import { cleanURL } from 'utils/cleanURL.js';
+import { loadScript, browserSupportsAllFeatures } from 'utils/loadScript.js';
 
 import './../css/app.scss';
 
 // add Art Template filters
-import runtime from 'art-template/lib/runtime';
-import filters from 'templates/filters/';
+import runtime from 'art-template/lib/runtime.js';
+import { filters } from 'templates/filters/index.js';
 for (let [key, value] of Object.entries(filters)) {
 	runtime[key] = value;
 }
