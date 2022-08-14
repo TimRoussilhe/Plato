@@ -18,7 +18,6 @@ program
 		global.srcPath = path.resolve(global.appRoot, './src/');
 		global.siteDir = path.resolve(global.appRoot, './public/');
 		global.routeDest = path.resolve(global.appRoot, './.plato/');
-		console.log('global', global);
 	})
 	.action((cmdObj: any) => {
 		develop(cmdObj.verbose, cmdObj.open);

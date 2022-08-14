@@ -9,6 +9,7 @@ import { Route } from '../@types/route.js';
 // Set ART FILTERS
 import { filters } from '../../shared/templates/filters/index.js';
 for (let [key, value] of Object.entries(filters)) {
+	// @ts-expect-error
 	template.defaults.imports[key] = value;
 }
 

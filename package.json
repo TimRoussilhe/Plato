@@ -9,9 +9,9 @@
 	],
 	"type": "module",
 	"scripts": {
-		"start": "npm run clean &&  node plato develop -v -o",
-		"dev-plato": "tsc -w --project ./plato/tsconfig.json",
-		"build-plato": "tsc --project ./plato/tsconfig.json",
+		"clean-plato": "rm -rf plato-dist/* ",
+		"dev-plato": "npm run clean-plato && tsc -w --project ./plato/tsconfig.json",
+		"build-plato": "npm run clean-plato && tsc --project ./plato/tsconfig.json",
 		"dev": "node plato-dist develop -v",
 		"develop": "node plato-dist develop -v",
 		"serve": "webpack-dev-server --config ./config/webpack.dev.config.js",

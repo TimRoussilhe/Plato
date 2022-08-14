@@ -157,7 +157,6 @@ export default async function develop(verbose: boolean = false, open: boolean = 
 		},
 	};
 
-	// @ts-expect-error
 	const compiler = webpack(webpackConfig);
 	const server = new WebpackDevServer(options, compiler);
 
