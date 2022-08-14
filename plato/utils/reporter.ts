@@ -20,7 +20,6 @@ const defaultColors = {
 class Reporter {
 	verbose = false;
 	colors = defaultColors;
-	startTime?: [number, number];
 
 	updateColors(colors: {}) {
 		this.colors = Object.assign(colors, defaultColors);
@@ -64,14 +63,15 @@ class Reporter {
 }
 
 function Activity(activityName: string, activityEmoji = '', reporter: Reporter) {
+	let startTime;
 	return {
 		start: (verbose = false) => {
-			reporter.startTime = process.hrtime();
+			startTime = process.hrtime();
 			verbose && log(reporter.colors.activityStart(`starting ${activityEmoji} ${activityName}`));
 		},
 		update: (verbose = false) => {
 			const elapsedTime = () => {
-				let elapsed = process.hrtime(reporter.startTime);
+				let elapsed = process.hrtime(startTime);
 				return `${convertHrtime(elapsed)['seconds'].toFixed(3)} s`;
 			};
 			verbose &&
@@ -79,7 +79,7 @@ function Activity(activityName: string, activityEmoji = '', reporter: Reporter) 
 		},
 		end: () => {
 			const elapsedTime = () => {
-				let elapsed = process.hrtime(reporter.startTime);
+				let elapsed = process.hrtime(startTime);
 				return `${convertHrtime(elapsed)['seconds'].toFixed(3)} s`;
 			};
 			log(

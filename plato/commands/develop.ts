@@ -28,7 +28,7 @@ export default async function develop(verbose: boolean = false, open: boolean = 
 	// Grab static routes
 	const staticRoutes = config.staticRoutes as Route[];
 
-	const globalActivity = reporter.activity('Plato Develop', '🤔');
+	let globalActivity = reporter.activity('Plato Develop', '🤔');
 	globalActivity.start(true);
 
 	/**
@@ -157,6 +157,7 @@ export default async function develop(verbose: boolean = false, open: boolean = 
 		},
 	};
 
+	globalActivity.end();
 	const compiler = webpack(webpackConfig);
 	const server = new WebpackDevServer(options, compiler);
 

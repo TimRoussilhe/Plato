@@ -24,7 +24,7 @@ export default async function build(verbose = false, open = false) {
 	// Grab static routes from config
 	const staticRoutes = config.staticRoutes as Route[];
 
-	const globalActivity = reporter.activity('Plato Build', '🤔');
+	let globalActivity = reporter.activity('Plato Build', '🤔');
 	globalActivity.start();
 
 	/**
