@@ -21,6 +21,39 @@ const config = {
 			format: 'woff2',
 		},
 	],
+	staticRoutes: [
+		{
+			id: 'index',
+			url: '/',
+			template: 'homepage',
+			json: 'index.json',
+		},
+		{
+			id: 'about',
+			url: '/about-no-data',
+			template: 'about',
+		},
+		{
+			id: 'about',
+			url: '/about',
+			template: 'about',
+			json: 'about.json',
+		},
+		{
+			id: 'pokemon',
+			url: '/pokemon',
+			template: 'about',
+			dataSource: 'https://pokeapi.co/api/v2/pokemon/?limit=6',
+			json: 'pokemon.json',
+		},
+		{
+			id: '404',
+			fileName: '404.html',
+			url: '/error',
+			template: 'notfound',
+			json: '404.json',
+		},
+	],
 };
 
 export default config;

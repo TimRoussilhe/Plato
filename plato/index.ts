@@ -13,7 +13,7 @@ program
 	.option('-o, --open', 'open dev')
 	.description('Develop website')
 	// create global path data that will be used accross our scripts
-	.action((cmdObj: any) => {
+	.action(() => {
 		global.appRoot = path.resolve(__dirname + './../');
 		global.srcPath = path.resolve(global.appRoot, './src/');
 		global.siteDir = path.resolve(global.appRoot, './public/');
@@ -29,7 +29,7 @@ program
 	.option('-v, --verbose', 'output extra debugging')
 	.option('-o, --open', 'open local http server to QA build')
 	// create global path data that will be used accross our scripts
-	.action((cmdObj: any) => {
+	.action(() => {
 		global.appRoot = path.resolve(__dirname + './../');
 		global.srcPath = path.resolve(global.appRoot, './src/');
 		global.siteDir = path.resolve(global.appRoot, './build/');

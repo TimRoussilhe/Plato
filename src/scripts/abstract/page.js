@@ -98,7 +98,7 @@ class PageComponent extends AbstractDOMComponent {
 				// Save server data in the Cache
 				Cache.set(currentRoute.id, globalData.serverData);
 			} else {
-				// weird thing here since globalData.serverData will always be defined from the node side
+				// probably not needed since serverData will always be defined from the server side
 				this.promises.data.reject();
 			}
 		}

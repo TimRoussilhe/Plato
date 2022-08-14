@@ -1,15 +1,20 @@
 import fse from 'fs-extra';
 import path from 'path';
-import chokidar from 'chokidar';
 import webpack from 'webpack';
 import WebpackDevServer from 'webpack-dev-server';
 import opn from 'opn';
 
+import { Routes, Route } from '../@types/route.js';
+
+import config from '../../site-config.js';
 import webpackConfig from '../../config/webpack.dev.config.js';
+
 import buildHTML from '../core/buildHTML.js';
 import { createPages } from '../core/createPages.js';
-import { saveRemoteDataFromSource, updateRoutes } from '../core/saveData.js';
-import { getRoutesByTemplatePath } from '../utils/routes.js';
+import { saveRemoteDataFromSource } from '../core/saveData.js';
+import { updateRoutes } from '../core/updateRoutes.js';
+import createWatchers from './develop-watchers.js';
+
 import reporter from '../utils/reporter.js';
 
 // check if node API is used and if so, check if createPages is used
@@ -17,24 +22,13 @@ import { createGlobalData, getStaticPagesProps } from './../../plato-node.js';
 
 const port = 9090;
 
-function copyAssetToPublicFolder(path) {
-	const publicPath = path.replace('src/', 'public/');
-	fse
-		.copy(path, publicPath)
-		.then(() => reporter.log('📗 File Copied: ' + path))
-		.catch((err) => {
-			reporter.failure('Error during asset copy : ', err);
-		});
-}
-
-export default async function develop(verbose, open) {
+export default async function develop(verbose: boolean = false, open: boolean = false) {
 	reporter.verbose = verbose;
 
 	// Grab static routes
-	let rawdata = fse.readFileSync(path.resolve(global.appRoot, './shared/routes.json'));
-	const staticRoutes = JSON.parse(rawdata).staticRoutes;
+	const staticRoutes = config.staticRoutes as Route[];
 
-	let globalActivity = reporter.activity('Plato Develop', '🤔');
+	const globalActivity = reporter.activity('Plato Develop', '🤔');
 	globalActivity.start(true);
 
 	/**
@@ -46,15 +40,14 @@ export default async function develop(verbose, open) {
 
 	// clear destination folder
 	fse.emptyDirSync(global.siteDir);
-	fse.emptyDirSync(path.resolve(global.siteDir, './data'));
 
 	// remove real_routes files
 	fse.emptyDirSync(global.routeDest);
 
 	// copy assets folder
-	fse.copySync(`${global.srcPath}/.htaccess`, `${global.siteDir}/.htaccess`);
-	fse.copySync(`${global.srcPath}/assets`, `${global.siteDir}/assets`);
-	fse.copySync(`${global.srcPath}/data`, `${global.siteDir}/data`);
+	fse.copySync(path.resolve(global.srcPath, './.htaccess'), path.resolve(global.siteDir, './.htaccess'));
+	fse.copySync(path.resolve(global.srcPath, './assets'), path.resolve(global.siteDir, './assets'));
+	fse.copySync(path.resolve(global.srcPath, './data'), path.resolve(global.siteDir, './data'));
 
 	activity.end();
 
@@ -70,16 +63,16 @@ export default async function develop(verbose, open) {
 	try {
 		await updateRoutes(staticRoutes);
 	} catch (err) {
-		reporter.failure('Error during updating routes: ', err);
+		reporter.failure('Error during updating routes: ', err as string);
 	}
 
 	// save remote endpoint for static routes
 	try {
 		for (const route of staticRoutes) {
-			if (route.data) await saveRemoteDataFromSource(route.data, route.json, global.siteDir + '/data/');
+			if (route.dataSource) await saveRemoteDataFromSource(route.dataSource, route.json, global.siteDir + '/data/');
 		}
 	} catch (err) {
-		reporter.failure('Error during saving static file: ', err);
+		reporter.failure('Error during saving static file: ', err as string);
 	}
 	activity.end();
 
@@ -88,9 +81,11 @@ export default async function develop(verbose, open) {
 	 */
 	activity = reporter.activity('Create Pages from Plato API', '🤖');
 	activity.start(true);
-	let pagesProps;
+
+	let pagesProps: Route[] = [];
 	try {
 		if (getStaticPagesProps) {
+			//TODO: add validation on user data
 			pagesProps = await getStaticPagesProps();
 		}
 	} catch (err) {
@@ -100,67 +95,25 @@ export default async function develop(verbose, open) {
 	/**
 	 * Create Pages from pagesProps
 	 */
-	let finalRoutes;
+	let finalRoutes: Routes = { routes: [] };
 	if (pagesProps && pagesProps.length > 0) {
 		try {
 			finalRoutes = await createPages(pagesProps, global.siteDir);
 		} catch (err) {
-			reporter.failure('Error during page creation ', err);
+			reporter.failure('Error during page creation ', err as string);
 		}
 	}
 
 	// check if node API is used and if so, check if createGlobalData is used
-	let globalData = null;
+	let globalData = {};
 	try {
 		if (createGlobalData) {
 			globalData = await createGlobalData();
 		}
 	} catch (err) {
-		reporter.info('No API found');
+		reporter.failure('Error createGlobalData ', err as string);
 	}
 	activity.end();
-
-	/**
-	 * Add Watchers
-	 * Watcher for assets
-	 * Watcher for templates change
-	 */
-	// Initialize watcher for template files
-	let watcher = chokidar.watch('./shared/templates/', {
-		ignored: /(^|[\/\\])\../,
-		persistent: true,
-	});
-	watcher
-		.on('add', (path) => reporter.log(`File ${path} has been added`))
-		.on('change', (path) => {
-			const activeRoutes = getRoutesByTemplatePath(finalRoutes.routes, path);
-			if (activeRoutes !== null) {
-				for (let page of activeRoutes) {
-					buildHTML(page, null, 'development', global.siteDir, globalData).catch(console.error);
-				}
-			} else {
-				// change from a partial => rebuild everything
-				// TODO : check if change is not happening in an unlink template
-				for (let page of finalRoutes.routes) {
-					buildHTML(page, null, 'development', global.siteDir, globalData).catch((err) => {
-						reporter.log(`Error: ${err}`);
-					});
-				}
-			}
-			reporter.log(`File ${path} has been changed`);
-		});
-
-	watcher.add('./shared/partials/');
-
-	// Initialize watcher for assets files
-	let watcherAsset = chokidar.watch('./src/assets/', {
-		ignored: /(^|[\/\\])\../,
-		persistent: true,
-		ignoreInitial: true,
-	});
-
-	watcherAsset.on('add', (path) => copyAssetToPublicFolder(path));
-	watcherAsset.on('change', (path) => copyAssetToPublicFolder(path));
 
 	/**
 	 * Build static HTML
@@ -173,12 +126,17 @@ export default async function develop(verbose, open) {
 			await buildHTML(page, null, 'development', global.siteDir, globalData);
 		}
 	} catch (err) {
-		reporter.failure('Error during page generation: ', err);
+		reporter.failure('Error during page generation: ', err as string);
 	}
 	activity.end();
 
+	/**
+	 * Create file watchers to rebuild HTML when templates changes
+	 */
+	createWatchers(finalRoutes.routes, globalData);
+
 	//TODO: provide dynamicRewrite support via API
-	let dynamicRewrite = [];
+	let dynamicRewrite: any[] = [];
 	// dynamicRewrite.push({ from: '/furniture/*', to: '/furniture/' });
 
 	const options = {
@@ -198,6 +156,8 @@ export default async function develop(verbose, open) {
 			serveIndex: true,
 		},
 	};
+
+	// @ts-expect-error
 	const compiler = webpack(webpackConfig);
 	const server = new WebpackDevServer(options, compiler);
 

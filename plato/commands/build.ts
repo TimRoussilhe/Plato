@@ -4,26 +4,27 @@ import opn from 'opn';
 import connect from 'connect';
 import serveStatic from 'serve-static';
 
-// report
+import { Routes, Route } from '../@types/route.js';
+
 import reporter from '../utils/reporter.js';
-import buildHTML from '../core/buildHTML.js';
-import { saveRemoteDataFromSource, updateRoutes } from '../core/saveData.js';
+import { saveRemoteDataFromSource } from '../core/saveData.js';
+import { updateRoutes } from '../core/updateRoutes.js';
 import { createPages } from '../core/createPages.js';
+import buildHTML from '../core/buildHTML.js';
 import buildProductionBundle from './build-javascript.js';
 import buildCritical from './build-critical.js';
 
+import config from './../../site-config.js';
 // check if node API is used and if so, check if createPages is used
 import { createGlobalData, getStaticPagesProps } from './../../plato-node.js';
 
-export default async function build(verbose, open) {
+export default async function build(verbose = false, open = false) {
 	reporter.verbose = verbose;
 
-	// Grab static routes
-	let rawdata = fse.readFileSync(path.resolve(global.appRoot, './shared/routes.json'));
-	const staticRoutes = JSON.parse(rawdata).staticRoutes;
+	// Grab static routes from config
+	const staticRoutes = config.staticRoutes as Route[];
 
-	let globalActivity;
-	globalActivity = reporter.activity('Plato Build', '🤔');
+	const globalActivity = reporter.activity('Plato Build', '🤔');
 	globalActivity.start();
 
 	/**
@@ -35,32 +36,39 @@ export default async function build(verbose, open) {
 
 	// clear destination folder
 	fse.emptyDirSync(global.siteDir);
-	fse.emptyDirSync(path.resolve(global.siteDir, './data'));
 
 	// remove real_routes files
 	fse.emptyDirSync(global.routeDest);
 
 	// copy assets folder
-	fse.copySync(`${global.srcPath}/.htaccess`, `${global.siteDir}/.htaccess`);
-	fse.copySync(`${global.srcPath}/assets`, `${global.siteDir}/assets`);
-	fse.copySync(`${global.srcPath}/data`, `${global.siteDir}/data`);
+	fse.copySync(path.resolve(global.srcPath, './.htaccess'), path.resolve(global.siteDir, './.htaccess'));
+	fse.copySync(path.resolve(global.srcPath, './assets'), path.resolve(global.siteDir, './assets'));
+	fse.copySync(path.resolve(global.srcPath, './data'), path.resolve(global.siteDir, './data'));
 
-	// add static routes to final_routes
-	await updateRoutes(staticRoutes);
 	activity.end();
 
 	/**
-	 * Save remote date from the static route file
+	 * Build dynamic routes file
+	 * And save remote date from the static route file
 	 */
-	activity = reporter.activity('Save remote Data', '🛣️');
+	activity = reporter.activity('Build Routes and save remote Data from Static routes', '🛣️');
 	activity.start();
+
+	// add static routes to final_routes
+	// save remote endpoint for static routes
+	try {
+		await updateRoutes(staticRoutes);
+	} catch (err) {
+		reporter.failure('Error during updating routes: ', err as string);
+	}
+
 	// save remote endpoint for static routes
 	try {
 		for (const route of staticRoutes) {
-			if (route.data) saveRemoteDataFromSource(route.data, route.json, global.siteDir + '/data/');
+			if (route.dataSource) await saveRemoteDataFromSource(route.dataSource, route.json, global.siteDir + '/data/');
 		}
 	} catch (err) {
-		reporter.failure('Error during saving static file: ', err);
+		reporter.failure('Error during saving static file: ', err as string);
 	}
 	activity.end();
 
@@ -69,7 +77,8 @@ export default async function build(verbose, open) {
 	 */
 	activity = reporter.activity('Create Pages from Plato API', '🤖');
 	activity.start(true);
-	let pagesProps;
+
+	let pagesProps: Route[] = [];
 	try {
 		if (getStaticPagesProps) {
 			pagesProps = await getStaticPagesProps();
@@ -81,7 +90,7 @@ export default async function build(verbose, open) {
 	/**
 	 * Create Pages from Plato Node API getStaticPagesProps method
 	 */
-	let finalRoutes;
+	let finalRoutes: Routes = { routes: [] };
 	try {
 		if (pagesProps && pagesProps.length > 0) {
 			finalRoutes = await createPages(pagesProps, global.siteDir);
@@ -91,7 +100,7 @@ export default async function build(verbose, open) {
 	}
 
 	// check if node API is used and if so, check if createGlobalData is used
-	let globalData;
+	let globalData = {};
 	try {
 		if (createGlobalData) {
 			globalData = await createGlobalData();
@@ -110,7 +119,7 @@ export default async function build(verbose, open) {
 	// Build Javascript and CSS Production Bundle Return the manifest with files and
 	// their hashed path.
 	await buildProductionBundle('').catch((err) => {
-		reporter.failure('Generating JavaScript bundles failed', err);
+		reporter.failure('Generating JavaScript bundles failed', err as string);
 	});
 
 	activity.end();
@@ -121,7 +130,7 @@ export default async function build(verbose, open) {
 	activity = reporter.activity('Build Legacy Javascript', '👴');
 	activity.start();
 	await buildProductionBundle('legacy').catch((err) => {
-		reporter.failure('Generating Legacy JavaScript bundles failed', err);
+		reporter.failure('Generating Legacy JavaScript bundles failed', err as string);
 	});
 
 	activity.end();
@@ -138,21 +147,20 @@ export default async function build(verbose, open) {
 			files.push(filename);
 		}
 	} catch (err) {
-		reporter.failure('Error during page generation: ', err);
+		reporter.failure('Error during page generation: ', err as string);
 	}
 	activity.end();
 
 	activity = reporter.activity('Build Critical CSS and minify HTML', '🎨');
 	activity.start();
 
-	function startNewJob() {
+	function startNewJob(): Promise<void> {
 		const file = files.pop(); // NOTE: mutates file array
 		if (!file) {
 			// no more new jobs to process (might still be jobs currently in process)
 			return Promise.resolve();
 		}
 		const dest = path.join(global.siteDir, file);
-		console.log('dest', dest);
 		return buildCritical(file, dest)
 			.then(() => {
 				// Then call to see if there are more jobs to process

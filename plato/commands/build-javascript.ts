@@ -1,8 +1,9 @@
 import webpack from 'webpack';
 import webpackConfig from '../../config/webpack.prod.config.js';
 
-export default async (env) => {
+export default async (env: string) => {
 	return new Promise<void>((resolve, reject) => {
+		// @ts-expect-error
 		webpack(webpackConfig(env)).run((err, stats) => {
 			if (err) {
 				console.error(err.stack || err);

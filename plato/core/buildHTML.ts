@@ -4,17 +4,17 @@ import template from 'art-template';
 
 import reporter from '../utils/reporter.js';
 import config from '../../site-config.js';
+import { Route } from '../@types/route.js';
 
 // Set ART FILTERS
 import { filters } from '../../shared/templates/filters/index.js';
 for (let [key, value] of Object.entries(filters)) {
-	// @ts-expect-error
 	template.defaults.imports[key] = value;
 }
 
 // A function that returns a promise to resolve into the data //fetched from the API or an error
-let artTemplatePromise = (templatePath, data) => {
-	return new Promise((resolve, reject) => {
+let artTemplatePromise = (templatePath: string, data: {}) => {
+	return new Promise<string>((resolve, reject) => {
 		try {
 			let htmlArt = template(templatePath, data);
 			resolve(htmlArt);
@@ -24,7 +24,7 @@ let artTemplatePromise = (templatePath, data) => {
 	});
 };
 
-function writeFileWithDirectory(dirPath, contents) {
+function writeFileWithDirectory(dirPath: string, contents: string) {
 	return new Promise<void>((resolve, reject) => {
 		// return value is a Promise resolving to the first directory created
 		fse
@@ -37,11 +37,17 @@ function writeFileWithDirectory(dirPath, contents) {
 	});
 }
 
-export default (page, manifest, mode = 'development', siteDir, globalData) => {
+export default (
+	page: Route,
+	manifest: string | null,
+	mode = 'development',
+	siteDir: string,
+	globalData: { serverData?: {} }
+) => {
 	return new Promise((resolve, reject) => {
-		let destPath;
+		let destPath: string = '';
 		// this will be provided to critical
-		let source;
+		let source: string;
 
 		// needed to genere 404.html
 		let fileName = page.fileName || 'index.html';
@@ -57,14 +63,14 @@ export default (page, manifest, mode = 'development', siteDir, globalData) => {
 			}
 		}
 
-		fse.mkdirs(destPath).catch((err) => {
+		fse.mkdirs(destPath).catch((err: string) => {
 			reject(err);
 		});
 
 		let data = {};
 		if (page.json) {
 			try {
-				data = fse.readJsonSync(path.resolve(global.siteDir, './data/', page.json));
+				data = fse.readJsonSync(path.resolve(siteDir, './data/', page.json));
 			} catch (err) {
 				reject(err);
 			}
@@ -88,7 +94,7 @@ export default (page, manifest, mode = 'development', siteDir, globalData) => {
 					mode,
 					manifest,
 					globals: globalData,
-					globalData: JSON.stringify(globalData),
+					globalDataString: JSON.stringify(globalData),
 					location: page.id,
 					type: page.template,
 				})
