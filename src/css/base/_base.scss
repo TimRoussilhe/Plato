@@ -1,8 +1,8 @@
 @import 'ui-resets';
 
 // import mixins
-@import 'mixins/mixins';
-@import 'mixins/aspect_ratio';
+// @import 'mixins/mixins';
+// @import 'mixins/aspect_ratio';
 @import 'mixins/font_style';
 @import 'mixins/responsive_font';
 
@@ -17,9 +17,6 @@
 // import utilities
 @import 'utilities/_u-align';
 @import 'utilities/_u-overlay';
-
-// import grid
-// @import 'reflex';
 
 // Definitions
 @import 'typography';

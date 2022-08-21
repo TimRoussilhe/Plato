@@ -39,64 +39,64 @@ export const getPath = (url = window.location.href) => parse(url).path;
  * Parse URL for path, query and hash and more.
  */
 export const parse = (url) => {
-	// Port
-	let port;
-	const matches = url.match(/:\d+/);
+  // Port
+  let port;
+  const matches = url.match(/:\d+/);
 
-	if (matches === null) {
-		if (/^http/.test(url)) {
-			port = 80;
-		}
+  if (matches === null) {
+    if (/^http/.test(url)) {
+      port = 80;
+    }
 
-		if (/^https/.test(url)) {
-			port = 443;
-		}
-	} else {
-		const portString = matches[0].substring(1);
+    if (/^https/.test(url)) {
+      port = 443;
+    }
+  } else {
+    const portString = matches[0].substring(1);
 
-		port = parseInt(portString, 10);
-	}
+    port = parseInt(portString, 10);
+  }
 
-	// Path
-	let path = url.replace(getOrigin(), '');
-	let hash;
-	let query = {};
+  // Path
+  let path = url.replace(getOrigin(), '');
+  let hash;
+  let query = {};
 
-	// Hash
-	const hashIndex = path.indexOf('#');
+  // Hash
+  const hashIndex = path.indexOf('#');
 
-	if (hashIndex >= 0) {
-		hash = path.slice(hashIndex + 1);
-		path = path.slice(0, hashIndex);
-	}
+  if (hashIndex >= 0) {
+    hash = path.slice(hashIndex + 1);
+    path = path.slice(0, hashIndex);
+  }
 
-	// Query
-	const queryIndex = path.indexOf('?');
+  // Query
+  const queryIndex = path.indexOf('?');
 
-	if (queryIndex >= 0) {
-		query = parseQuery(path.slice(queryIndex + 1));
-		path = path.slice(0, queryIndex);
-	}
+  if (queryIndex >= 0) {
+    query = parseQuery(path.slice(queryIndex + 1));
+    path = path.slice(0, queryIndex);
+  }
 
-	return {
-		hash,
-		path,
-		port,
-		query,
-	};
+  return {
+    hash,
+    path,
+    port,
+    query,
+  };
 };
 
 /**
  * Parse a query string to object.
  */
 export const parseQuery = (str) =>
-	str.split('&').reduce((acc, el) => {
-		const [key, value] = el.split('=');
+  str.split('&').reduce((acc, el) => {
+    const [key, value] = el.split('=');
 
-		acc[key] = value;
+    acc[key] = value;
 
-		return acc;
-	}, {});
+    return acc;
+  }, {});
 
 /**
  * Clean URL, remove "hash" and/or "trailing slash".

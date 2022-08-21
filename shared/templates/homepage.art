@@ -2,6 +2,8 @@
 	<div class="introduction">
 		<h1 class="fs-title">Dynamic content: {{ data.content.title }}</h1>
 		<h2 class="fs-body">INDEX RELOAD Static content</h2>
+		{{set test = 5.4}}
+		<h3>test filter: {{test|round }}</h3>
 		<span class="icon instagram">{{ include './svgs/instagram.art' }}</span>
 	</div>
 </section>

@@ -1,7 +1,7 @@
 <!-- Global Data -->
-{{ if globalData }}
+{{ if globalDataString }}
 <script id="__PLATO_DATA__" type="application/json">
-{{@ globalData }}
+{{@ globalDataString }}
 </script>
 {{/if}}
 <!-- Scripts -->

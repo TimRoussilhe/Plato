@@ -29,43 +29,43 @@ const download = ({ el }) => el.getAttribute && typeof el.getAttribute('download
 const preventSelf = ({ el }) => el.hasAttribute('data-prevent');
 
 export class Prevent {
-	constructor() {
-		this.suite = [];
-		this.tests = new Map();
+  constructor() {
+    this.suite = [];
+    this.tests = new Map();
 
-		this.init();
-	}
+    this.init();
+  }
 
-	init() {
-		// Add defaults
-		this.add('pushState', pushState);
-		this.add('exists', exists);
-		this.add('newTab', newTab);
-		this.add('blank', blank);
-		this.add('download', download);
-		this.add('preventSelf', preventSelf);
-	}
+  init() {
+    // Add defaults
+    this.add('pushState', pushState);
+    this.add('exists', exists);
+    this.add('newTab', newTab);
+    this.add('blank', blank);
+    this.add('download', download);
+    this.add('preventSelf', preventSelf);
+  }
 
-	add(name, check, suite = true) {
-		this.tests.set(name, check);
-		suite && this.suite.push(name);
-	}
+  add(name, check, suite = true) {
+    this.tests.set(name, check);
+    suite && this.suite.push(name);
+  }
 
-	/**
-	 * Run individual test
-	 */
-	run(name, el, event, href) {
-		return this.tests.get(name)({
-			el,
-			event,
-			href,
-		});
-	}
+  /**
+   * Run individual test
+   */
+  run(name, el, event, href) {
+    return this.tests.get(name)({
+      el,
+      event,
+      href,
+    });
+  }
 
-	/**
-	 * Run test suite
-	 */
-	checkLink(el, event, href) {
-		return this.suite.some(name => this.run(name, el, event, href));
-	}
+  /**
+   * Run test suite
+   */
+  checkLink(el, event, href) {
+    return this.suite.some((name) => this.run(name, el, event, href));
+  }
 }

@@ -1,4 +1,4 @@
-import Page from 'abstract/page';
+import Page from 'abstract/page.js';
 import template from 'templates/homepage.art';
 // Constants
 
@@ -11,10 +11,10 @@ import template from 'templates/homepage.art';
 // Lib
 
 class Homepage extends Page {
-	constructor(props) {
-		super(props);
-		this.template = template;
-	}
+  constructor(props) {
+    super(props);
+    this.template = template;
+  }
 }
 
 export default Homepage;
