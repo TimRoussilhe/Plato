@@ -4,8 +4,8 @@ import app from 'app/reducers.js';
 import layout from 'layout/reducers.js';
 
 const rootReducer = combineReducers({
-	app,
-	layout,
+  app,
+  layout,
 });
 
 export default rootReducer;

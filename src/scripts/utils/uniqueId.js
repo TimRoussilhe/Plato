@@ -18,16 +18,16 @@ const idCounter = {};
  * // => '105'
  */
 function uniqueId(prefix = '$uid$') {
-	if (!idCounter[prefix]) {
-		idCounter[prefix] = 0;
-	}
+  if (!idCounter[prefix]) {
+    idCounter[prefix] = 0;
+  }
 
-	const id = ++idCounter[prefix];
-	if (prefix === '$uid$') {
-		return `${id}`;
-	}
+  const id = ++idCounter[prefix];
+  if (prefix === '$uid$') {
+    return `${id}`;
+  }
 
-	return `${prefix + id}`;
+  return `${prefix + id}`;
 }
 
 export default uniqueId;

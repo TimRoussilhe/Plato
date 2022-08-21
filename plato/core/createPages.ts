@@ -14,26 +14,26 @@ import { Routes, Route } from '../@types/route.js';
  *   - json ( the name of the json local data )
  */
 export const createPages = (pagesProps: Route[], siteDir: string) => {
-	return new Promise<Routes>(async (resolve, reject) => {
-		// create JSON Files
-		pagesProps.forEach(({ data, id }) => {
-			saveRemoteData(JSON.stringify(data), id + '.json', siteDir + '/data/');
-		});
+  return new Promise<Routes>(async (resolve, reject) => {
+    // create JSON Files
+    pagesProps.forEach(({ data, id }) => {
+      saveRemoteData(JSON.stringify(data), id + '.json', siteDir + '/data/');
+    });
 
-		const routes = pagesProps.map(({ id, url, template }): Route => {
-			return {
-				id,
-				url,
-				template,
-				json: id + '.json',
-			};
-		});
+    const routes = pagesProps.map(({ id, url, template }): Route => {
+      return {
+        id,
+        url,
+        template,
+        json: id + '.json',
+      };
+    });
 
-		try {
-			const activeRoutes = await updateRoutes(routes);
-			resolve(activeRoutes);
-		} catch (error) {
-			reject(error);
-		}
-	});
+    try {
+      const activeRoutes = await updateRoutes(routes);
+      resolve(activeRoutes);
+    } catch (error) {
+      reject(error);
+    }
+  });
 };

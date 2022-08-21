@@ -14,56 +14,56 @@ import './../css/app.scss';
 import runtime from 'art-template/lib/runtime.js';
 import { filters } from 'templates/filters/index.js';
 for (let [key, value] of Object.entries(filters)) {
-	runtime[key] = value;
+  runtime[key] = value;
 }
 
 class Entry {
-	constructor() {
-		console.log('--- APP STARTED ---');
-		console.log('\n\n\n');
-		this.app = null;
-	}
+  constructor() {
+    console.log('--- APP STARTED ---');
+    console.log('\n\n\n');
+    this.app = null;
+  }
 
-	init() {
-		const router = Router.configureRoute();
-		this.app = new App();
-		const root = document.documentElement;
+  init() {
+    const router = Router.configureRoute();
+    this.app = new App();
+    const root = document.documentElement;
 
-		isMobile() && root.classList.add('isMobile');
-		isTablet() && root.classList.add('isTablet');
+    isMobile() && root.classList.add('isMobile');
+    isTablet() && root.classList.add('isTablet');
 
-		let deviceType = 'desktop';
-		if (isMobile()) deviceType = 'mobile';
-		if (isTablet()) deviceType = 'tablet';
+    let deviceType = 'desktop';
+    if (isMobile()) deviceType = 'mobile';
+    if (isTablet()) deviceType = 'tablet';
 
-		store.dispatch(setDeviceType(deviceType));
+    store.dispatch(setDeviceType(deviceType));
 
-		Router.initRouter().then(() => {
-			this.app.init().then(() => {
-				router.start();
-			});
-		});
-	}
+    Router.initRouter().then(() => {
+      this.app.init().then(() => {
+        router.start();
+      });
+    });
+  }
 }
 
 (function () {
-	cleanURL(window.location.href.split('?')[0]);
+  cleanURL(window.location.href.split('?')[0]);
 })();
 
 if (browserSupportsAllFeatures()) {
-	// Browsers that support all features run `main()` immediately.
-	main();
+  // Browsers that support all features run `main()` immediately.
+  main();
 } else {
-	// All other browsers loads polyfills and then run `main()`.
-	loadScript('https://cdn.jsdelivr.net/npm/whatwg-fetch@3.6.2/dist/fetch.umd.min.js', main);
+  // All other browsers loads polyfills and then run `main()`.
+  loadScript('https://cdn.jsdelivr.net/npm/whatwg-fetch@3.6.2/dist/fetch.umd.min.js', main);
 }
 
 function main(err) {
-	// Initiate all other code paths.
-	// If there's an error loading the polyfills, handle that
-	// case gracefully and track that the error occurred.
+  // Initiate all other code paths.
+  // If there's an error loading the polyfills, handle that
+  // case gracefully and track that the error occurred.
 
-	// initialize the APP do not make a global reference to it.
-	const entry = new Entry();
-	entry.init();
+  // initialize the APP do not make a global reference to it.
+  const entry = new Entry();
+  entry.init();
 }

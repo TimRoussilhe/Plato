@@ -9,6 +9,7 @@
 	],
 	"type": "module",
 	"scripts": {
+		"start": "npm run build-plato && npm run dev",
 		"clean-plato": "rm -rf plato-dist/* ",
 		"dev-plato": "npm run clean-plato && tsc -w --project ./plato/tsconfig.json",
 		"build-plato": "npm run clean-plato && tsc --project ./plato/tsconfig.json",
@@ -30,7 +31,6 @@
 		"@types/fs-extra": "^9.0.13",
 		"@types/node": "^18.7.2",
 		"@types/node-fetch": "^2.6.2",
-		"@vercel/ncc": "^0.34.0",
 		"art-template-loader": "^1.4.3",
 		"autoprefixer": "^10.4.8",
 		"babel-loader": "^8.2.5",
@@ -60,7 +60,6 @@
 		"style-loader": "^3.3.1",
 		"terminal-link": "^2.0.0",
 		"terser-webpack-plugin": "^5.3.3",
-		"ts-node": "^10.9.1",
 		"webpack": "^5.74.0",
 		"webpack-bundle-analyzer": "^4.5.0",
 		"webpack-bundle-size-analyzer": "^3.1.0",
@@ -72,6 +71,7 @@
 		"@babel/runtime": "^7.18.9",
 		"art-template": "^4.13.2",
 		"core-js": "^3.24.1",
-		"eslint-config-prettier": "^6.3.0"
+		"eslint-config-prettier": "^6.3.0",
+		"fast-average-color-node": "^2.4.0"
 	}
 }
