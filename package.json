@@ -39,7 +39,7 @@
 		"commander": "^2.19.0",
 		"connect": "^3.7.0",
 		"convert-hrtime": "^2.0.0",
-		"critical": "^4.0.1",
+		"critical": "^5.0.4",
 		"css-loader": "^6.7.1",
 		"css-minimizer-webpack-plugin": "^4.0.0",
 		"eslint": "^8.21.0",
