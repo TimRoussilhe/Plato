@@ -60,7 +60,7 @@
 		"style-loader": "^3.3.1",
 		"terminal-link": "^2.0.0",
 		"terser-webpack-plugin": "^5.3.3",
-		"webpack": "^5.74.0",
+		"webpack": "^5.76.0",
 		"webpack-bundle-analyzer": "^4.5.0",
 		"webpack-bundle-size-analyzer": "^3.1.0",
 		"webpack-cli": "^4.10.0",
