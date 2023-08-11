@@ -31,7 +31,7 @@ function writeFileWithDirectory(dirPath: string, contents: string) {
     fse
       .mkdirp(path.dirname(dirPath))
       .then(() => {
-        fse.writeFile(dirPath, contents);
+        fse.writeFileSync(dirPath, contents);
         resolve();
       })
       .catch((err) => reject(err));
@@ -86,6 +86,7 @@ export default (
       globalData,
     })
       .then((html) => {
+        // TODO: remove globals we don't need in JS
         // adding serverData for the first render here
         globalData.serverData = data;
         artTemplatePromise(path.resolve('./shared/templates/layout.art'), {

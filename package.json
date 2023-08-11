@@ -39,7 +39,7 @@
 		"commander": "^2.19.0",
 		"connect": "^3.7.0",
 		"convert-hrtime": "^2.0.0",
-		"critical": "^4.0.1",
+		"critical": "^5.1.1",
 		"css-loader": "^6.7.1",
 		"css-minimizer-webpack-plugin": "^4.0.0",
 		"eslint": "^8.21.0",
@@ -71,7 +71,9 @@
 		"@babel/runtime": "^7.18.9",
 		"art-template": "^4.13.2",
 		"core-js": "^3.24.1",
+		"dotenv": "^16.3.1",
 		"eslint-config-prettier": "^6.3.0",
-		"fast-average-color-node": "^2.4.0"
+		"fast-average-color-node": "^2.4.0",
+		"html-minifier-terser": "^7.2.0"
 	}
 }

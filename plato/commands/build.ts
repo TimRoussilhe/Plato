@@ -15,8 +15,6 @@ import buildProductionBundle from './build-javascript.js';
 import buildCritical from './build-critical.js';
 
 import config from './../../site-config.js';
-// check if node API is used and if so, check if createPages is used
-import { createGlobalData, getStaticPagesProps } from './../../plato-node.js';
 
 export default async function build(verbose = false, open = false) {
   reporter.verbose = verbose;
@@ -80,6 +78,7 @@ export default async function build(verbose = false, open = false) {
 
   let pagesProps: Route[] = [];
   try {
+    const { getStaticPagesProps } = await import('./../../plato-node.js');
     if (getStaticPagesProps) {
       pagesProps = await getStaticPagesProps();
     }
@@ -102,6 +101,8 @@ export default async function build(verbose = false, open = false) {
   // check if node API is used and if so, check if createGlobalData is used
   let globalData = {};
   try {
+    const { createGlobalData } = await import('./../../plato-node.js');
+
     if (createGlobalData) {
       globalData = await createGlobalData();
     }
@@ -109,6 +110,16 @@ export default async function build(verbose = false, open = false) {
     console.log('No API found: ' + err);
   }
 
+  // on plato complete Hook
+  try {
+    const { onPageCreatedHook } = await import('./../../plato-node.js');
+
+    if (onPageCreatedHook) {
+      await onPageCreatedHook();
+    }
+  } catch (err) {
+    console.log('Error during onPageCreatedHook: ' + err);
+  }
   activity.end();
 
   /**
@@ -167,9 +178,11 @@ export default async function build(verbose = false, open = false) {
         reporter.info(`Critical Built : ${file}`);
         return startNewJob();
       })
-      .catch((err) => reporter.failure('Error during Critical generation: ', err));
+      .catch((err) => {
+        reporter.failure('Error during Critical generation: ', err);
+      });
   }
-  // how many jobs do we want to handle in paralell?
+  // how many jobs do we want to handle in parallel?
   // Below, 3:
   await Promise.all([startNewJob(), startNewJob(), startNewJob()]).catch((err) =>
     reporter.failure('Error during Critical generations: ', err)

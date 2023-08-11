@@ -1,3 +1,9 @@
+// We import the config here to avoid order issue
+// In Node modules are hoisted before
+// but dotenv needs to be preloaded
+// https://stackoverflow.com/a/63541230
+import 'dotenv/config';
+
 import program from 'commander';
 import develop from './commands/develop.js';
 import build from './commands/build.js';
@@ -12,7 +18,7 @@ program
   .option('-v, --verbose', 'output extra debugging')
   .option('-o, --open', 'open dev')
   .description('Develop website')
-  // create global path data that will be used accross our scripts
+  // create global path data that will be used across our scripts
   .action(() => {
     global.appRoot = path.resolve(__dirname + './../');
     global.srcPath = path.resolve(global.appRoot, './src/');
@@ -27,7 +33,7 @@ program
   .command('build')
   .option('-v, --verbose', 'output extra debugging')
   .option('-o, --open', 'open local http server to QA build')
-  // create global path data that will be used accross our scripts
+  // create global path data that will be used across our scripts
   .action(() => {
     global.appRoot = path.resolve(__dirname + './../');
     global.srcPath = path.resolve(global.appRoot, './src/');

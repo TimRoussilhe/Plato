@@ -16,10 +16,6 @@ import { updateRoutes } from '../core/updateRoutes.js';
 import createWatchers from './develop-watchers.js';
 
 import reporter from '../utils/reporter.js';
-
-// check if node API is used and if so, check if createPages is used
-import { createGlobalData, getStaticPagesProps } from './../../plato-node.js';
-
 const port = 9090;
 
 export default async function develop(verbose: boolean = false, open: boolean = false) {
@@ -84,12 +80,13 @@ export default async function develop(verbose: boolean = false, open: boolean = 
 
   let pagesProps: Route[] = [];
   try {
+    const { getStaticPagesProps } = await import('./../../plato-node.js');
     if (getStaticPagesProps) {
       //TODO: add validation on user data
       pagesProps = await getStaticPagesProps();
     }
   } catch (err) {
-    reporter.info('Error during getStaticPagesProps call');
+    reporter.failure('Error during getStaticPagesProps call', err as string);
   }
 
   /**
@@ -104,9 +101,21 @@ export default async function develop(verbose: boolean = false, open: boolean = 
     }
   }
 
+  // on plato complete Hook
+  try {
+    const { onPageCreatedHook } = await import('./../../plato-node.js');
+
+    if (onPageCreatedHook) {
+      await onPageCreatedHook();
+    }
+  } catch (err) {
+    console.log('Error during onPageCreatedHook: ' + err);
+  }
+
   // check if node API is used and if so, check if createGlobalData is used
   let globalData = {};
   try {
+    const { createGlobalData } = await import('./../../plato-node.js');
     if (createGlobalData) {
       globalData = await createGlobalData();
     }
@@ -162,7 +171,6 @@ export default async function develop(verbose: boolean = false, open: boolean = 
   globalActivity.end();
 
   const runServer = async () => {
-    console.log('Starting server...');
     await server.start();
     reporter.displayUrl('Development server started', 'http://localhost:' + port);
     if (open) opn('http://localhost:' + port);
